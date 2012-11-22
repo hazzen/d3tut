@@ -1,0 +1,136 @@
+.pad-top{padding-top:20px;}
+.pad-bottom{padding-bottom:20px;}
+.pad-left{padding-left:20px;}
+.pad-right{padding-right:20px;}
+.pad-all{padding:20px 20px 20px 20px;}
+.hrefborder-bottom{border-bottom:1px solid #a4b2b3;}
+.clearfix:after {content: "";display: table;clear: both;}
+
+em {
+  font-style: italic;
+}
+
+a,a:visited {
+  color: #41689f;
+  text-decoration: none;
+}
+a.no-style,a.no-style:visited {
+  color: #31484f;
+}
+
+body {
+  font: 13px arial,sans-serif;
+  color: #31484f;
+  position: relative;
+}
+
+div.header {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+div.main,div.header {
+  position: relative;
+  margin-left: 100px;
+}
+
+div.left-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200px;
+}
+
+div.content {
+  margin-left: 10px;
+  position: relative;
+  left: 200px;
+  top: 0;
+  width: 800px;
+}
+
+h1 {
+  font-size: 20px;
+  color: #000;
+}
+
+h2 {
+  font-size: 16px;
+}
+
+#masthead {
+  background: #efeff7;
+  border-radius: 2px;
+  margin: 5px 0;
+}
+
+ul.selector > li {
+  margin-bottom: 0.5em;
+}
+
+/*
+ul.selector > li:hover {
+  background: #efeff7;
+}
+*/
+
+ul.selector > li > a {
+  display: inline-block;
+  width: 100%;
+}
+
+ul.selector ul.selector {
+  margin-left: 20px;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+ul.bullet-list {
+  list-style: circle;
+  margin-left: 1em;
+}
+
+.header > .content {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.section-header {
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.code {
+  color: #000;
+  margin: 10px 0 10px 20px;
+  white-space: pre;
+  font-family: monospace;
+  background-color: #efeff4;
+  border: 1px solid #ccc;
+  border-bottom-width: 3px;
+}
+
+.code::before {
+  font-family: arial,sans-serif;
+  font-size: 16px;
+  color: #242;
+  font-weight: bold;
+  display: block;
+  background-color: #b3b3bd;
+}
+
+.code-html::before {
+  content: 'HTML';
+}
+
+.code-js::before {
+  content: 'JS';
+}
+
+.code-result::before {
+  content: 'Result';
+}
