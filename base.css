@@ -92,6 +92,16 @@ ul.bullet-list {
   margin-left: 1em;
 }
 
+ol {
+  list-style: decimal;
+  margin: 5px 0 5px 1em;
+  margin-left: 1em;
+}
+
+ol > li {
+  margin-left: 1em;
+}
+
 .header > .content {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
@@ -99,6 +109,7 @@ ul.bullet-list {
 
 .section-header {
   font-size: 16px;
+  font-weight: bold;
   border-bottom: 1px solid #eee;
   margin-bottom: 5px;
   color: #666;
@@ -114,7 +125,7 @@ ul.bullet-list {
   border-bottom-width: 3px;
 }
 
-.code::before {
+.sample .code::before {
   font-family: arial,sans-serif;
   font-size: 16px;
   color: #242;
@@ -123,14 +134,26 @@ ul.bullet-list {
   background-color: #b3b3bd;
 }
 
-.code-html::before {
+.sample .code.code-html::before {
   content: 'HTML';
 }
 
-.code-js::before {
+.sample .code.code-js::before {
   content: 'JS';
 }
 
-.code-result::before {
+.sample .code.code-result::before {
   content: 'Result';
+}
+
+.code-inline {
+  display: inline-block;
+  white-space: normal;
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+.code em {
+  font-style: normal;
+  background-color: #f1ae7e;
 }

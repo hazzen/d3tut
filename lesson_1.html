@@ -39,8 +39,8 @@
           <li><a href='#'>1. Intro</a></li>
           <li>
           <ul class='selector'>
-            <li><a href='#s1'>1.1 Beginnings</a>
-            <li><a href='#s2'>1.2 A Node</a>
+            <li><a href='#s1'>1.1</a>
+            <li><a href='#s2'>1.2</a>
           </ul>
           </li>
         </ul>
@@ -53,27 +53,72 @@
           <div class='section-content'>
             A simple example of basic d3 syntax is as good a starting point as
             any:
-            <div class='code code-html'>&lt;div class='section'&gt;
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='section'&gt;
   First
 &lt;/div&gt;
 &lt;div class='section'&gt;
   Second
 &lt;/div&gt;</div>
-            <div class ='code code-js'>d3.select('.section')
+              <div class ='code code-js'>d3.select('.section')
     .text('D3 was here');</div>
-            <div class='code code-result'>&lt;div class='section'&gt;
+              <div class='code code-result'>&lt;div class='section'&gt;
   D3 was here
 &lt;/div&gt;
 &lt;div class='section'&gt;
   Second
 &lt;/div&gt;</div>
+            </div>
+            This code can be broken down into two parts:
+            <ol>
+              <li>a selection, <div class='code code-inline code-js'>d3.select('.section')</div>.
+                  This takes a <a href='http://www.w3.org/TR/selectors-api/'>selector</a>
+                  and returns a <div class='code code-inline code-js'>d3.selection</div>.
+              <li>an operation, <div class='code code-inline code-js'>text('D3 was here')</div>.
+                  The <div class='code code-inline code-js'>d3.selection</div>
+                  returned by the previous call supports a number of these. The one
+                  we called sets the <div class='code code-inline code-js'>textContent</div>
+                of the selection to the argument.
+            </ol>
+            For convenience, d3 is nice and returns the selection itself from
+            the operation. So, instead of writing this code:
+            <div class='code code-js'>var section = d3.select('.section');
+section.text('D3 was here');
+section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
+             d3 lets you write it all in one statement:
+            <div class='code code-js'>d3.select('.section')
+    .text('D3 was here');
+    .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
           </div>
         </div>
         <div class='section'>
           <div class='section-header' id='s2'>
-            1.2 A Node
+            1.2 One node? I've got an army!
           </div>
           <div class='section-content'>
+            So, you now have the tools to vandalize websites everywhere with
+            magenta text letting people know how cool you are. But it would be
+            pretty tedious to do so, one node at a time. Plus, as you saw from
+            the first demo, the selection from <div class='code code-inline code-js'>d3.select</div>
+            only got us the first matching node. Luckily, we have just the tool:
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='section'&gt;
+  First
+&lt;/div&gt;
+&lt;div class='section'&gt;
+  Second
+&lt;/div&gt;</div>
+              <div class ='code code-js'>d3.<em>selectAll</em>('.section')
+    .text('D3 was here');</div>
+              <div class='code code-result'>&lt;div class='section'&gt;
+  D3 was here
+&lt;/div&gt;
+&lt;div class='section'&gt;
+  D3 was here
+&lt;/div&gt;</div>
+            </div>
+            Now, no <div class='code code-inline code-html'>div</div> is safe
+            from your marker.
           </div>
         </div>
       </div>
