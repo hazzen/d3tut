@@ -200,3 +200,24 @@ ol > li {
   font-style: normal;
   background-color: #f1ae7e;
 }
+
+.aside {
+  color: #000;
+  margin: 10px 0;
+  background-color: #efeff4;
+  border: 1px solid #ccc;
+  border-bottom-width: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.aside::before {
+  font-family: arial,sans-serif;
+  font-variant: small-caps;
+  font-size: 16px;
+  color: #000;
+  font-weight: bold;
+  display: block;
+  background-color: #b3b3bd;
+  content: 'note';
+}
