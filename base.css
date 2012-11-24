@@ -146,6 +146,27 @@ ol > li {
   content: 'Result';
 }
 
+.sample .sample-swap {
+  position: absolute;
+  right: 0;
+  border: 1px solid #aaa;
+  background-color: #b3b3bd;
+  color: #242;
+  font-variant: small-caps;
+}
+
+.sample .sample-swap:hover {
+  border-color: #888;
+  color: #000;
+  background-color: #d6d6db;
+}
+
+.sample .sample-swap:active {
+  border-color: #888;
+  color: #000;
+  background-color: #9292a0;
+}
+
 .code-inline {
   display: inline-block;
   white-space: normal;
