@@ -63,12 +63,7 @@
 &lt;/div&gt;</div>
               <div class ='code code-js'>d3.select('.section')
     .text('D3 was here');</div>
-              <div class='code code-result'>&lt;div class='section'&gt;
-  D3 was here
-&lt;/div&gt;
-&lt;div class='section'&gt;
-  Second
-&lt;/div&gt;</div>
+              <div class='code code-result'></div>
             </div>
             This code can be broken down into two parts:
             <ol>
@@ -111,12 +106,7 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
 &lt;/div&gt;</div>
               <div class ='code code-js'>d3.<em>selectAll</em>('.section')
     .text('D3 was here');</div>
-              <div class='code code-result'>&lt;div class='section'&gt;
-  D3 was here
-&lt;/div&gt;
-&lt;div class='section'&gt;
-  D3 was here
-&lt;/div&gt;</div>
+              <div class='code code-result'></div>
             </div>
             Now, no <div class='code code-inline code-html'>div</div> is safe
             from your marker.
@@ -143,12 +133,7 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
       var index = Array.prototype.indexOf.call(this.parentElement.children, this);
       return (index % 2) == 0 ? 'Even' : 'Odd';
     });</div>
-              <div class='code code-result'>&lt;div&gt;Even&lt;/div&gt;
-&lt;div&gt;Odd&lt;/div&gt;
-&lt;div&gt;Even&lt;/div&gt;
-&lt;div&gt;Odd&lt;/div&gt;
-&lt;div&gt;Even&lt;/div&gt;
-</div>
+              <div class='code code-result'></div>
             </div>
           </div>
           Something of note - D3 defines <div class='code code-js code-inline'>this</div>

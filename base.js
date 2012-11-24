@@ -24,12 +24,17 @@
       });
   };
 
-  var sizeElem = function(result) {
-    var w = result.node().clientWidth;
-    var h = result.node().clientHeight;
-    result.html(result.text());
-    w = Math.max(w, result.node().clientWidth);
-    h = Math.max(h, result.node().clientHeight);
+  var sizeResultContent = function(resultElem) {
+    var offscreen = d3.select(document.body).append('div')
+      .style('position', 'absolute')
+      .style('left', '-999px')
+      .html(d3.select(resultElem).html());
+    var w = offscreen.node().clientWidth;
+    var h = offscreen.node().clientHeight;
+    offscreen.text(offscreen.html());
+    w = Math.max(w, offscreen.node().clientWidth);
+    h = Math.max(h, offscreen.node().clientHeight);
+    offscreen.remove();
     return [w, h];
   };
 
@@ -41,10 +46,8 @@
     if (!js.length || !result.length) {
       return;
     }
-    var resultDims = sizeElem(result);
-    result.style('width', resultDims[0] + 'px')
-      .style('height', resultDims[1] + 'px');
-    result.html('');
+
+    var currentDims = [result.node().offsetWidth, result.node().offsetHeight];
     var iframe = result.append('iframe')
       .style('width', '100%')
       .style('height', '100%')
@@ -56,7 +59,8 @@
         iframe.contentDocument.body.innerHTML = unescapeHtml(html.text());
       }
       var icss = iframeDoc.createElement('style');
-      icss.innerHTML = '.code {color:#000;white-space:pre;font-family:monospace;}';
+      icss.innerHTML = '.code{color:#000;white-space:pre;font-family:monospace;}' +
+          'body{padding:0;margin:0}';
       iframeDoc.head.appendChild(icss);
       var ijs = iframeDoc.createElement('script');
       ijs.type = 'text/javascript';
@@ -64,9 +68,14 @@
       ijs.src = 'd3.v2.min.js';
 
       var onIjsLoad = function() {
+        result.classed('loaded', true);
         iframeWindow.eval(js.text());
         ijs.removeEventListener('load', onIjsLoad, true);
         ijs.parentNode.removeChild(ijs);
+
+        var resultDims = sizeResultContent(iframeDoc.body);
+        result.style('width', Math.max(currentDims[0], resultDims[0]) + 'px')
+          .style('height', (currentDims[1] + resultDims[1]) + 'px');
       };
       ijs.addEventListener('load', onIjsLoad, true);
 

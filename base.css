@@ -146,6 +146,14 @@ ol > li {
   content: 'Result';
 }
 
+.sample .code.code-result::after {
+  content: 'Loading...';
+}
+
+.sample .code.code-result.loaded::after {
+  content: none;
+}
+
 .sample .sample-swap {
   position: absolute;
   right: 0;
