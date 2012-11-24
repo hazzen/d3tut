@@ -122,6 +122,38 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
             from your marker.
           </div>
         </div>
+        <div class='section'>
+          <div class='section-header' id='s3'>
+            1.3 Happy little snowflakes
+          </div>
+          <div class='section-content'>
+            You now have the tools to modify either the first node matching a
+            selection, or all the nodes matching a selection. Sometimes, though,
+            it would be nice to modify each node based on some property. Maybe
+            you want the even ones to say 'Even' and the odd ones to say 'Odd'.
+            D3, in its infinite wisdom, makes that easy:
+            <div class='sample'>
+              <div class='code code-html'>&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;</div>
+              <div class ='code code-js'>d3.selectAll('div')
+    .text(function() {
+      var index = Array.prototype.indexOf.call(this.parentElement.children, this);
+      return (index % 2) == 0 ? 'Even' : 'Odd';
+    });</div>
+              <div class='code code-result'>&lt;div&gt;Even&lt;/div&gt;
+&lt;div&gt;Odd&lt;/div&gt;
+&lt;div&gt;Even&lt;/div&gt;
+&lt;div&gt;Odd&lt;/div&gt;
+&lt;div&gt;Even&lt;/div&gt;
+</div>
+            </div>
+          </div>
+          Something of note - D3 defines <div class='code code-js code-inline'>this</div>
+          inside the function as "the node the attribute will be set on".
+        </div>
       </div>
     </div>
   </body>

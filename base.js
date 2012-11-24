@@ -24,6 +24,15 @@
       });
   };
 
+  var sizeElem = function(result) {
+    var w = result.node().clientWidth;
+    var h = result.node().clientHeight;
+    result.html(result.text());
+    w = Math.max(w, result.node().clientWidth);
+    h = Math.max(h, result.node().clientHeight);
+    return [w, h];
+  };
+
   var annotateSample = function(sample) {
     sample = d3.select(sample);
     var html = sample.select('.code-html');
@@ -32,8 +41,9 @@
     if (!js.length || !result.length) {
       return;
     }
-    result.style('width', result.node().clientWidth + 'px')
-      .style('height', result.node().clientHeight + 'px');
+    var resultDims = sizeElem(result);
+    result.style('width', resultDims[0] + 'px')
+      .style('height', resultDims[1] + 'px');
     result.html('');
     var iframe = result.append('iframe')
       .style('width', '100%')
