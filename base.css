@@ -29,6 +29,10 @@ div.header {
   margin-bottom: 50px;
 }
 
+div.footer {
+  margin-bottom: 50px;
+}
+
 div.main,div.header {
   position: relative;
   margin-left: 100px;
@@ -111,7 +115,7 @@ ol > li {
   font-size: 16px;
   font-weight: bold;
   border-bottom: 1px solid #eee;
-  margin-bottom: 5px;
+  margin: 15px 0 5px;
   color: #666;
 }
 
@@ -152,6 +156,16 @@ ol > li {
 
 .sample .code.code-result.loaded::after {
   content: none;
+}
+
+.sample .code.code-result.error {
+  font-family: arial,sans-serif;
+  color: #f31;
+}
+
+.sample .code.code-result.error::before {
+  background-color: #c3acac;
+  color: #444;
 }
 
 .sample .sample-swap {

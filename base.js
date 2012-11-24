@@ -1,6 +1,12 @@
 (function(exports) {
   var tut = {};
 
+  var describeError = function(e) {
+    var apologies = ['Whoops', 'Harumph', 'Drats', 'Snap', 'Zut', 'Bugger'];
+    var apol = apologies[Math.floor(Math.random() * apologies.length)];
+    return [apol, '! We had an error (', e.name, ': "', e.message, '").'].join('');
+  };
+
   var unescapeHtml = function(code) {
     return code.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
   };
@@ -68,14 +74,19 @@
       ijs.src = 'd3.v2.min.js';
 
       var onIjsLoad = function() {
-        result.classed('loaded', true);
-        iframeWindow.eval(js.text());
         ijs.removeEventListener('load', onIjsLoad, true);
+        result.classed('loaded', true);
+        try {
+          iframeWindow.eval(js.text());
+        } catch (e) {
+          result.classed('error', true)
+            .text(describeError(e));
+        }
         ijs.parentNode.removeChild(ijs);
 
         var resultDims = sizeResultContent(iframeDoc.body);
-        result.style('width', Math.max(currentDims[0], resultDims[0]) + 'px')
-          .style('height', (currentDims[1] + resultDims[1]) + 'px');
+        result.style('width', currentDims[0] + 'px')
+          .style('height', (10 + currentDims[1] + resultDims[1]) + 'px');
       };
       ijs.addEventListener('load', onIjsLoad, true);
 

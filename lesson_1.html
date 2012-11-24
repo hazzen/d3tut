@@ -105,7 +105,7 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
   Second
 &lt;/div&gt;</div>
               <div class ='code code-js'>d3.<em>selectAll</em>('.section')
-    .text('D3 was here');</div>
+  .text('D3 was here');</div>
               <div class='code code-result'></div>
             </div>
             Now, no <div class='code code-inline code-html'>div</div> is safe
@@ -129,17 +129,63 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
 &lt;div&gt;&lt;/div&gt;
 &lt;div&gt;&lt;/div&gt;</div>
               <div class ='code code-js'>d3.selectAll('div')
-    .text(function() {
-      var index = Array.prototype.indexOf.call(this.parentElement.children, this);
-      return (index % 2) == 0 ? 'Even' : 'Odd';
-    });</div>
+  .text(function() {
+    var index = Array.prototype.indexOf.call(this.parentElement.children, this);
+    return (index % 2) == 0 ? 'Even' : 'Odd';
+  });</div>
               <div class='code code-result'></div>
             </div>
+            Something of note - D3 defines <div class='code code-js code-inline'>this</div>
+            inside the function as "the node the attribute will be set on".
           </div>
-          Something of note - D3 defines <div class='code code-js code-inline'>this</div>
-          inside the function as "the node the attribute will be set on".
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s4'>
+            1.4 Playing God
+          </div>
+          <div class='section-content'>
+            All of this modification would be useless if not for the other side
+            of the coin - creation! D3 provides an <div class='code code-js code-inline'>
+            append</div> method on selections for this purpose. It takes a single
+            argument - the tag name of the element to create. This can be any
+            valid tag, like <div class='code code-html code-inline'>div</div>
+            or <div class='code code-html code-inline'>table</div>. Like most
+            <div class='code code-js code-inline'>d3.selection</div> methods, the
+            return value is also a <div class='code code-js code-inline'>d3.selection</div>.
+            However, it contains the newly-created nodes, and not the original
+            selection:
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='things'&gt;
+  &lt;div&gt;Sugar&lt;/div&gt;
+&lt;/div&gt;</div>
+              <div class ='code code-js'>d3.select('.things')
+  .append('div')
+    .style('color', 'red')
+    .text('Spice');</div>
+              <div class='code code-result'></div>
+            </div>
+            Like all selection methods, <div class='code code-js code-inline'>append</div>
+            operates on all selected nodes. If multiple nodes are selected,
+            multiple nodes will be created (and returned):
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='things'&gt;
+  &lt;div&gt;Sugar&lt;/div&gt;
+  &lt;div&gt;Spice&lt;/div&gt;
+&lt;/div&gt;</div>
+              <div class ='code code-js'>d3.selectAll('.things div')
+  .append('div')
+    .style('display', 'inline-block')
+    .style('color', 'green')
+    .text('\u2713');</div>
+              <div class='code code-result'></div>
+            </div>
+            If you've played around with jQuery, or other JavaScript libraries,
+            you may notice similarities.
+          </div>
         </div>
       </div>
+    </div>
+    <div class='footer'>
     </div>
   </body>
   <script type="text/javascript">
