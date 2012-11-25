@@ -62,7 +62,7 @@
   Second
 &lt;/div&gt;</div>
               <div class ='code code-js'>d3.select('.section')
-  .text('D3 was here');</div>
+    .text('D3 was here');</div>
               <div class='code code-result'></div>
             </div>
             This code can be broken down into two parts:
@@ -83,8 +83,8 @@ section.text('D3 was here');
 section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
              d3 lets you write it all in one statement:
             <div class='code code-js'>d3.select('.section')
-  .text('D3 was here');
-  .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
+    .text('D3 was here');
+    .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
           </div>
         </div>
         <div class='section'>
@@ -105,7 +105,7 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
   Second
 &lt;/div&gt;</div>
               <div class ='code code-js'>d3.<em>selectAll</em>('.section')
-  .text('D3 was here');</div>
+    .text('D3 was here');</div>
               <div class='code code-result'></div>
             </div>
             Now, no <div class='code code-inline code-html'>div</div> is safe
@@ -129,10 +129,10 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
 &lt;div&gt;&lt;/div&gt;
 &lt;div&gt;&lt;/div&gt;</div>
               <div class ='code code-js'>d3.selectAll('div')
-  .text(function() {
-    var index = Array.prototype.indexOf.call(this.parentElement.children, this);
-    return (index % 2) == 0 ? 'Even' : 'Odd';
-  });</div>
+    .text(function() {
+      var index = Array.prototype.indexOf.call(this.parentElement.children, this);
+      return (index % 2) == 0 ? 'Even' : 'Odd';
+    });</div>
               <div class='code code-result'></div>
             </div>
             Something of note - D3 defines <div class='code code-js code-inline'>this</div>
@@ -247,9 +247,9 @@ d3.selectAll('.slayer').data(slayerNames);</div>
   'Faith'
 ];
 d3.selectAll('.slayer').data(slayerNames)
-  .text(function(d, i) {
-    return 'Slayer #' + (i + 1) + ': ' + d;  // i is 0-based.
-  });</div>
+    .text(function(d, i) {
+      return 'Slayer #' + (i + 1) + ': ' + d;  // i is 0-based.
+    });</div>
               <div class='code code-result'></div>
             </div>
             It turns out most methods of selection that set some property
@@ -278,9 +278,9 @@ d3.selectAll('.slayer').data(slayerNames)
   'Archer'
 ];
 d3.selectAll('.captain').data(captainNames)
-  .text(function(d, i) {
-    return 'Captain #' + (i + 1) + ': ' + d;  // i is 0-based.
-  });</div>
+    .text(function(d, i) {
+      return 'Captain #' + (i + 1) + ': ' + d;  // i is 0-based.
+    });</div>
               <div class='code code-result'></div>
             </div>
             <div class='aside'>
@@ -320,15 +320,15 @@ d3.selectAll('.captain').data(captainNames)
 var parent = d3.select('.captains');
 var captains = parent.selectAll('.captain').data(captainNames);
 captains.enter().append('div')
-  .style('color', 'green')
-  .attr('class', 'captain')  // attr is like style or text, but sets node-level attributes.
-  .text(function(d, i) {
-    return 'Captain #' + (i + 1) + ': ' + d;
+    .style('color', 'green')
+    .attr('class', 'captain')  // attr is like style or text, but sets node-level attributes.
+    .text(function(d, i) {
+      return 'Captain #' + (i + 1) + ': ' + d;
   });
 captains
-  .text(function(d, i) {
-    return 'Captain #' + (i + 1) + ': ' + d;
-  });</div>
+    .text(function(d, i) {
+      return 'Captain #' + (i + 1) + ': ' + d;
+    });</div>
               <div class='code code-result'></div>
             </div>
             All captains in a line, now. Calling <div class='code code-js code-inline'>append</div>
@@ -343,14 +343,14 @@ captains
             the example:
             <div class='code code-js'>...
 captains.enter().append('div')
-  .style('color', 'green')
-  .attr('class', 'captain');
+    .style('color', 'green')
+    .attr('class', 'captain');
 // captains now has the newly-appended nodes in its selection,
 // so those nodes will be included in all method calls.
 captains
-  .text(function(d, i) {
-    return 'Captain #' + (i + 1) + ': ' + d;
-  });</div>
+    .text(function(d, i) {
+      return 'Captain #' + (i + 1) + ': ' + d;
+    });</div>
             If the <div class='code code-js code-inline'>text</div> call was before
             the <div class='code code-js code-inline'>append</div>, only the
             existing nodes would get text. As such, it is usually best to deal
@@ -363,7 +363,7 @@ captains
 // We are selecting all of the .number nodes - which don't exist!
 var numbers = parent.selectAll('.number').data([7, 8, 21, 888]);
 numbers.enter().append('div')
-  .text(function(d, i) { return d; });</div>
+    .text(function(d, i) { return d; });</div>
               <div class='code code-result'></div>
             </div>
             While the above code works, it is actually missing one crucial detail.
@@ -371,11 +371,28 @@ numbers.enter().append('div')
             the new elements would match the selection. This isn't enforced, but
             not doing so leads to an unhappy coder. So the correct, ever-shorter,
             version of the code would be:
-            <div class='code code-js'>d3.select('.lucky-numbers')
-  .selectAll('.number').data([7, 8, 21, 888])
+            <div class='code code-js'>d3.select('.lucky-numbers').selectAll('.number')
+    .data([7, 8, 21, 888])
   .enter().append('div')
     <em>.attr('class', 'number')</em>
     .text(function(d, i) { return d; });</div>
+            <div class='aside'>
+              There are many different coding styles to use when writing D3. This
+              comes down to personal taste, but the example set by the D3 documentation
+              is not a bad one:
+              <ul class='bullet-list'>
+                <li>Multiple <div class='code code-js code-inline'>select</div>
+                operations can be on one line</li>
+                <li>Modifying operations on a selection are indented four spaces
+                and get their own line</li>
+                <li>Pair <div class='code code-js code-inline'>enter</div> and
+                <div class='code code-js code-inline'>append</div> together on
+                one line with a two-space indent<br>This makes it obvious
+                operations are on a new set of nodes, not the original selection</li>
+                <li>Only have one <div class='code code-js code-inline'>selectAll</div>
+                per statement</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

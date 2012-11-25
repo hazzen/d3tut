@@ -92,8 +92,8 @@ p {
 }
 
 ul.bullet-list {
-  list-style: circle;
-  margin-left: 1em;
+  list-style: disc;
+  margin: 5px 0 5px 2em;
 }
 
 ol {
