@@ -62,7 +62,7 @@
   Second
 &lt;/div&gt;</div>
               <div class ='code code-js'>d3.select('.section')
-    .text('D3 was here');</div>
+  .text('D3 was here');</div>
               <div class='code code-result'></div>
             </div>
             This code can be broken down into two parts:
@@ -83,8 +83,8 @@ section.text('D3 was here');
 section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
              d3 lets you write it all in one statement:
             <div class='code code-js'>d3.select('.section')
-    .text('D3 was here');
-    .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
+  .text('D3 was here');
+  .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
           </div>
         </div>
         <div class='section'>
@@ -294,6 +294,88 @@ d3.selectAll('.captain').data(captainNames)
             1.6 Two nodes enter, no nodes leave
           </div>
           <div class='section-content'>
+            The <div class='code code-js code-inline'>data</div> method, mentioned
+            previously, doesn't just bind data to elements. It computes a data
+            <em>join</em> between the nodes in the document and the data provided.
+            If two elements are selected and five datum provided, D3 notes three
+            more datum were provided than elements and stores this in the
+            <div class='code code-js code-inline'>enter</div> selection, accessible
+            via the <div class='code code-js code-inline'>enter</div> method
+            on the return value of a call to <div class='code code-js code-inline'>data</div>.
+            As there are no actual nodes to select, <div class='code code-js code-inline'>enter</div>
+            doesn't support most <div class='code code-js code-inline'>d3.selection</div>
+            methods. It does, however, allow <div class='code code-js code-inline'>append</div>:
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='captains'&gt;
+  &lt;div class='captain'&gt;&lt;/div&gt;
+  &lt;div class='captain'&gt;&lt;/div&gt;
+&lt;/div&gt;</div>
+              <div class='code code-js'>var captainNames = [
+  'Kirk',
+  'Picard',
+  'Sisko',
+  'Janeway',
+  'Archer'
+];
+var parent = d3.select('.captains');
+var captains = parent.selectAll('.captain').data(captainNames);
+captains.enter().append('div')
+  .style('color', 'green')
+  .attr('class', 'captain')  // attr is like style or text, but sets node-level attributes.
+  .text(function(d, i) {
+    return 'Captain #' + (i + 1) + ': ' + d;
+  });
+captains
+  .text(function(d, i) {
+    return 'Captain #' + (i + 1) + ': ' + d;
+  });</div>
+              <div class='code code-result'></div>
+            </div>
+            All captains in a line, now. Calling <div class='code code-js code-inline'>append</div>
+            operated on the parent of our selection, appending one node
+            per additional data element - in this case creating three new divs
+            as the last children of <div class='code code-html code-inline'>div class='captains'</div>.
+            <hr>
+            The <div class='code code-js code-inline'>enter</div> selection also
+            has another trick up its sleeve - nodes appended with it are automatically
+            inserted in the proper place in the <em>original</em> selection. So,
+            the following code still is equivalent to, and less error-prone than,
+            the example:
+            <div class='code code-js'>...
+captains.enter().append('div')
+  .style('color', 'green')
+  .attr('class', 'captain');
+// captains now has the newly-appended nodes in its selection,
+// so those nodes will be included in all method calls.
+captains
+  .text(function(d, i) {
+    return 'Captain #' + (i + 1) + ': ' + d;
+  });</div>
+            If the <div class='code code-js code-inline'>text</div> call was before
+            the <div class='code code-js code-inline'>append</div>, only the
+            existing nodes would get text. As such, it is usually best to deal
+            with the <div class='code code-js code-inline'>enter</div> selection first.
+            You don't even need any nodes to begin with; you can have an <em>empty</em>
+            selection and append to it, as long as it has a valid parent:
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='lucky-numbers'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var parent = d3.select('.lucky-numbers');
+// We are selecting all of the .number nodes - which don't exist!
+var numbers = parent.selectAll('.number').data([7, 8, 21, 888]);
+numbers.enter().append('div')
+  .text(function(d, i) { return d; });</div>
+              <div class='code code-result'></div>
+            </div>
+            While the above code works, it is actually missing one crucial detail.
+            When appending elements to a selection, it is good practice to ensure
+            the new elements would match the selection. This isn't enforced, but
+            not doing so leads to an unhappy coder. So the correct, ever-shorter,
+            version of the code would be:
+            <div class='code code-js'>d3.select('.lucky-numbers')
+  .selectAll('.number').data([7, 8, 21, 888])
+  .enter().append('div')
+    <em>.attr('class', 'number')</em>
+    .text(function(d, i) { return d; });</div>
           </div>
         </div>
       </div>
