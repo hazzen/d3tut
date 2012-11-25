@@ -67,6 +67,8 @@
               <li>a selection, <div class='code code-inline code-js'>d3.select('.section')</div>.
                   This takes a <a href='http://www.w3.org/TR/selectors-api/'>selector</a>
                   and returns a <div class='code code-inline code-js'>d3.selection</div>.
+                  This can also take an <div class='code code-inline code-js'>element</div>
+                  if you have one lying around.
               <li>an operation, <div class='code code-inline code-js'>text('D3 was here')</div>.
                   The <div class='code code-inline code-js'>d3.selection</div>
                   returned by the previous call supports a number of these. The one
@@ -223,6 +225,13 @@ d3.selectAll('.slayer').data(slayerNames);</div>
             <div class='code code-js code-inline'>Array</div> back out by calling
             the method with no arguments:
             <div class='code code-js'>var slayerNames = d3.selectAll('.slayers').data();</div>
+            <div class='aside'>
+              Most 'setter' operations in D3 support this idiom - instead of
+              providing a value, you can simply leave it blank. D3 will return
+              the first value of the first node in the selection. For instance,
+              got get the text content of a div is as easy as
+              <div class='code code-js code-inline'>var textContent = d3.select(theDiv).text()</div>
+            </div>
             Still, though, that isn't much help. Without an easy way of getting
             data associated with a node and modifying the node in some way, one
             might as well not use D3. Going back to the <a href='#s3'>snowflakes</a>
