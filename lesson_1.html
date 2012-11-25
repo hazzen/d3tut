@@ -406,7 +406,148 @@ numbers.enter().append('div')
             You've made it this far and haven't seen any colorful graphics. Which
             I'm sure is the only reason you want to use D3 - to impress friends,
             family, and crushes with your data-visualizing prowess. Well, the
-            time is now. Kind of.
+            time is now. Kind of. Future lessons will expand on not only the
+            capabilities of SVG, but also additional functionality of D3. Let's
+            make some squares!
+            <div class='sample'>
+              <div class='code code-html'>&lt;div id='chart'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var root = d3.select('#chart').append('svg')
+    .attr('width', 200)
+    .attr('height', 200)
+    .style('border', '1px solid black');
+
+root.selectAll('rect')
+    .data([5, 25, 80]).enter()
+  .append('rect')
+    .attr('x', Object)
+    .attr('y', Object)
+    .attr('width', 15)
+    .attr('height', 10)
+    .attr('fill', '#c63')
+    .attr('stroke', 'black');</div>
+              <div class='code code-result'></div>
+            </div>
+            There is a lot going on in that sample, much of it new. First off
+            is SVG - which has a <a href='http://www.w3.org/TR/SVG/'>W3C Recommendation</a>.
+            Or, in other words, a descriptive manual. It works; though for now
+            we will mainly concern ourselves with the <a href='http://www.w3.org/TR/SVG/shapes.html'>basic shapes</a>.
+            SVG can be embedded within HTML. D3 makes this simple; you need
+            only append an <div class='code code-html code-inline'>svg</div> element
+            to part of the DOM. This element functions much like the
+            <div class='code code-html code-inline'>body</div> element in a webpage -
+            it is the root onto which all other elements must be added. Relevant code:
+            <div class='code code-js'>var root = d3.select('#chart').append('svg')
+    .attr('width', 200)
+    .attr('height', 200)
+    .style('border', '1px solid black');</div>
+            It is a very good idea to explicitly set the
+            <div class='code code-js code-inline'>width</div> and
+            <div class='code code-js code-inline'>height</div> of the root
+            <div class='code code-js code-inline'>svg</div> element as they default
+            to <div class='code code-js code-inline'>100%</div>.
+            <div class='aside'>
+               You'll note the dimensions here, and elsewhere for SVG elements,
+               can be raw numbers with no attached unit. When specifying values
+               for attributes on SVG nodes (that is, using
+               <div class='code code-js code-inline'>.attr(...);</div>), the units
+               are assumed to be in the "current user coordinate system". For
+               now, pretend that means 'pixels'. You can always add a
+               <a href='http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units'>CSS2 unit</a>
+               as well, such as <div class='code code-html code-inline'>.attr('x', '53px')</div>
+               or <div class='code code-html code-inline'>.attr('y', '2em')</div>
+               but it tends to be easier to simply ignore the unit unless necessary.
+               The whole spec is available
+               <a href='http://www.w3.org/TR/SVG/types.html#DataTypeLength'>here</a>
+               for the curious or the curiously demented that enjoy reading
+               standards documents.
+            </div>
+            The next new bit is our select - we used element type selection
+            instead of classes. That is, we wrote
+            <div class='code code-js code-inline'>.selectAll('rect')</div> instead
+            of <div class='code code-js code-inline'>.selectAll('.some-class')</div>.
+            Why? Well, for one thing, it saves a line of code in the example (we
+            no longer need to add a class attribute that matches the selection). It
+            also seemed like a good idea to mix it up. Keep you on your toes.
+            <hr>
+            Moving on, we have these curious lines:
+            <div class='code code-js'>  .append('rect')
+    .attr('x', Object)
+    .attr('y', Object)</div>
+            The first one should be straightforward - we are no longer creating
+            HTML elements. Now, we are in the brave new world of SVG elements.
+            <div class='code code-js code-inline'>
+            <a href='http://www.w3.org/TR/SVG/shapes.html#RectElement'>rect</a>
+            </div> is a simple one to start with. The other two lines are
+            quite mysterious. Somewhat magic, one might say. I'd agree - you
+            will see, on occaison,
+            <div class='code code-js code-inline'>String</div> or
+            <div class='code code-js code-inline'>Object</div> used as a value.
+            Remember that values can either be literals (like a string or number),
+            or a function that is evaluated once per node/datum? Well,
+            <div class='code code-js code-inline'>String</div> and
+            <div class='code code-js code-inline'>Object</div> are just functions.
+            So the line <div class='code code-js'>.attr('x', Object)</div>
+            is equivalent to <div class='code code-js'>.attr('x', function(d, i) { return Object(d, i); })</div>
+            and also to <div class='code code-js'>.attr('x', function(d, i) { return d; })</div>
+            <div class='code code-js code-inline'>Object</div>, then, is essentially
+            the identity function (and, luckily, it ignores every argument other
+            than the first). Remember, you are free to use any function as
+            a value argument - it need not be defined inline, or even defined
+            by you.
+            <hr>
+            The final two lines are just setting up our visuals:
+            <div class='code code-js'>    .attr('fill', '#c63')
+    .attr('stroke', 'black');</div>
+            Those should be self-explanatory, but they aren't the only way
+            of styling SVG elements. You can also put it in your CSS (or
+            embed a style element in the SVG element, an advanced topic I'm
+            going to pretend I didn't mention because I don't want to go into
+            it). There are many, many style attributes and a legion of values
+            to set.  You can read all about them from
+            <a href='http://www.w3.org/TR/SVG/styling.html'>
+            the horse's mouth</a>, or you can just pick up bits and pieces
+            from the examples here. Your call.
+            <hr>
+            There is one final example to offer, provided without commentary.
+            You should be able to <a href='http://en.wikipedia.org/wiki/Piet_Mondrian'>
+            figure it out</a>. Just remember -
+            <div class='code code-js code-inline'>datum</div> can be anything.
+            <div class='sample'>
+              <div class='code code-html'>&lt;div id='chart'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var root = d3.select('#chart').append('svg')
+    .attr('width', 600)
+    .attr('height', 600)
+    .style('border', '1px solid black');
+
+var rects = [
+  {x:  -5, y:  -5, w: 150, h: 195},
+  {x:  -5, y: 200, w: 150, h: 230},
+  {x: 155, y: 435, w: 395, h: 175},
+  {x: 555, y: 435, w:  55, h:  80},
+  {x: 155, y:  -5, w: 450, h: 435, fill: '#731000'},
+  {x:  -5, y: 435, w: 150, h: 175, fill: '#0b183b'},
+  {x: 555, y: 520, w:  55, h:  90, fill: '#d49800'}
+];
+
+root.selectAll('rect')
+    .data(rects).enter()
+  .append('rect')
+    .attr('x', function(d) { return d.x; })
+    .attr('y', function(d) { return d.y; })
+    .attr('width', function(d) { return d.w; })
+    .attr('height', function(d) { return d.h; })
+    .attr('fill', function(d) { return d.fill || '#eef2d1'; })
+    .attr('stroke-width', 10)
+    .attr('stroke', 'black');</div>
+              <div class='code code-result'></div>
+            </div>
+            The next lesson will cover more of the D3 library, specifically
+            those parts focused on making drawing easier, as well as a whole
+            spread of SVG elements yet to be seen. And, don't worry,
+            animations will come soon after (so you can get your <em>zwoop</em>s
+            and <em>schwedaddl</em>es and really impress your friends). There
+            will be a detour through nested selections on the way, so don't get
+            too excited.
           </div>
         </div>
       </div>
