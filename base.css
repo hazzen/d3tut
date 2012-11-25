@@ -5,6 +5,8 @@
 .pad-all{padding:20px 20px 20px 20px;}
 .hrefborder-bottom{border-bottom:1px solid #a4b2b3;}
 .clearfix:after {content: "";display: table;clear: both;}
+.float-left {float: left}
+.float-right {float: right}
 
 em {
   font-style: italic;
@@ -30,10 +32,11 @@ div.header {
 }
 
 div.footer {
-  margin-bottom: 50px;
+  margin: 50px 0;
+  color: #666;
 }
 
-div.main,div.header {
+div.main,div.header,div.footer {
   position: relative;
   margin-left: 100px;
 }

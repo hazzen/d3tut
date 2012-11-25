@@ -20,7 +20,10 @@
           var me = d3.select(this);
           var body = d3.select(content);
           if (me.datum()) {
-            body.text(body.html())
+            var styled = style_html(body.html(), {
+              indent_size: 2
+            });
+            body.text(styled)
               .classed('code', true);
           } else {
             body.html(body.text())
