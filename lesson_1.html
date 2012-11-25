@@ -3,7 +3,7 @@
     <link href="reset.css" rel="stylesheet" type="text/css">
     <link href="base.css" rel="stylesheet" type="text/css">
     <title>
-      hazzens games
+      D3, Conceptually - Lesson 1
     </title>
     <script type="text/javascript" src="d3.v2.min.js"></script>
     <script type="text/javascript" src="base.js"></script>
@@ -192,6 +192,108 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
               Yes, you could do it. If you examine the source of this page, you
               might even notice it being done. But don't say I told you to.
             </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s5'>
+            1.5 But where's the data?
+          </div>
+          <div class='section-content'>
+            You, the reader, might be confused at this point. You might have read,
+            on the <a href='http://d3js.org/'>D3</a> website, "D3.js is a
+            JavaScript library for manipulating documents based on data." But
+            we haven't seen a single mention of data yet. Meet our new friend,
+            the <div class='code code-js code-inline'>data</div> operator (a
+            card-carrying member of the <div class='code code-js code-inline'>d3.selection</div>
+            club). It binds some <div class='code code-js code-inline'>data</div>
+            to a <div class='code code-js code-inline'>selection</div>.
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='slayer'&gt;&lt;/div&gt;
+&lt;div class='slayer'&gt;&lt;/div&gt;
+&lt;div class='slayer'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var slayerNames = [
+  'Buffy',
+  'Kendra',
+  'Faith'
+];
+d3.selectAll('.slayer').data(slayerNames);</div>
+              <div class='code code-result'></div>
+            </div>
+            The argument to <div class='code code-js code-inline'>data</div> is
+            an <div class='code code-js code-inline'>Array</div>, the elements of
+            which can have any type. By itself, binding data to elements doesn't
+            accomplish anything without the ability to access it. You can get this
+            <div class='code code-js code-inline'>Array</div> back out by calling
+            the method with no arguments:
+            <div class='code code-js'>var slayerNames = d3.selectAll('.slayers').data();</div>
+            Still, though, that isn't much help. Without an easy way of getting
+            data associated with a node and modifying the node in some way, one
+            might as well not use D3. Going back to the <a href='#s3'>snowflakes</a>
+            example, we saw a function passed as an argument to a
+            <div class='code code-js code-inline'>d3.selection</div> method. What
+            I didn't mention is that function is called with several arguments -
+            the bound <div class='code code-js code-inline'>datum</div>
+            of the current element, and its index within the
+            <div class='code code-js code-inline'>selection</div>. By convention,
+            we call these <div class='code code-js code-inline'>d</div> and
+            <div class='code code-js code-inline'>i</div>. For example:
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='slayer'&gt;&lt;/div&gt;
+&lt;div class='slayer'&gt;&lt;/div&gt;
+&lt;div class='slayer'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var slayerNames = [
+  'Buffy',
+  'Kendra',
+  'Faith'
+];
+d3.selectAll('.slayer').data(slayerNames)
+  .text(function(d, i) {
+    return 'Slayer #' + (i + 1) + ': ' + d;  // i is 0-based.
+  });</div>
+              <div class='code code-result'></div>
+            </div>
+            It turns out most methods of selection that set some property
+            of each node in the selection support this idiom: arguments
+            can either be functions (called with
+            <div class='code code-js code-inline'>datum</div> and
+            <div class='code code-js code-inline'>index</div>, and a
+            <div class='code code-js code-inline'>this</div> of the node), or
+            a literal value. They both come in handy - sometimes, you want every
+            node to have a <div class='code code-html code-inline'>font-style</div>
+            of <div class='code code-html code-inline'>bold</div>, and sometimes
+            you want each node to get special treatment.
+            <hr>
+            And what if the length of data doesn't match the length of the
+            selection? To our neophyte eyes, not much. The selection is only
+            as many nodes as existent, and the remaineder of the data (if any)
+            is simply ignored.
+            <div class='sample'>
+              <div class='code code-html'>&lt;div class='captain'&gt;&lt;/div&gt;
+&lt;div class='captain'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var captainNames = [
+  'Kirk',
+  'Picard',
+  'Sisko',
+  'Janeway',
+  'Archer'
+];
+d3.selectAll('.captain').data(captainNames)
+  .text(function(d, i) {
+    return 'Captain #' + (i + 1) + ': ' + d;  // i is 0-based.
+  });</div>
+              <div class='code code-result'></div>
+            </div>
+            <div class='aside'>
+              Everything is more complex than this, but we'll get to that
+              when the time comes. Starting right now, actually.
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s6'>
+            1.6 Two nodes enter, no nodes leave
+          </div>
+          <div class='section-content'>
           </div>
         </div>
       </div>

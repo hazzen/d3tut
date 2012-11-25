@@ -221,3 +221,8 @@ ol > li {
   background-color: #b3b3bd;
   content: 'note';
 }
+
+hr {
+  border: none;
+  margin: 10px 0;
+}
