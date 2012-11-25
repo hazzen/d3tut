@@ -13,33 +13,34 @@
 
   var makeSwapButton = function(container, content) {
     var btn = d3.select(container).append('button')
-      .datum(true)
-      .attr('class', 'sample-swap')
-      .text('swap src/result')
-      .on('click', function() {
-        var me = d3.select(this);
-        var body = d3.select(content);
-        if (me.datum()) {
-          body.text(body.html())
-            .classed('code', true);
-        } else {
-          body.html(body.text())
-            .classed('code', false);
-        }
-        me.datum(!me.datum());
-      });
+        .datum(true)
+        .attr('class', 'sample-swap')
+        .text('swap src/result')
+        .on('click', function() {
+          var me = d3.select(this);
+          var body = d3.select(content);
+          if (me.datum()) {
+            body.text(body.html())
+              .classed('code', true);
+          } else {
+            body.html(body.text())
+              .classed('code', false);
+          }
+          me.datum(!me.datum());
+          var dims = sizeResultContent(content);
+          d3.select(container)
+              .style('height', (25 + dims[1]) + 'px');
+        });
   };
 
   var sizeResultContent = function(resultElem) {
-    var offscreen = d3.select(document.body).append('div')
-      .style('position', 'absolute')
-      .style('left', '-999px')
-      .html(d3.select(resultElem).html());
+    var offscreen = d3.select(resultElem.ownerDocument.body).append('div')
+        .style('position', 'absolute')
+        .style('left', '-999px')
+        .attr('class', resultElem.className)
+        .html(d3.select(resultElem).html());
     var w = offscreen.node().clientWidth;
     var h = offscreen.node().clientHeight;
-    offscreen.text(offscreen.html());
-    w = Math.max(w, offscreen.node().clientWidth);
-    h = Math.max(h, offscreen.node().clientHeight);
     offscreen.remove();
     return [w, h];
   };
@@ -55,9 +56,9 @@
 
     var currentDims = [result.node().offsetWidth, result.node().offsetHeight];
     var iframe = result.append('iframe')
-      .style('width', '100%')
-      .style('height', '100%')
-      .node();
+        .style('width', '100%')
+        .style('height', '100%')
+        .node();
     window.setTimeout(function() {
       var iframeWindow = iframe.contentWindow;
       var iframeDoc = iframeWindow.document;
@@ -75,18 +76,20 @@
 
       var onIjsLoad = function() {
         ijs.removeEventListener('load', onIjsLoad, true);
-        result.classed('loaded', true);
+        result
+            .classed('loaded', true);
         try {
           iframeWindow.eval(js.text());
         } catch (e) {
-          result.classed('error', true)
-            .text(describeError(e));
+          result
+              .classed('error', true)
+              .text(describeError(e));
         }
         ijs.parentNode.removeChild(ijs);
 
         var resultDims = sizeResultContent(iframeDoc.body);
-        result.style('width', currentDims[0] + 'px')
-          .style('height', (10 + currentDims[1] + resultDims[1]) + 'px');
+        result
+            .style('height', (25 + resultDims[1]) + 'px');
       };
       ijs.addEventListener('load', onIjsLoad, true);
 
