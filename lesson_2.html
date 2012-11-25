@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <link href="reset.css" rel="stylesheet" type="text/css">
+    <link href="base.css" rel="stylesheet" type="text/css">
+    <title>
+      D3, Conceptually - Lesson 2
+    </title>
+    <script type="text/javascript" src="d3.v2.min.js"></script>
+    <script type="text/javascript" src="base.js"></script>
+    <script type="text/javascript" src="beautify-html.js"></script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-24357809-1']);
+      _gaq.push(['_setDomainName', 'hazzens.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class='header'>
+      <div class='left-bar'>
+      </div>
+      <div class='content'>
+        <h1 id='masthead'>
+          D3, Conceptually
+        </h1>
+        <h2 class='lesson'>
+          Lesson 2: Charts <span class='warn'>UNDER CONSTRUCTION</span>
+        </h2>
+      </div>
+    </div>
+    <div class='main'>
+      <div class='left-bar'>
+        <h2 class='border-bottom'>index</h2>
+        <ul class='pad-top selector'>
+          <li><a href='lesson_0.html'>0. Preface</a></li>
+          <li><a href='lesson_1.html'>1. Introductory elements</a></li>
+          <li class='selected'><a href='lesson_2.html'>2. Charts</a></li>
+        </ul>
+      </div>
+      <div class='content'>
+        <div class='section'>
+          <div class='section-header' id='s1'>
+            2.1 Making some charts outside of the school
+          </div>
+          <div class='section-content'>
+            <div class='sample'>
+              <div class='code code-html'>&lt;div id='chart'&gt;&lt;/div&gt;</div>
+              <div class='code code-js'>var evenNumbers = [2, 4, 6, 8, 10];
+var w = 600;
+var h = 100;
+var root = d3.select('#chart').append('svg')
+    .attr('width', w)
+    .attr('height', h)
+    .style('border', '1px solid black');
+
+var barHeight = h / evenNumbers.length;
+root.selectAll('rect.number')
+    .data(evenNumbers).enter()
+  .append('rect')
+    .attr('class', 'number')
+    .attr('x', 0)
+    .attr('y', function(d, i) { return i * barHeight; })
+    .attr('width', function(d) { return 60 * d; })
+    .attr('height', barHeight)
+    .attr('fill', '#cff')
+    .attr('stroke', '#666');</div>
+              <div class='code code-result'></div>
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s2'>
+            2.2 Tipping the scales
+          </div>
+          <div class='section-content'>
+            <span class='warn'>Under construction.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='footer'>
+      <div class='content'>
+        Copyright 2012 <a href='http://hazzens.com'>Mikey Levine</a>
+        <div class='float-right'>
+          Built using <a href='http://d3js.org'>D3</a> and
+          <a href='https://github.com/einars/js-beautify'>js-beautify</a>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    tut.init();
+  </script>
+</html>

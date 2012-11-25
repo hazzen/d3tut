@@ -38,13 +38,9 @@
       <div class='left-bar'>
         <h2 class='border-bottom'>index</h2>
         <ul class='pad-top selector'>
-          <li><a href='#'>1. Intro</a></li>
-          <li>
-          <ul class='selector'>
-            <li><a href='#s1'>1.1</a>
-            <li><a href='#s2'>1.2</a>
-          </ul>
-          </li>
+          <li><a href='lesson_0.html'>0. Preface</a></li>
+          <li class='selected'><a href='#'>1. Introductory elements</a></li>
+          <li><a href='lesson_2.html'>2. Charts</a></li>
         </ul>
       </div>
       <div class='content'>
@@ -495,6 +491,10 @@ root.selectAll('rect')
             than the first). Remember, you are free to use any function as
             a value argument - it need not be defined inline, or even defined
             by you.
+            <div class='aside'>
+              The coordinate system in SVG uses the top-left corner as the origin;
+              x increases right-wards and y increases down-wards.
+            </div>
             <hr>
             The final two lines are just setting up our visuals:
             <div class='code code-js'>    .attr('fill', '#c63')
