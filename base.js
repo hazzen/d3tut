@@ -61,8 +61,9 @@
     var iframe = result.append('iframe')
         .style('width', '100%')
         .style('height', '100%')
+        .text('')
         .node();
-    window.setTimeout(function() {
+    var onIframeLoad = function() {
       var iframeWindow = iframe.contentWindow;
       var iframeDoc = iframeWindow.document;
       if (html.text()) {
@@ -96,10 +97,18 @@
       };
       ijs.addEventListener('load', onIjsLoad, true);
 
-      iframeDoc.body.appendChild(ijs);
+      iframeDoc.head.appendChild(ijs);
 
       makeSwapButton(result.node(), iframeDoc.body);
-    });
+    };
+    // Firefox doesn't like setTimeout-ing an iframe loading, and Chrome doesn't
+    // seem to fire the load event. I'll assume Webkit == Chrome, and ignore
+    // IE/Opera.
+    if (navigator.userAgent.match(/Firefox/)) {
+      iframe.addEventListener('load', onIframeLoad, true);
+    } else {
+      window.setTimeout(onIframeLoad, 1);
+    }
   };
 
   var annotateAllSamples = function() {
