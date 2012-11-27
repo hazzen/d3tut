@@ -1,0 +1,40 @@
+<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom">
+  <title>D3, Conceptually - Lessons</title>
+  <subtitle>A tutorial-in-progress for the JavaScript library D3</subtitle>
+  <link href="http://code.hazzens.com/d3tut/atom.xml" rel="self"/>
+  <link href="http://code.hazzens.com/d3tut/"/>
+  <updated>2012-11-26T23:59:00Z</updated>
+  <author>
+    <name>Mikey Levine</name>
+    <uri>http://hazzens.com</uri>
+  </author>
+  <id>tag:code.hazzens.com,2012:/d3tut</id>
+
+  <entry>
+    <title>Lesson 1: Introductory elements</title>
+    <link href="http://code.hazzens.com/d3tut/lesson1.html"/>
+    <id>tag:code.hazzens.com,2012-11-26:/d3tut/lesson1.html</id>
+    <updated>2012-11-26T23:59:00Z</updated>
+    <summary>
+      In which we select elements and attach data to them.
+    </summary>
+    <author>
+      <name>Mikey Levine</name>
+      <uri>http://hazzens.com</uri>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Lesson 0: Preface</title>
+    <link href="http://code.hazzens.com/d3tut/lesson0.html"/>
+    <id>tag:code.hazzens.com,2012-11-26:/d3tut/lesson0.html</id>
+    <updated>2012-11-26T23:59:00Z</updated>
+    <summary>
+      In which we survey the playing field.
+    </summary>
+    <author>
+      <name>Mikey Levine</name>
+      <uri>http://hazzens.com</uri>
+    </author>
+  </entry>
+</feed>
