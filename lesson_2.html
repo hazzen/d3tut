@@ -51,55 +51,112 @@
             2.1 Making some charts outside of the school
           </div>
           <div class='section-content'>
-            As in the last lesson, throwing some code at you, the reader, and
-            then explaining is a good way to break the ice. So, ice breaker:
+            We start this lesson with a simple (and completely contrived)
+            problem to solve. Word has it the world might be ending; some
+            aliens have contacted the leader of the world (pretend, will you)
+            and demanded they be shown a bar chart of the even numbers up to 10.
+            Some sort of test, we gather, and if we can't deliver they promise
+            to destroy the world. A far-fetched request, but it sure beats a
+            whale.
+            <hr>
+            So, how to begin? As everything, with our data:
+            <code class='block js'>var evenNumbers = [0, 2, 4, 6, 8, 10];</code>
+            Good, good. Now, the aliens also demanded the graph have a width
+            of 600 pixels and height of 100&mdash;those numbers please them
+            (don't ask how they share our definition of pixels). Putting those
+            in variables won't hurt:
+            <code class='block js'>var width = 600;
+var height = 100;</code>
+            And why not arbitrarily decide the bars will be stacked vertically,
+            each extending to the right in proportion to the represented number.
+            So, if we have six bars, that must make each of them
+            <code class='js'>height / 6</code> pixels tall. Hardcoding
+            <code class='js'>6</code> doesn't really strike me as a good idea,
+            considering the example we set above. So, we make sure
+            however many bars we have will fit:
+            <code class='block js'>var barHeight = height / evenNumbers.length;</code>
+            What about the width of each bar? Well, that depends on the number
+            it represents. We have 600 pixels to work with; giving 10, the
+            largest datum, a width of 600 pixels will work fine (and zero,
+            obviously, gets zero). A function for that would be:
+            <code class='block js'>var barWidth = function(number) {
+  return number * (width / 10);
+};</code>
+            "Aha!", you might say, "shouldn't that <em>also</em> vary based
+            on the data, and not hard-coded? Aren't you setting a bad example
+            for the kids?". And I would reply with a proper function:
+            <code class='block js'>var maxDataValue = d3.max(evenNumbers);
+var barWidth = function(number) {
+  return number * (width / maxDataValue);
+};</code>
+            A <code class>rect</code> element in SVG is defined by its
+            <code>width</code>, <code>height</code>, <code>x</code>, and
+            <code>y</code> attributes. We have two of them (<code
+            class='html'>width</code> and <code>height</code>), so lets get the
+            others.
+            <hr>
+            <code>x</code> is quite easy, actually. All bars should
+            be aligned along the left axis, so they all have an <code>x</code>
+            of 0. <code>y</code> takes a <em>bit</em> more thought, but not too
+            much (save those brain cells for something else). The
+            <code>i</code>-th even number should be offset by <code>i * barHeight</code>.
+            Or, in a function:
+            <code class='block js'>var barY = function(index) {
+  return index * barHeight;
+};</code>
+            Now, we know from the last lesson that <code>barY</code> is probably
+            going to be provided as an <code>attr</code> value, which is passed
+            two arguments - first the <code>datum</code>, then the <code>index</code>.
+            So we change it to:
+            <code class='block js'>var barY = function(datum, index) {
+  return index * barHeight;
+};</code>
+            Putting all of this together, and choosing arbitrary colors, we get:
             <div class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
-              <code class='block js'>var w = 600;
-var h = 100;
+              <code class='block js'>var width = 600;
+var height = 100;
 var root = d3.select('#chart').append('svg')
     .attr({
-      'width': w,
-      'height': h,
+      'width': width,
+      'height': height,
     })
     .style('border', '1px solid black');
 
-var evenNumbers = [2, 4, 6, 8, 10];
-var barHeight = h / evenNumbers.length;
+var evenNumbers = [0, 2, 4, 6, 8, 10];
+var maxDataValue = d3.max(evenNumbers);
+var barHeight = height / evenNumbers.length;
+var barWidth = function(datum) {
+  return datum * (width / maxDataValue);
+};
+var barX = 0;
+var barY = function(datum, index) {
+  return index * barHeight;
+};
 root.selectAll('rect.number')
     .data(evenNumbers).enter()
   .append('rect')
     .attr({
       'class': 'number',
-      'x': 0,
-      'y': function(d, i) { return i * barHeight; },
-      'width': function(d) { return 60 * d; },
+      'x': barX,
+      'y': barY,
+      'width': barWidth,
       'height': barHeight,
       'fill': '#dff',
-      'stroke': '#666',
+      'stroke': '#444',
     });</code>
               <code class='block result'></code>
             </div>
-            Our first two lines are simple: we set a variable named
-            <code class='js'>w</code> and one named
-            <code class='js'>h</code> to some numbers.
-            Why? Who cares, if it doesn't make sense, keep reading. Doing so,
-            we get:
-            <code class='block js'>var root = d3.select('#chart').append('svg')
-    .attr({
-      'width': w,
-      'height': h,
-    })
-    .style('border', '1px solid black');</code>
-             New syntax! Join the club. D3 is under
-             <a href='https://github.com/mbostock/d3/wiki/Release-Notes'>constant
-             development</a> and new features get added with some frequency.
-             Your author tries to keep up, but can't always be bothered.
-             The two variables from before should now be more obvious in their
-             meaning - they are the width and height of whatever chart we are
-             making. Why not give them a longer name? A better question: why
-             name them at all? Aside from it being good style to do so, we also
-             still have use for them.
+            <div class='aside'>
+               New syntax! Join the club. D3 is under
+               <a href='https://github.com/mbostock/d3/wiki/Release-Notes'>constant
+               development</a> and new features get added with some frequency.
+               Your author tries to keep up, but can't always be bothered.
+               Hopefully you pick better role models. Passing a map to the
+               <code>attr</code> function (among others) is shorthand for
+               calling <code>attr</code> for each (key, value) pair in the map.
+             </div>
+             <hr>
           </div>
         </div>
         <div class='section'>
