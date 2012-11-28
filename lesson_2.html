@@ -51,29 +51,55 @@
             2.1 Making some charts outside of the school
           </div>
           <div class='section-content'>
+            As in the last lesson, throwing some code at you, the reader, and
+            then explaining is a good way to break the ice. So, ice breaker:
             <div class='sample'>
-              <div class='code code-html'>&lt;div id='chart'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var evenNumbers = [2, 4, 6, 8, 10];
-var w = 600;
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var w = 600;
 var h = 100;
 var root = d3.select('#chart').append('svg')
-    .attr('width', w)
-    .attr('height', h)
+    .attr({
+      'width': w,
+      'height': h,
+    })
     .style('border', '1px solid black');
 
+var evenNumbers = [2, 4, 6, 8, 10];
 var barHeight = h / evenNumbers.length;
 root.selectAll('rect.number')
     .data(evenNumbers).enter()
   .append('rect')
-    .attr('class', 'number')
-    .attr('x', 0)
-    .attr('y', function(d, i) { return i * barHeight; })
-    .attr('width', function(d) { return 60 * d; })
-    .attr('height', barHeight)
-    .attr('fill', '#cff')
-    .attr('stroke', '#666');</div>
-              <div class='code code-result'></div>
+    .attr({
+      'class': 'number',
+      'x': 0,
+      'y': function(d, i) { return i * barHeight; },
+      'width': function(d) { return 60 * d; },
+      'height': barHeight,
+      'fill': '#dff',
+      'stroke': '#666',
+    });</code>
+              <code class='block result'></code>
             </div>
+            Our first two lines are simple: we set a variable named
+            <code class='js'>w</code> and one named
+            <code class='js'>h</code> to some numbers.
+            Why? Who cares, if it doesn't make sense, keep reading. Doing so,
+            we get:
+            <code class='block js'>var root = d3.select('#chart').append('svg')
+    .attr({
+      'width': w,
+      'height': h,
+    })
+    .style('border', '1px solid black');</code>
+             New syntax! Join the club. D3 is under
+             <a href='https://github.com/mbostock/d3/wiki/Release-Notes'>constant
+             development</a> and new features get added with some frequency.
+             Your author tries to keep up, but can't always be bothered.
+             The two variables from before should now be more obvious in their
+             meaning - they are the width and height of whatever chart we are
+             making. Why not give them a longer name? A better question: why
+             name them at all? Aside from it being good style to do so, we also
+             still have use for them.
           </div>
         </div>
         <div class='section'>

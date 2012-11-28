@@ -50,9 +50,9 @@
 
   var annotateSample = function(sample) {
     sample = d3.select(sample);
-    var html = sample.select('.code-html');
-    var js = sample.select('.code-js');
-    var result = sample.select('.code-result');
+    var html = sample.select('.html');
+    var js = sample.select('.js');
+    var result = sample.select('.result');
     if (!js.length || !result.length) {
       return;
     }

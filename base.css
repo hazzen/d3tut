@@ -121,17 +121,24 @@ ol > li {
   color: #666;
 }
 
-.code {
-  color: #000;
-  margin: 10px 0 10px 20px;
-  white-space: pre;
-  font-family: monospace;
+code {
   background-color: #efeff4;
   border: 1px solid #ccc;
-  border-bottom-width: 3px;
+  color: #000;
+  display: inline-block;
+  font-family: monospace;
+  margin: 0;
+  white-space: normal;
 }
 
-.sample .code::before {
+code.block {
+  border-bottom-width: 3px;
+  display: block;
+  margin: 10px 0 10px 20px;
+  white-space: pre;
+}
+
+.sample code.block::before {
   font-family: arial,sans-serif;
   font-size: 16px;
   color: #242;
@@ -140,32 +147,32 @@ ol > li {
   background-color: #b3b3bd;
 }
 
-.sample .code.code-html::before {
+.sample code.block.html::before {
   content: 'HTML';
 }
 
-.sample .code.code-js::before {
+.sample code.block.js::before {
   content: 'JS';
 }
 
-.sample .code.code-result::before {
+.sample code.block.result::before {
   content: 'Result';
 }
 
-.sample .code.code-result::after {
+.sample code.block.result::after {
   content: 'Loading...';
 }
 
-.sample .code.code-result.loaded::after {
+.sample code.block.result.loaded::after {
   content: none;
 }
 
-.sample .code.code-result.error {
+.sample code.block.result.error {
   font-family: arial,sans-serif;
   color: #f31;
 }
 
-.sample .code.code-result.error::before {
+.sample code.block.result.error::before {
   background-color: #c3acac;
   color: #444;
 }
@@ -191,14 +198,7 @@ ol > li {
   background-color: #9292a0;
 }
 
-.code-inline {
-  display: inline-block;
-  white-space: normal;
-  margin: 0;
-  border: 1px solid #ccc;
-}
-
-.code em {
+code em {
   font-style: normal;
   background-color: #f1ae7e;
 }

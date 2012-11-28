@@ -54,38 +54,38 @@
             A simple example of basic d3 syntax is as good a starting point as
             any:
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='section'&gt;
+              <code class='block html'>&lt;div class='section'&gt;
   First
 &lt;/div&gt;
 &lt;div class='section'&gt;
   Second
-&lt;/div&gt;</div>
-              <div class ='code code-js'>d3.select('.section')
-    .text('D3 was here');</div>
-              <div class='code code-result'></div>
+&lt;/div&gt;</code>
+              <code class='block js'>d3.select('.section')
+    .text('D3 was here');</code>
+              <code class='block result'></code>
             </div>
             This code can be broken down into two parts:
             <ol>
-              <li>a selection, <div class='code code-inline code-js'>d3.select('.section')</div>.
+              <li>a selection, <code class='js'>d3.select('.section')</code>.
                   This takes a <a href='http://www.w3.org/TR/selectors-api/'>selector</a>
-                  and returns a <div class='code code-inline code-js'>d3.selection</div>.
-                  This can also take an <div class='code code-inline code-js'>element</div>
+                  and returns a <code class='js'>d3.selection</code>.
+                  This can also take an <code class='js'>element</code>
                   if you have one lying around.
-              <li>an operation, <div class='code code-inline code-js'>text('D3 was here')</div>.
-                  The <div class='code code-inline code-js'>d3.selection</div>
+              <li>an operation, <code class='js'>text('D3 was here')</code>.
+                  The <code class='js'>d3.selection</code>
                   returned by the previous call supports a number of these. The one
-                  we called sets the <div class='code code-inline code-js'>textContent</div>
+                  we called sets the <code class='js'>textContent</code>
                 of the selection to the argument.
             </ol>
             For convenience, d3 is nice and returns the selection itself from
             the operation. So, instead of writing this code:
-            <div class='code code-js'>var section = d3.select('.section');
+            <code class='block js'>var section = d3.select('.section');
 section.text('D3 was here');
-section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
+section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</code>
              d3 lets you write it all in one statement:
-            <div class='code code-js'>d3.select('.section')
+            <code class='block js'>d3.select('.section')
     .text('D3 was here');
-    .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</div>
+    .style('color', '#f0f');  // Magenta to make sure pedestrians see my graffiti!</code>
           </div>
         </div>
         <div class='section'>
@@ -96,20 +96,20 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
             So, you now have the tools to vandalize websites everywhere with
             magenta text letting people know how cool you are. But it would be
             pretty tedious to do so, one node at a time. Plus, as you saw from
-            the first demo, the selection from <div class='code code-inline code-js'>d3.select</div>
+            the first demo, the selection from <code class='js'>d3.select</code>
             only got us the first matching node. Luckily, we have just the tool:
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='section'&gt;
+              <code class='block html'>&lt;div class='section'&gt;
   First
 &lt;/div&gt;
 &lt;div class='section'&gt;
   Second
-&lt;/div&gt;</div>
-              <div class ='code code-js'>d3.<em>selectAll</em>('.section')
-    .text('D3 was here');</div>
-              <div class='code code-result'></div>
+&lt;/div&gt;</code>
+              <code class='block js'>d3.<em>selectAll</em>('.section')
+    .text('D3 was here');</code>
+              <code class='block result'></code>
             </div>
-            Now, no <div class='code code-inline code-html'>div</div> is safe
+            Now, no <code class='html'>div</code> is safe
             from your marker.
           </div>
         </div>
@@ -124,19 +124,19 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
             you want the even ones to say 'Even' and the odd ones to say 'Odd'.
             D3, in its infinite wisdom, makes that easy:
             <div class='sample'>
-              <div class='code code-html'>&lt;div&gt;&lt;/div&gt;
+              <code class='block html'>&lt;div&gt;&lt;/div&gt;
 &lt;div&gt;&lt;/div&gt;
 &lt;div&gt;&lt;/div&gt;
 &lt;div&gt;&lt;/div&gt;
-&lt;div&gt;&lt;/div&gt;</div>
-              <div class ='code code-js'>d3.selectAll('div')
+&lt;div&gt;&lt;/div&gt;</code>
+              <code class='block js'>d3.selectAll('div')
     .text(function() {
       var index = Array.prototype.indexOf.call(this.parentElement.children, this);
       return (index % 2) == 0 ? 'Even' : 'Odd';
-    });</div>
-              <div class='code code-result'></div>
+    });</code>
+              <code class='block result'></code>
             </div>
-            Something of note - D3 defines <div class='code code-js code-inline'>this</div>
+            Something of note - D3 defines <code class='js'>this</code>
             inside the function as "the node the attribute will be set on".
           </div>
         </div>
@@ -146,39 +146,39 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
           </div>
           <div class='section-content'>
             All of this modification would be useless if not for the other side
-            of the coin - creation! D3 provides an <div class='code code-js code-inline'>
-            append</div> method on selections for this purpose. It takes a single
+            of the coin - creation! D3 provides an <code class='js'>
+            append</code> method on selections for this purpose. It takes a single
             argument - the tag name of the element to create. This can be any
-            valid tag, like <div class='code code-html code-inline'>div</div>
-            or <div class='code code-html code-inline'>table</div>. Like most
-            <div class='code code-js code-inline'>d3.selection</div> methods, the
-            return value is also a <div class='code code-js code-inline'>d3.selection</div>.
+            valid tag, like <code class='html'>div</code>
+            or <code class='html'>table</code>. Like most
+            <code class='js'>d3.selection</code> methods, the
+            return value is also a <code class='js'>d3.selection</code>.
             However, it contains the newly-created nodes, and not the original
             selection:
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='things'&gt;
+              <code class='block html'>&lt;div class='things'&gt;
   &lt;div&gt;Sugar&lt;/div&gt;
-&lt;/div&gt;</div>
-              <div class ='code code-js'>d3.select('.things')
+&lt;/div&gt;</code>
+              <code class='block js'>d3.select('.things')
   .append('div')
     .style('color', 'red')
-    .text('Spice');</div>
-              <div class='code code-result'></div>
+    .text('Spice');</code>
+              <code class='block result'></code>
             </div>
-            Like all selection methods, <div class='code code-js code-inline'>append</div>
+            Like all selection methods, <code class='js'>append</code>
             operates on all selected nodes. If multiple nodes are selected,
             multiple nodes will be created (and returned):
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='things'&gt;
+              <code class='block html'>&lt;div class='things'&gt;
   &lt;div&gt;Sugar&lt;/div&gt;
   &lt;div&gt;Spice&lt;/div&gt;
-&lt;/div&gt;</div>
-              <div class ='code code-js'>d3.selectAll('.things div')
+&lt;/div&gt;</code>
+              <code class='block js'>d3.selectAll('.things div')
   .append('div')
     .style('display', 'inline-block')
     .style('color', 'green')
-    .text('\u2713');</div>
-              <div class='code code-result'></div>
+    .text('\u2713');</code>
+              <code class='block result'></code>
             </div>
             If you've played around with <a href='http://jquery.com/'>jQuery</a>,
             or other JavaScript libraries, you may notice similarities. The
@@ -204,52 +204,52 @@ section.style('color', '#f0f');  // Magenta to make sure pedestrians see my graf
             on the <a href='http://d3js.org/'>D3</a> website, "D3.js is a
             JavaScript library for manipulating documents based on data." But
             we haven't seen a single mention of data yet. Meet our new friend,
-            the <div class='code code-js code-inline'>data</div> operator (a
-            card-carrying member of the <div class='code code-js code-inline'>d3.selection</div>
-            club). It binds some <div class='code code-js code-inline'>data</div>
-            to a <div class='code code-js code-inline'>selection</div>.
+            the <code class='js'>data</code> operator (a
+            card-carrying member of the <code class='js'>d3.selection</code>
+            club). It binds some <code class='js'>data</code>
+            to a <code class='js'>selection</code>.
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='slayer'&gt;&lt;/div&gt;
+              <code class='block html'>&lt;div class='slayer'&gt;&lt;/div&gt;
 &lt;div class='slayer'&gt;&lt;/div&gt;
-&lt;div class='slayer'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var slayerNames = [
+&lt;div class='slayer'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var slayerNames = [
   'Buffy',
   'Kendra',
   'Faith'
 ];
-d3.selectAll('.slayer').data(slayerNames);</div>
-              <div class='code code-result'></div>
+d3.selectAll('.slayer').data(slayerNames);</code>
+              <code class='block result'></code>
             </div>
-            The argument to <div class='code code-js code-inline'>data</div> is
-            an <div class='code code-js code-inline'>Array</div>, the elements of
+            The argument to <code class='js'>data</code> is
+            an <code class='js'>Array</code>, the elements of
             which can have any type. By itself, binding data to elements doesn't
             accomplish anything without the ability to access it. You can get this
-            <div class='code code-js code-inline'>Array</div> back out by calling
+            <code class='js'>Array</code> back out by calling
             the method with no arguments:
-            <div class='code code-js'>var slayerNames = d3.selectAll('.slayers').data();</div>
+            <code class='block js'>var slayerNames = d3.selectAll('.slayers').data();</code>
             <div class='aside'>
               Most 'setter' operations in D3 support this idiom - instead of
               providing a value, you can simply leave it blank. D3 will return
               the first value of the first node in the selection. For instance,
               getting the text content of a div is as easy as
-              <div class='code code-js code-inline'>var textContent = d3.select(theDiv).text()</div>
+              <code class='js'>var textContent = d3.select(theDiv).text()</code>
             </div>
             Still, though, that isn't much help. Without an easy way of getting
             data associated with a node and modifying the node in some way, one
             might as well not use D3. Going back to the <a href='#s3'>snowflakes</a>
             example, we saw a function passed as an argument to a
-            <div class='code code-js code-inline'>d3.selection</div> method. What
+            <code class='js'>d3.selection</code> method. What
             I didn't mention is that function is called with several arguments -
-            the bound <div class='code code-js code-inline'>datum</div>
+            the bound <code class='js'>datum</code>
             of the current element, and its index within the
-            <div class='code code-js code-inline'>selection</div>. By convention,
-            we call these <div class='code code-js code-inline'>d</div> and
-            <div class='code code-js code-inline'>i</div>. For example:
+            <code class='js'>selection</code>. By convention,
+            we call these <code class='js'>d</code> and
+            <code class='js'>i</code>. For example:
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='slayer'&gt;&lt;/div&gt;
+              <code class='block html'>&lt;div class='slayer'&gt;&lt;/div&gt;
 &lt;div class='slayer'&gt;&lt;/div&gt;
-&lt;div class='slayer'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var slayerNames = [
+&lt;div class='slayer'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var slayerNames = [
   'Buffy',
   'Kendra',
   'Faith'
@@ -257,18 +257,18 @@ d3.selectAll('.slayer').data(slayerNames);</div>
 d3.selectAll('.slayer').data(slayerNames)
     .text(function(d, i) {
       return 'Slayer #' + (i + 1) + ': ' + d;  // i is 0-based.
-    });</div>
-              <div class='code code-result'></div>
+    });</code>
+              <code class='block result'></code>
             </div>
             It turns out most methods of selection that set some property
             of each node in the selection support this idiom: arguments
             can either be functions (called with
-            <div class='code code-js code-inline'>datum</div> and
-            <div class='code code-js code-inline'>index</div>, and a
-            <div class='code code-js code-inline'>this</div> of the node), or
+            <code class='js'>datum</code> and
+            <code class='js'>index</code>, and a
+            <code class='js'>this</code> of the node), or
             a literal value. They both come in handy - sometimes, you want every
-            node to have a <div class='code code-html code-inline'>font-style</div>
-            of <div class='code code-html code-inline'>bold</div>, and sometimes
+            node to have a <code class='html'>font-style</code>
+            of <code class='html'>bold</code>, and sometimes
             you want each node to get special treatment.
             <hr>
             And what if the length of data doesn't match the length of the
@@ -276,9 +276,9 @@ d3.selectAll('.slayer').data(slayerNames)
             as many nodes as existent, and the remainder of the data (if any)
             is simply ignored.
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='captain'&gt;&lt;/div&gt;
-&lt;div class='captain'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var captainNames = [
+              <code class='block html'>&lt;div class='captain'&gt;&lt;/div&gt;
+&lt;div class='captain'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var captainNames = [
   'Kirk',
   'Picard',
   'Sisko',
@@ -288,8 +288,8 @@ d3.selectAll('.slayer').data(slayerNames)
 d3.selectAll('.captain').data(captainNames)
     .text(function(d, i) {
       return 'Captain #' + (i + 1) + ': ' + d;  // i is 0-based.
-    });</div>
-              <div class='code code-result'></div>
+    });</code>
+              <code class='block result'></code>
             </div>
             <div class='aside'>
               Everything is more complex than this, but we'll get to that
@@ -302,23 +302,23 @@ d3.selectAll('.captain').data(captainNames)
             1.6 Two nodes enter, no nodes leave
           </div>
           <div class='section-content'>
-            The <div class='code code-js code-inline'>data</div> method, mentioned
+            The <code class='js'>data</code> method, mentioned
             previously, doesn't just bind data to elements. It computes a data
             <em>join</em> between the nodes in the document and the data provided.
             If two elements are selected and five datum provided, D3 notes three
             more datum were provided than elements and stores this in the
-            <div class='code code-js code-inline'>enter</div> selection, accessible
-            via the <div class='code code-js code-inline'>enter</div> method
-            on the return value of a call to <div class='code code-js code-inline'>data</div>.
-            As there are no actual nodes to select, <div class='code code-js code-inline'>enter</div>
-            doesn't support most <div class='code code-js code-inline'>d3.selection</div>
-            methods. It does, however, allow <div class='code code-js code-inline'>append</div>:
+            <code class='js'>enter</code> selection, accessible
+            via the <code class='js'>enter</code> method
+            on the return value of a call to <code class='js'>data</code>.
+            As there are no actual nodes to select, <code class='js'>enter</code>
+            doesn't support most <code class='js'>d3.selection</code>
+            methods. It does, however, allow <code class='js'>append</code>:
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='captains'&gt;
+              <code class='block html'>&lt;div class='captains'&gt;
   &lt;div class='captain'&gt;&lt;/div&gt;
   &lt;div class='captain'&gt;&lt;/div&gt;
-&lt;/div&gt;</div>
-              <div class='code code-js'>var captainNames = [
+&lt;/div&gt;</code>
+              <code class='block js'>var captainNames = [
   'Kirk',
   'Picard',
   'Sisko',
@@ -336,20 +336,20 @@ captains.enter().append('div')
 captains
     .text(function(d, i) {
       return 'Captain #' + (i + 1) + ': ' + d;
-    });</div>
-              <div class='code code-result'></div>
+    });</code>
+              <code class='block result'></code>
             </div>
-            All captains in a line, now. Calling <div class='code code-js code-inline'>append</div>
+            All captains in a line, now. Calling <code class='js'>append</code>
             operated on the parent of our selection, appending one node
             per additional data element - in this case creating three new divs
-            as the last children of <div class='code code-html code-inline'>div class='captains'</div>.
+            as the last children of <code class='html'>div class='captains'</code>.
             <hr>
-            The <div class='code code-js code-inline'>enter</div> selection also
+            The <code class='js'>enter</code> selection also
             has another trick up its sleeve - nodes appended with it are automatically
             inserted in the proper place in the <em>original</em> selection. So,
             the following code still is equivalent to, and less error-prone than,
             the example:
-            <div class='code code-js'>...
+            <code class='block js'>...
 captains.enter().append('div')
     .style('color', 'green')
     .attr('class', 'captain');
@@ -358,32 +358,32 @@ captains.enter().append('div')
 captains
     .text(function(d, i) {
       return 'Captain #' + (i + 1) + ': ' + d;
-    });</div>
-            If the <div class='code code-js code-inline'>text</div> call was before
-            the <div class='code code-js code-inline'>append</div>, only the
+    });</code>
+            If the <code class='js'>text</code> call was before
+            the <code class='js'>append</code>, only the
             existing nodes would get text. As such, it is usually best to deal
-            with the <div class='code code-js code-inline'>enter</div> selection first.
+            with the <code class='js'>enter</code> selection first.
             You don't even need any nodes to begin with; you can have an <em>empty</em>
             selection and append to it, as long as it has a valid parent:
             <div class='sample'>
-              <div class='code code-html'>&lt;div class='lucky-numbers'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var parent = d3.select('.lucky-numbers');
+              <code class='block html'>&lt;div class='lucky-numbers'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var parent = d3.select('.lucky-numbers');
 // We are selecting all of the .number nodes - which don't exist!
 var numbers = parent.selectAll('.number').data([7, 8, 21, 888]);
 numbers.enter().append('div')
-    .text(function(d, i) { return d; });</div>
-              <div class='code code-result'></div>
+    .text(function(d, i) { return d; });</code>
+              <code class='block result'></code>
             </div>
             While the above code works, it is actually missing one crucial detail.
             When appending elements to a selection, it is good practice to ensure
             the new elements would match the selection. This isn't enforced, but
             not doing so leads to an unhappy coder. So the correct, ever-shorter,
             version of the code would be:
-            <div class='code code-js'>d3.select('.lucky-numbers').selectAll('.number')
+            <code class='block js'>d3.select('.lucky-numbers').selectAll('.number')
     .data([7, 8, 21, 888])
   .enter().append('div')
     <em>.attr('class', 'number')</em>
-    .text(function(d, i) { return d; });</div>
+    .text(function(d, i) { return d; });</code>
             The reason for this is not readily apparent. But all those cool things
             you've seen in D3? The <em>swoosh</em>es and <em>floop</em>s and
             <em>schwarp</em>s? Well, the idiom is for them.
@@ -392,15 +392,15 @@ numbers.enter().append('div')
               comes down to personal taste, but the example set by the D3 documentation
               is not a bad one:
               <ul class='bullet-list'>
-                <li>Multiple <div class='code code-js code-inline'>select</div>
+                <li>Multiple <code class='js'>select</code>
                 operations can be on one line</li>
                 <li>Modifying operations on a selection are indented four spaces
                 and get their own line</li>
-                <li>Pair <div class='code code-js code-inline'>enter</div> and
-                <div class='code code-js code-inline'>append</div> together on
+                <li>Pair <code class='js'>enter</code> and
+                <code class='js'>append</code> together on
                 one line with a two-space indent<br>This makes it obvious
                 operations are on a new set of nodes, not the original selection</li>
-                <li>Only have one <div class='code code-js code-inline'>selectAll</div>
+                <li>Only have one <code class='js'>selectAll</code>
                 per statement</li>
               </ul>
             </div>
@@ -418,8 +418,8 @@ numbers.enter().append('div')
             capabilities of SVG, but also additional functionality of D3. Let's
             make some squares!
             <div class='sample'>
-              <div class='code code-html'>&lt;div id='chart'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var root = d3.select('#chart').append('svg')
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#chart').append('svg')
     .attr('width', 200)
     .attr('height', 200)
     .style('border', '1px solid black');
@@ -432,37 +432,37 @@ root.selectAll('rect')
     .attr('width', 15)
     .attr('height', 10)
     .attr('fill', '#c63')
-    .attr('stroke', 'black');</div>
-              <div class='code code-result'></div>
+    .attr('stroke', 'black');</code>
+              <code class='block result'></code>
             </div>
             There is a lot going on in that sample, much of it new. First off
             is SVG - which has a <a href='http://www.w3.org/TR/SVG/'>W3C Recommendation</a>.
             Or, in other words, a descriptive manual. It works; though for now
             we will mainly concern ourselves with the <a href='http://www.w3.org/TR/SVG/shapes.html'>basic shapes</a>.
             SVG can be embedded within HTML. D3 makes this simple; you need
-            only append an <div class='code code-html code-inline'>svg</div> element
+            only append an <code class='html'>svg</code> element
             to part of the DOM. This element functions much like the
-            <div class='code code-html code-inline'>body</div> element in a webpage -
+            <code class='html'>body</code> element in a webpage -
             it is the root onto which all other elements must be added. Relevant code:
-            <div class='code code-js'>var root = d3.select('#chart').append('svg')
+            <code class='block js'>var root = d3.select('#chart').append('svg')
     .attr('width', 200)
     .attr('height', 200)
-    .style('border', '1px solid black');</div>
+    .style('border', '1px solid black');</code>
             It is a very good idea to explicitly set the
-            <div class='code code-js code-inline'>width</div> and
-            <div class='code code-js code-inline'>height</div> of the root
-            <div class='code code-js code-inline'>svg</div> element as they default
-            to <div class='code code-js code-inline'>100%</div>.
+            <code class='js'>width</code> and
+            <code class='js'>height</code> of the root
+            <code class='js'>svg</code> element as they default
+            to <code class='js'>100%</code>.
             <div class='aside'>
                You'll note the dimensions here, and elsewhere for SVG elements,
                can be raw numbers with no attached unit. When specifying values
                for attributes on SVG nodes (that is, using
-               <div class='code code-js code-inline'>.attr(...);</div>), the units
+               <code class='js'>.attr(...);</code>), the units
                are assumed to be in the "current user coordinate system". For
                now, pretend that means 'pixels'. You can always add a
                <a href='http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units'>CSS2 unit</a>
-               as well, such as <div class='code code-html code-inline'>.attr('x', '53px')</div>
-               or <div class='code code-html code-inline'>.attr('y', '2em')</div>
+               as well, such as <code class='html'>.attr('x', '53px')</code>
+               or <code class='html'>.attr('y', '2em')</code>
                but it tends to be easier to simply ignore the unit unless necessary.
                The whole spec is available
                <a href='http://www.w3.org/TR/SVG/types.html#DataTypeLength'>here</a>
@@ -471,33 +471,33 @@ root.selectAll('rect')
             </div>
             The next new bit is our select - we used element type selection
             instead of classes. That is, we wrote
-            <div class='code code-js code-inline'>.selectAll('rect')</div> instead
-            of <div class='code code-js code-inline'>.selectAll('.some-class')</div>.
+            <code class='js'>.selectAll('rect')</code> instead
+            of <code class='js'>.selectAll('.some-class')</code>.
             Why? Well, for one thing, it saves a line of code in the example (we
             no longer need to add a class attribute that matches the selection). It
             also seemed like a good idea to mix it up. Keep you on your toes.
             <hr>
             Moving on, we have these curious lines:
-            <div class='code code-js'>  .append('rect')
+            <code class='block js'>  .append('rect')
     .attr('x', Object)
-    .attr('y', Object)</div>
+    .attr('y', Object)</code>
             The first one should be straightforward - we are no longer creating
             HTML elements. Now, we are in the brave new world of SVG elements.
-            <div class='code code-js code-inline'>
+            <code class='js'>
             <a href='http://www.w3.org/TR/SVG/shapes.html#RectElement'>rect</a>
-            </div> is a simple one to start with. The other two lines are
+            </code> is a simple one to start with. The other two lines are
             quite mysterious. Somewhat magic, one might say. I'd agree - you
             will see, on occaison,
-            <div class='code code-js code-inline'>String</div> or
-            <div class='code code-js code-inline'>Object</div> used as a value.
+            <code class='js'>String</code> or
+            <code class='js'>Object</code> used as a value.
             Remember that values can either be literals (like a string or number),
             or a function that is evaluated once per node/datum? Well,
-            <div class='code code-js code-inline'>String</div> and
-            <div class='code code-js code-inline'>Object</div> are just functions.
-            So the line <div class='code code-js'>.attr('x', Object)</div>
-            is equivalent to <div class='code code-js'>.attr('x', function(d, i) { return Object(d, i); })</div>
-            and also to <div class='code code-js'>.attr('x', function(d, i) { return d; })</div>
-            <div class='code code-js code-inline'>Object</div>, then, is essentially
+            <code class='js'>String</code> and
+            <code class='js'>Object</code> are just functions.
+            So the line <code class='block js'>.attr('x', Object)</code>
+            is equivalent to <code class='block js'>.attr('x', function(d, i) { return Object(d, i); })</code>
+            and also to <code class='block js'>.attr('x', function(d, i) { return d; })</code>
+            <code class='js'>Object</code>, then, is essentially
             the identity function (and, luckily, it ignores every argument other
             than the first). Remember, you are free to use any function as
             a value argument - it need not be defined inline, or even defined
@@ -508,8 +508,8 @@ root.selectAll('rect')
             </div>
             <hr>
             The final two lines are just setting up our visuals:
-            <div class='code code-js'>    .attr('fill', '#c63')
-    .attr('stroke', 'black');</div>
+            <code class='block js'>    .attr('fill', '#c63')
+    .attr('stroke', 'black');</code>
             Those should be self-explanatory, but they aren't the only way
             of styling SVG elements. You can also put it in your CSS (or
             embed a style element in the SVG element, an advanced topic I'm
@@ -523,10 +523,10 @@ root.selectAll('rect')
             There is one final example to offer, provided without commentary.
             You should be able to <a href='http://en.wikipedia.org/wiki/Piet_Mondrian'>
             figure it out</a>. Just remember -
-            <div class='code code-js code-inline'>datum</div> can be anything.
+            <code class='js'>datum</code> can be anything.
             <div class='sample'>
-              <div class='code code-html'>&lt;div id='chart'&gt;&lt;/div&gt;</div>
-              <div class='code code-js'>var root = d3.select('#chart').append('svg')
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#chart').append('svg')
     .attr('width', 600)
     .attr('height', 600)
     .style('border', '1px solid black');
@@ -550,8 +550,8 @@ root.selectAll('rect')
     .attr('height', function(d) { return d.h; })
     .attr('fill', function(d) { return d.fill || '#eef2d1'; })
     .attr('stroke-width', 10)
-    .attr('stroke', 'black');</div>
-              <div class='code code-result'></div>
+    .attr('stroke', 'black');</code>
+              <code class='block result'></code>
             </div>
             The next lesson will cover more of the D3 library, specifically
             those parts focused on making drawing easier, as well as a whole
