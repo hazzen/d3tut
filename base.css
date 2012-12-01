@@ -8,6 +8,7 @@
 .float-left{float: left}
 .float-right{float: right}
 .warn{color: #ad1f1f;}
+.nobr{white-space:nowrap;}
 
 em {
   font-style: italic;
@@ -227,4 +228,16 @@ code em {
 hr {
   border: none;
   margin: 10px 0;
+}
+
+span.spoiler {
+  color: #444;
+  background: #444;
+}
+
+span.spoiler::before {
+  content: 'Spoiler:';
+  background: white;
+  border: 1px solid black;
+  padding: 0 5px;
 }

@@ -91,23 +91,28 @@ var barWidth = function(number) {
 };</code>
             A <code class>rect</code> element in SVG is defined by its
             <code>width</code>, <code>height</code>, <code>x</code>, and
-            <code>y</code> attributes. We have two of them (<code
-            class='html'>width</code> and <code>height</code>), so lets get the
-            others.
-            <hr>
+            <code>y</code> attributes. We have two of them
+            <span class='nobr'>(<code class='html'>width</code></span>
+            and <code>height</code>), so lets get the others.
+            <div class='aside'>
+              Remember, in SVG the top-left corner is (0, 0). x-coordinates
+              increase to the right and y-coordinates increase down the page.
+            </div>
             <code>x</code> is quite easy, actually. All bars should
             be aligned along the left axis, so they all have an <code>x</code>
-            of 0. <code>y</code> takes a <em>bit</em> more thought, but not too
+            of 0. <code>y</code> takes a <em>bit</em> more thought, but not
             much (save those brain cells for something else). The
             <code>i</code>-th even number should be offset by <code>i * barHeight</code>.
             Or, in a function:
             <code class='block js'>var barY = function(index) {
   return index * barHeight;
 };</code>
-            Now, we know from the last lesson that <code>barY</code> is probably
-            going to be provided as an <code>attr</code> value, which is passed
-            two arguments - first the <code>datum</code>, then the <code>index</code>.
-            So we change it to:
+            Now, we know from the <a href='lesson_1.html#s5'>last lesson</a>
+            that <code>barY</code> is probably
+            going to be provided as an argument to <code>attr</code>, and when
+            a function is provided to <code>attr</code> it gets two arguments:
+            first the <code>datum</code>, then the <code>index</code>.
+            So we change the function to:
             <code class='block js'>var barY = function(datum, index) {
   return index * barHeight;
 };</code>
@@ -161,10 +166,155 @@ root.selectAll('rect.number')
         </div>
         <div class='section'>
           <div class='section-header' id='s2'>
-            2.2 Tipping the scales
+            2.3 A bigger palette
           </div>
           <div class='section-content'>
-            <span class='warn'>Under construction.</span>
+            Contrary to the example we've set, SVG provides more primitives than
+            the lowly <code>rect</code>. And you know what that means: more
+            contrived examples. Let's consider a new graph - a self-descriptive
+            <!-- TODO link me --> one. A plot of cicles, where the x-axis is
+            the radius of the circle and the y-axis is the number of pixels
+            in that circle (its area).
+            <hr>
+            The <code>circle</code><!--TODO--> element is just what we need.
+            Like the <code>rect</code> before it, and all the future SVG
+            elements we render, it supports presentation attributes.
+            <div class='aside'>
+              Huh? What?  Afraid you fell asleep in class and missed the
+              definition of the word? Nope, the teacher is just making you
+              sweat. The presentation attributes <!--LINK--> are the attributes
+              that determine how a shape is rendered. We've already seen
+              <code>fill</code> and <code>stroke</code>. There are more to come,
+              but we won't be exhaustive. The SVG standard is, while not exactly
+              readable, easy to browse and full of examples. Consider browsing
+              it over coffee. Or not, actually. Don't do that.
+            </div>
+            While the presentation of a <code>circle</code> is the same as a
+            <code>rect</code>, the positioning isn't. We need three attributes:
+            The <code>circle</code> is centered at
+            <span class='nobr'>(<code>cx</code>,</span>
+            <code>cy</code>) and has a radius of <code>r</code>. So, building it
+            much like the last one with a few changes:
+            <code class='block js'>var circleX = function(radius) { return radius; };
+var circleY = function(radius) { return Math.PI * radius * radius; };</code>
+            We'll also, obviously, need a larger area to render our circles in.
+            Let's try radius values of <code>[1, 2, 3, 5]</code>.
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var width = 600;
+var height = 100;
+var root = d3.select('#chart').append('svg')
+    .attr({
+      'width': width,
+      'height': height,
+    })
+    .style('background', 'white');
+
+var circleRs = [1, 2, 3, 5];
+var circleX = function(radius) { return radius; };
+var circleY = function(radius) { return Math.PI * radius * radius; };
+var circleR = function(radius) { return radius; };
+
+root.selectAll('circle')
+    .data(circleRs).enter()
+  .append('circle')
+    .attr({
+        'cx': circleX,
+        'cy': circleY,
+        'r': circleR,
+        'fill': '#ffcdcd',
+        'stroke': '#666',
+    });</code>
+              <code class='block result'></code>
+            </div>
+            Hrm, not the best graph. We have a few obvious issues: first, 100
+            pixels of height is not going to cut it at this scale if we want to
+            have larger circles. Second, our elements are scrunched along the
+            left. Thirdly, our y-axis is <em>reversed</em> from a normal graph.
+            The third is easy to solve - instead of mapping the
+            <code>radius</code> to <code>Math.PI * radius * radius</code>, we
+            instead subtract that value from the height of the graph:
+            <code>height - Math.PI * radius * radius</code>. The first two are
+            both classes of the same problem - a scale where 1 unit along the
+            axis is 1 pixel is tiny. Miniscule. Laughable. Infintesimal. No,
+            wait, that isn't right. Got carried away with my adjectives.
+            <hr>
+            When drawing a graph on paper, your scale is more likely to be
+            closer to 10mm to 1 unit (we don't use imperial units here; those
+            despots will never keep us down). We can fix that by scaling our
+            computed <code>cx</code> and <code>cy</code> values by an arbitrary
+            number - <code>4</code> sounds good. We'll also need to change our
+            bounds; if the largest circle is has a radius of <code>5</code>, we
+            would like <code>height - 4 * Math.PI * 5 * 5</code> to not be
+            negative; 350 is big enough for that. Now, our new (and maybe
+            improved) chart:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var width = 600;
+var height = <em>350</em>;
+var root = d3.select('#chart').append('svg')
+    .attr({
+      'width': width,
+      'height': height,
+    })
+    .style('background', 'white');
+
+var circleRs = [1, 2, 3, 5];
+var circleX = function(radius) { return <em>4 *</em> radius; };
+var circleY = function(radius) { return <em>height - 4 *</em> Math.PI * radius * radius; };
+var circleR = function(radius) { return radius; };
+
+root.selectAll('circle')
+    .data(circleRs).enter()
+  .append('circle')
+    .attr({
+        'cx': circleX,
+        'cy': circleY,
+        'r': circleR,
+        'fill': '#ffcdcd',
+        'stroke': '#666',
+    });</code>
+              <code class='block result'></code>
+            </div>
+            In the tradition of all my favorite textbooks, I leave deciding if
+            that is an improvement as an exercise for the reader.
+            <span class='spoiler'>It really isn't much of an improvement. Not
+            much could save the chart, really. Terribly dreadful, that.</span>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s3'>
+            2.3 Tipping the scales
+          </div>
+          <div class='section-content'>
+            While the previous example wasn't bad code, it isn't exactly
+            idiomatic D3. It works, but D3 provides many helpers <!-- TODO link
+            me --!> to make our code easier to read and our intent clear. For
+            example, <span class='nobr'><code>d3.scale</code>.</span><!--TODO-->
+            You may have noticed in the last example we had inserted some magic
+            values in our attribute functions (like <code>4</code> and
+            <code>height</code>). But these were <em>separate</em> from the data
+            we actually cared about - that our <code>cx</code> is just the
+            <code>radius</code> on some arbitrary scale, and the <code>cy</code>
+            is likewise a <em>number</em> on some <em>scale</em>. In case the
+            name, and this hammering of a point, did not clue you in,
+            <code>d3.scale</code> and its many members are designed to assist
+            us.
+            <hr>
+            Before we introduce our first scale, we'll define what a scale
+            <em>is</em>. A scale is a function that maps input values to output
+            values. Neither the input nor output need be numbers, but starting
+            with them will be easiest. The simplest scale, then, is the identity
+            function. We used that, implicitly, in the first circle example (the
+            "bad" one). We mapped our data (radius) values to a value along some
+            axis, then scaled that axis using the identity function.
+            <hr>
+            In the second, questionably improved, example, we scaled that axis
+            by multipling by 4. Our scale function was then <code>var scale =
+              function(x) { return 4 * x; };</code>. This is an example of a
+            <em>linear scale</em> (as, an astute reader will note, is the
+            identity scale). D3 provides <code>d3.scale.linear</code> for just
+            this purpose.
           </div>
         </div>
       </div>
