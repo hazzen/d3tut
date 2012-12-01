@@ -310,11 +310,136 @@ root.selectAll('circle')
             axis, then scaled that axis using the identity function.
             <hr>
             In the second, questionably improved, example, we scaled that axis
-            by multipling by 4. Our scale function was then <code>var scale =
-              function(x) { return 4 * x; };</code>. This is an example of a
+            by multipling by 4. Our scale function was then <code>function(x) {
+              return 4 * x; };</code>. This is an example of a
             <em>linear scale</em> (as, an astute reader will note, is the
             identity scale). D3 provides <code>d3.scale.linear</code> for just
             this purpose.
+            <hr>
+            The <a href='https://github.com/mbostock/d3/wiki/Quantitative-Scales#wiki-linear'>
+              documentation</a> for it is useful, but you can save the for
+            later. The short of it is thus: <code>d3.scale.linear()</code>
+            returns a new <code>object</code> that is <em>also</em> a
+            <code>function</code>. The two methods of current interest on the
+            object are <code>domain</code> and <code>range</code>. Both take an
+            array of values that specify, respectively, the <em>domain</em> and
+            <em>range</em> of the scale function. An example would prove
+            instructive:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root');
+var scale = d3.scale.linear()
+    .domain([0, 10])
+    .range([0, 100]);
+
+root.selectAll('div')
+    .data([0, 10, 5, -5, 100]).enter()
+  .append('div')
+    .text(function(d) {
+      return 'The scaled value of ' + d + ' is ' + scale(d);
+    });</code>
+              <code class='block result'></code>
+            </div>
+            The first two lines are, hopefully, exactly as expected - an input
+            of <code>0</code> (the first element of the domain) maps to an
+            output of <code>0</code> (the first element of the range), just as
+            <code>10</code> maps to <code>100</code>. The third value,
+            <code>5</code> should also make sense - our scale is linear, so an
+            input value halfway between the domain values of <code>0</code> and
+            <code>10</code> maps to an output value halfway between the
+            respective range values&mdash;<code>0</code> and <code>100</code>.
+            <hr>
+            The other two may be surprising, but follow from above. If an input
+            value falls outside the domain, the scale pretends the domain and
+            range are extended to include the value. If you don't like this
+            behavior, you can call <code>.clamp(true)</code> on the scale to
+            force all values to fall within the domain.
+            <div class='aside'>
+              Linear scales actually accept an array length <em>at least</em> 2
+              for the domain and range.  This is a more advanced feature which
+              may prove useful later, but for now only serves to confuse. Read
+              the <a
+                href='https://github.com/mbostock/d3/wiki/Quantitative-Scales#wiki-linear_domain'>docs</a>
+              or attempt to guess the semantics if you want, or just carry on
+              with your life. All are valid paths, and one may find
+              enlightenment along any.
+            </div>
+            We can use our scalar powers (sweet! only a Levenshtein distance of
+            4 from super!) to improve the second circle example. Now, we have a
+            lot of options available to us - <em>anything</em> that results in
+            <code>1</code> mapping to <code>4</code> will work. So what values
+            to use for the domain and range? Why not the simplest - a domain of
+            <code>[0, 1]</code> and a range of <code>[0, 4]</code>.
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var width = 600;
+var height = 350;
+var root = d3.select('#chart').append('svg')
+    .attr({
+      'width': width,
+      'height': height,
+    })
+    .style('background', 'white');
+
+var circleRs = [1, 2, 3, 5];
+<em>var xScale = d3.scale.linear()
+    .domain([0, 1])
+    .range([0, 4]);
+var yScale = xScale;  // Our x and y use the same scale.
+var circleX = function(radius) { return xScale(radius); };
+var circleY = function(radius) { return height - yScale(Math.PI * radius * radius); };</em>
+var circleR = function(radius) { return radius; };
+
+root.selectAll('circle')
+    .data(circleRs).enter()
+  .append('circle')
+    .attr({
+        'cx': circleX,
+        'cy': circleY,
+        'r': circleR,
+        'fill': '#ffcdcd',
+        'stroke': '#666',
+    });</code>
+              <code class='block result'></code>
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s4'>
+            2.4 Nope, sorry, that circles example is still rubbish
+          </div>
+          <div class='section-content'>
+            And I'm not going to let it rest until that code is <em>good</em>
+            (even if the source of the chart is contrived). The <code>yScale</code>
+            used in the example is, frankly, an embarassment. Look at our
+            <code>circleY</code> function again:
+            <code class='block js'>var circleY = function(radius) { return height - yScale(Math.PI * radius * radius); };</code>
+            We still have parts of our conversion from axis to pixels (our
+            original motivation for scales) <em>outside</em> of the scale
+            definition. I'm speaking, of course, of that pesky <code>height
+              -</code> that begins our function. So, to fix it, we need to put
+            on our thinking caps.
+            <hr>
+            We need two input values and two output values for a scale. We have
+            a trivially easy one - the input value of <code>0</code> maps to the
+            output value of <code>height</code>. That was fun! Plug and play
+            sure is easier than Windows 95 led me to believe... and we can just
+            put in another input value to get another output value.
+            <hr>
+            But <em>what</em> input value? We can choose one arbitrarily and it
+            will just work. Why not <code>1</code>, which maps to <code>height -
+              4 * Math.PI * 1 * 1</code> or simply
+            <code>337.4336blahblahblah</code>. Or actually simpler in the form
+            of <code>height - 4 * Math.PI</code>. So we just put that in our code,
+            right? Problem solved?
+            <code class='block js'>var scaleY = d3.scale.linear()
+    .domain([0, 1])
+    .range([height, height - 4 * Math.PI]);</code>
+            No! Wrong! Bad student! I'd hit you with my newspaper, but I can't
+            find one - think they all went out of business. The only thing we've
+            accomplished is moving a magic number from one place to another. Why
+            not try again - why are we subtracting <code>4 * Math.PI</code> from
+            <code>height</code>?
           </div>
         </div>
       </div>
