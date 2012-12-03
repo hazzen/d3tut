@@ -367,9 +367,10 @@ root.selectAll('div')
             We can use our scalar powers (sweet! only a Levenshtein distance of
             4 from super!) to improve the second circle example. Now, we have a
             lot of options available to us - <em>anything</em> that results in
-            <code>1</code> mapping to <code>4</code> will work. So what values
-            to use for the domain and range? Why not the simplest - a domain of
-            <code>[0, 1]</code> and a range of <code>[0, 4]</code>.
+            <code>1</code> mapping to <code>4</code> will work (as our scale just
+            multiplied by 4). So what values to use for the domain and range?
+            Why not the simplest - a domain of <code>[0, 1]</code> and a range
+            of <code>[0, 4]</code>.
             <div class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var width = 600;
@@ -428,18 +429,173 @@ root.selectAll('circle')
             <hr>
             But <em>what</em> input value? We can choose one arbitrarily and it
             will just work. Why not <code>1</code>, which maps to <code>height -
-              4 * Math.PI * 1 * 1</code> or simply
+              yScale(Math.PI * 1 * 1)</code> or simply
             <code>337.4336blahblahblah</code>. Or actually simpler in the form
-            of <code>height - 4 * Math.PI</code>. So we just put that in our code,
+            of <code>height - 4 * Math.PI</code>. Just put that in our code,
             right? Problem solved?
             <code class='block js'>var scaleY = d3.scale.linear()
     .domain([0, 1])
     .range([height, height - 4 * Math.PI]);</code>
-            No! Wrong! Bad student! I'd hit you with my newspaper, but I can't
-            find one - think they all went out of business. The only thing we've
-            accomplished is moving a magic number from one place to another. Why
-            not try again - why are we subtracting <code>4 * Math.PI</code> from
-            <code>height</code>?
+            Not so fast. The only thing we've accomplished is moving a magic
+            number from one place to another.  The <code>4</code> introduced
+            into this function comes from our <code>xScale</code>, and the
+            <code>Math.PI</code> comes from our mapping of <code>data</code>
+            values to <code>y</code> values. We have conflated two things: the
+            mapping from data to y, and the mapping from y to pixels. We can
+            make this more clear by introducing functions:
+            <code class='js block'>var dataToY = function(d) {
+  return Math.PI * d * d;
+};
+
+var yScale = d3.scale.linear()
+    .domain([0, 1])
+    .range([height - 4 * dataToY(0), height - 4 * dataToY(1)]);
+
+var circleY = function(d) {
+  return yScale(dataToY(d));
+};</code>
+            Now our path from the <code>data</code> bound to each
+            <code>circle</code> to the final resting <code>y</code> is clear.
+            <div class='aside'>
+              Another option would have been a different set of
+              <code>data</code> values.  Instead of an array of
+              <code>radius</code> numbers, it could have been an array of
+              objects, each with a <code>radius</code> and <code>area</code>
+              property. This would have removed the need for the <code>dataToY</code>
+              function at the cost of more verbose data. There are reasons for
+              keeping the bound data simple and reasons for binding very complex
+              objects, and no easy rule to follow.
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s5'>
+            2.5 Once more unto the... graph
+          </div>
+          <div class='section-content'>
+            Before moving on to more advanced data bindings, we'll feature
+            one last example that introduces some additional elements of SVG
+            used in most visualizations. We'll start with a description of the
+            problem, the complete solution, and follow it with a explanation
+            of some of the new bits. So, let's graph!
+            <hr>
+            But what? Histograms. Simple, and easy. And practical, too. Pretend
+            (or not, as necessary) that you play a <a href='http://en.wikipedia.org/wiki/Tabletop_role-playing_game'>tabletop roleplaying game</a>
+            as some character that hits things with other things. You just got
+            a sweet new things to hit other things with - an <em>eldritchian
+              quadruple axe</em> (it's pretty cool, trust me). When you hit
+            things with this thing, you roll <a href='http://en.wikipedia.org/wiki/Dice_notation'>2d4 + 2d6</a>
+            for damage, assuming the enemy fails their sanity check, and half
+            rounding down otherwise. Now, you received <em>DJs boombox of Call
+              Me Maybe</em> in your last quest (for those not familiar with the
+            game, that is a cursed amulet that makes everyone within 50m fail
+            their sanity checks) so the math here is going to be easy. Which is
+            good, because some members of your party just stare at you blindly
+            when you say <em>probability mass function</em> and you just want
+            to demonstrate how awesome this new axe is.
+            <hr>
+            With a histogram, of course.
+            <hr>
+            So, we'll simulate 500 attacks with your axes and graph the
+            resulting histogram. And we'll pick, arbitrarily, 640x480 pixels
+            as the size.
+            <div class='sample'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  div#chart svg {
+    border: 1px solid black;
+    background: white;
+  }
+
+  .axis .domain, .axis .tick {
+     stroke: #000;
+     fill: none;
+   }
+
+   .title {
+     fill: #666;
+     font-family: Helvetica, sans-serif;  /* Helvectica is cool, right? */
+     text-anchor: middle;
+     font-size: 24px;
+   }
+
+   .bar {
+     fill: #fcc;
+     stroke: #444;
+   }
+&lt;/style&gt;
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var width = 640;
+var height = 480;
+var root = d3.select('#chart').append('svg')
+    .attr({
+      'width': width,
+      'height': height,
+    });
+
+// Render the title.
+var titleHeight = 50;
+root.append('text')
+    .attr({
+      'class': 'title',
+      'x': width / 2,
+      'y': titleHeight / 2,
+    })
+    .text('Skull-splitting power!');
+
+// Simulate 500 rolls of the axe.
+var rollDie = function(numSides) {
+  return 1 + Math.floor(Math.random() * numSides);
+};
+
+var MAX_ROLL = 4 + 4 + 6 + 6;
+var rollHisto = d3.range(MAX_ROLL).map(function() { return 0; });
+for (var i = 0; i &lt; 500; i++) {
+  var rolled = rollDie(4) + rollDie(4) + rollDie(6) + rollDie(6);
+  rollHisto[rolled - 1]++;
+}
+
+// Render our axis.
+var yAxisWidth = 50;
+var xAxisHeight = 50;
+
+var xScale = d3.scale.linear()
+    .domain([0, MAX_ROLL])
+    .range([yAxisWidth, width - yAxisWidth]);
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(rollHisto) * 1.2])
+    .range([height - xAxisHeight, titleHeight]);
+
+var xAxis = d3.svg.axis().scale(xScale);
+root.append('g')
+    .attr({
+      'class': 'x axis',
+      'transform': 'translate(0,' + (height - xAxisHeight) + ')',
+    })
+    .call(xAxis);
+
+var yAxis = d3.svg.axis().scale(yScale).orient('left');
+root.append('g')
+    .attr({
+      'class': 'x axis',
+      'transform': 'translate(' + yAxisWidth + ',0)',
+    })
+    .call(yAxis);
+
+// Render the dice bars.
+root.selectAll('rect.bar')
+    .data(rollHisto).enter()
+  .append('rect')
+    .attr({
+      'class': 'bar',
+      'x': function(d, i) { return xScale(i + 0.5); },
+      'width': xScale(1) - xScale(0),
+      'y': yScale,
+      'height': function(d) { return yScale(0) - yScale(d); },
+    });
+  </code>
+              <code class='block result'></code>
+            </div>
+
           </div>
         </div>
       </div>
