@@ -171,23 +171,25 @@ root.selectAll('rect.number')
           <div class='section-content'>
             Contrary to the example we've set, SVG provides more primitives than
             the lowly <code>rect</code>. And you know what that means: more
-            contrived examples. Let's consider a new graph - a self-descriptive
-            <!-- TODO link me --> one. A plot of cicles, where the x-axis is
+            contrived examples. Let's consider a new graph - a <a href='http://xkcd.com/688/'>self-descriptive</a>
+            one. A plot of cicles, where the x-axis is
             the radius of the circle and the y-axis is the number of pixels
             in that circle (its area).
             <hr>
-            The <code>circle</code><!--TODO--> element is just what we need.
-            Like the <code>rect</code> before it, and all the future SVG
-            elements we render, it supports presentation attributes.
+            The <code><a href='http://www.w3.org/TR/SVG/shapes.html#CircleElement'>circle</a></code>
+            element is just what we need.  Like the <code>rect</code> before
+            it, and all the future SVG elements we render, it supports
+            presentation attributes.
             <div class='aside'>
               Huh? What?  Afraid you fell asleep in class and missed the
               definition of the word? Nope, the teacher is just making you
-              sweat. The presentation attributes <!--LINK--> are the attributes
-              that determine how a shape is rendered. We've already seen
-              <code>fill</code> and <code>stroke</code>. There are more to come,
-              but we won't be exhaustive. The SVG standard is, while not exactly
-              readable, easy to browse and full of examples. Consider browsing
-              it over coffee. Or not, actually. Don't do that.
+              sweat. The <a href='http://www.w3.org/TR/SVG/styling.html#SVGStylingProperties'>presentation attributes</a>
+              are the attributes that determine how a shape is rendered. We've
+              already seen <code>fill</code> and <code>stroke</code>. There are
+              more to come, but we won't be exhaustive. The SVG standard is,
+              while not exactly readable, easy to browse and full of examples.
+              Consider browsing it over coffee. Or not, actually. Don't do
+              that.
             </div>
             While the presentation of a <code>circle</code> is the same as a
             <code>rect</code>, the positioning isn't. We need three attributes:
@@ -288,9 +290,9 @@ root.selectAll('circle')
           </div>
           <div class='section-content'>
             While the previous example wasn't bad code, it isn't exactly
-            idiomatic D3. It works, but D3 provides many helpers <!-- TODO link
-            me --!> to make our code easier to read and our intent clear. For
-            example, <span class='nobr'><code>d3.scale</code>.</span><!--TODO-->
+            idiomatic D3. It works, but D3 provides <a href='https://github.com/mbostock/d3/wiki/API-Reference'>many helpers</a>
+            to make our code easier to read and our intent clear. For
+            example, <span class='nobr'><code><a href='https://github.com/mbostock/d3/wiki/Scales'>d3.scale</ao></code>.</span>
             You may have noticed in the last example we had inserted some magic
             values in our attribute functions (like <code>4</code> and
             <code>height</code>). But these were <em>separate</em> from the data
