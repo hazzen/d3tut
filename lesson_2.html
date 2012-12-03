@@ -576,7 +576,7 @@ root.append('g')
 var yAxis = d3.svg.axis().scale(yScale).orient('left');
 root.append('g')
     .attr({
-      'class': 'x axis',
+      'class': 'y axis',
       'transform': 'translate(' + yAxisWidth + ',0)',
     })
     .call(yAxis);
@@ -609,7 +609,21 @@ root.selectAll('rect.bar')
             style property for HTML elements, but it works just fine for SVG.
             The complete list of all valid properties to put in CSS is available
             <a href='http://www.w3.org/TR/SVG/styling.html'>in the spec</a>.
-            <hr>
+            <div class='aside'>
+              In addition to <code>text-anchor</code>, there is another
+              commonly used attribute: <span class='nobr'><code>dy</code>.</span>
+              The <code>dy</code> of a <code>text</code> element is the amount,
+              in any units, the text should be offset from its defined <code>y</code>
+              position. How is this useful? Vertically aligning text. There are
+              some "magic" values one can use with <code>dy</code> to get a variety
+              of effects. A <code>dy</code> of <code>0.3em</code> vertically
+              centers the text along the defined <code>y</code> position. A
+              <code>dy</code> of <code>0.7em</code> aligns the top of the text
+              at the defined <code>y</code> position. And, obviously, a
+              <code>dy</code> of <code>1em</code> moves the text down a
+              line from the defined <code>y</code> attribute. These numbers
+              aren't actually magic, but follow from the <a href='http://en.wikipedia.org/wiki/Em_(typography)'>definition of the em unit</a>.
+            </div>
             The next new bit is the <code><a href='http://www.w3.org/TR/SVG/text.html'>text</a></code>
             element used for the title. Just to confuse you, <code>text</code>
             in SVG behaves nothing like in HTML, nor like <code>rect</code>s
@@ -729,6 +743,150 @@ root.selectAll('rect.bar')
             <code>fn(selection); return selection;</code> - enabling method
             chaining.
         </div>
+      </div>
+        <div class='section'>
+          <div class='section-header' id='s6'>
+            2.6 An optional, and not necessary, detour into style
+          </div>
+          <div class='section-content'>
+            This is a short section that, at one point in writing, was a note
+            in the above example. But, it was much too long as a note and so
+            it rests, here, mostly unloved and entirely alone. Wait, not so
+            unloved - you! You, reader, are reading me! Oh, most frabjous day!
+            <hr>
+            So, style. After reading about the <code>g</code> element and
+            <code>transform</code> attribute, a smart question could have been
+            posited: why not render the bars from the histogram into their
+            own little <span class='nobr'><code>g</code>,</span> offset from
+            the cruel identity transform and in their own little world? Why
+            not have the <code>xScale</code> keep its domain, but have a range
+            of <span class='nobr'><code>[0, width - yAxisWidth]</code>?</span>
+            And, of course, the same for the <span class='nobr'><code>yScale</code>?</span>
+            Other than requiring we place all the <code>rect</code> elements
+            inside a <code>g</code> with <code>translate</code> of
+            <span class='nobr'><code>'transform(' + yAxisWidth + ', ' + titleHeight + ')'</code>,</span>
+            it seems more clear.
+            <div class='aside'>
+              Nothing will excuse the ugliness of that string concatenation,
+              though. But a clever coder might realize the stringification of
+              an array is the same as <code>array.join(', ')</code> and write
+              ever-so-short, ever-so-clever code. And receive a gold star from
+              me. Then, maybe, a slap.
+            </div>
+            However, a nice scale for our graph creates a less-nice situation
+            for our <code>d3.svg.axis</code> calls. Unless...
+            <hr>
+            Of course! Unless one were to <em>also</em> put the <code>g</code>
+            elements inside the bar's <code>g</code> element. Which of these is
+            better? For a toy example such as this one, it really doesn't
+            matter. As graphs get more complex, you will learn to trust the
+            <code>g</code> element more than its humble name suggest. You may,
+            in fact, start calling it your <span class='nobr'><code>G</code>.</span>
+            For reference, here is the fully-updated example:
+            <div class='sample'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  svg {
+    border: 1px solid black;
+    background: white;
+  }
+
+  .axis .domain, .axis .tick {
+    stroke: #000;
+    fill: none;
+  }
+
+  .title {
+    fill: #666;
+    font-family: Helvetica, sans-serif;  /* Helvectica is cool, right? */
+    text-anchor: middle;
+    font-size: 24px;
+  }
+
+  .bar {
+    fill: #fcc;
+    stroke: #444;
+  }
+&lt;/style&gt;
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var width = 640;
+var height = 480;
+var root = d3.select('#chart').append('svg')
+    .attr({
+      'width': width,
+      'height': height,
+    });
+
+// Render the title.
+var titleHeight = 50;
+root.append('text')
+    .attr({
+      'class': 'title',
+      'x': width / 2,
+      'y': titleHeight / 2,
+    })
+    .text('Skull-splitting power!');
+
+// Simulate 500 rolls of the axe.
+var rollDie = function(numSides) {
+  return 1 + Math.floor(Math.random() * numSides);
+};
+
+var MAX_ROLL = 4 + 4 + 6 + 6;
+var rollHisto = d3.range(MAX_ROLL + 1).map(function() { return 0; });
+for (var i = 0; i &lt; 500; i++) {
+  var rolled = rollDie(4) + rollDie(4) + rollDie(6) + rollDie(6);
+  rollHisto[rolled]++;
+}
+
+var yAxisWidth = 50;
+var xAxisHeight = 50;
+
+<em>// Define the root g element.
+var histoWidth = width - yAxisWidth;
+var histoHeight = height - xAxisHeight - titleHeight;
+var histoG = root.append('g')
+    .attr({
+      'class': 'histo',
+      'transform': 'translate(' + yAxisWidth + ', ' + titleHeight + ')',
+    });
+</em>
+
+// Render our axis.
+var xScale = d3.scale.linear()
+    .domain([0, rollHisto.length])
+<em>    .range([0, histoWidth]);</em>
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(rollHisto) * 1.2])
+<em>    .range([histoHeight, 0]);</em>
+
+var xAxis = d3.svg.axis().scale(xScale);
+histoG.append('g')
+    .attr({
+      'class': 'x axis',
+<em>      'transform': 'translate(0, ' + histoHeight + ')',</em>
+    })
+    .call(xAxis);
+
+var yAxis = d3.svg.axis().scale(yScale).orient('left');
+histoG.append('g')
+    .attr('class', 'y axis')
+    .call(yAxis);
+
+// Render the dice bars.
+histoG.selectAll('rect.bar')
+    .data(rollHisto).enter()
+  .append('rect')
+    .attr({
+      'class': 'bar',
+      'x': function(d, i) { return xScale(i - 0.5); },
+      'width': xScale(1) - xScale(0),
+      'y': yScale,
+      'height': function(d) { return yScale(0) - yScale(d); },
+    });</code>
+              <code class='block result'></code>
+            </div>
+        </div>
+        A bit cleaner, if not shorter.
       </div>
     </div>
     <div class='footer'>

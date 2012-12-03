@@ -126,7 +126,7 @@ code {
   background-color: #efeff4;
   border: 1px solid #ccc;
   color: #000;
-  display: inline-block;
+  display: inline;
   font-family: monospace;
   margin: 0;
   white-space: normal;
