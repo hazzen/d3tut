@@ -591,11 +591,44 @@ root.selectAll('rect.bar')
       'width': xScale(1) - xScale(0),
       'y': yScale,
       'height': function(d) { return yScale(0) - yScale(d); },
-    });
-  </code>
+    });</code>
               <code class='block result'></code>
             </div>
-
+            <em>Phew!</em> That was quite a bit of code, and much of it new.
+            First order of business: this example used CSS. Yes, CSS. You see,
+            I know I mentioned this in the last lesson as an advanced topic.
+            Congratulations, your SVG is now advanced! Gold star! Styling your
+            charts the same way you would style your documents is done for the
+            same reason - keeping presentation separate from content is good.
+            It is a little more complicated with CSS as some things you think
+            of as presentation in CSS are, conceptually, part of the content in
+            SVG. Namely, the position and dimension of an element.
+            <hr>
+            Some readers may have spotted another difference: some of those CSS
+            properties aren't valid. True, <code>text-anchor</code> isn't a
+            style property for HTML elements, but it works just fine for SVG.
+            The complete list of all valid properties to put in CSS is available
+            <a href='http://www.w3.org/TR/SVG/styling.html'>in the spec</a>.
+            <hr>
+            The next new bit is the <code><a href='http://www.w3.org/TR/SVG/text.html'>text</a></code>
+            element used for the title. Just to confuse you, <code>text</code>
+            in SVG behaves nothing like in HTML. For one, it <em>does not wrap</em>.
+            It will overflow as necessary and you can't <em>easily</em> prevent
+            this. It sucks. For serious text layout in SVG, I suggest two good
+            options. If you know your data, lay your text out by hand, assuming
+            everything will fit (which it will, because you can modify as
+            needed). If you don't know your data, I suggest using HTML - either
+            with <code>absolute</code> positioned nodes or with a <a href='http://www.w3.org/TR/SVG/extend.html#ForeignObjectElement'>foreignObject</a>
+            (to embed HTML within SVG). Neither of the HTML options are great,
+            mind you, but they do work.
+            <div class='aside'>
+              Another option for laying out unknown text is to render, offscreen,
+              the text you wish to layout and use some of the <a href='http://www.w3.org/TR/SVG/text.html#DOMInterfaces'>DOM interface methods</a>
+              to query the size of the text, such as <code>getComputedTextLength</code>.
+              Alternatively, you can use the <code>getBBox</code> method (on the
+              <code><a href='http://www.w3.org/TR/SVG/types.html#InterfaceSVGLocatable'>SVGLocatable</a></code>
+              DOM interface) to get the height as well.
+            </div>
           </div>
         </div>
       </div>
