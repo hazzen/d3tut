@@ -498,7 +498,7 @@ var circleY = function(d) {
             <hr>
             So, we'll simulate 500 attacks with your axes and graph the
             resulting histogram. And we'll pick, arbitrarily, 640x480 pixels
-            as the size.
+            as the size. With a title and nicely-labeled axes for our axes.
             <div class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
   svg {
@@ -548,10 +548,10 @@ var rollDie = function(numSides) {
 };
 
 var MAX_ROLL = 4 + 4 + 6 + 6;
-var rollHisto = d3.range(MAX_ROLL).map(function() { return 0; });
+var rollHisto = d3.range(MAX_ROLL + 1).map(function() { return 0; });
 for (var i = 0; i &lt; 500; i++) {
   var rolled = rollDie(4) + rollDie(4) + rollDie(6) + rollDie(6);
-  rollHisto[rolled - 1]++;
+  rollHisto[rolled]++;
 }
 
 // Render our axis.
@@ -559,8 +559,8 @@ var yAxisWidth = 50;
 var xAxisHeight = 50;
 
 var xScale = d3.scale.linear()
-    .domain([0, MAX_ROLL])
-    .range([yAxisWidth, width - yAxisWidth]);
+    .domain([0, rollHisto.length])
+    .range([yAxisWidth, width]);
 var yScale = d3.scale.linear()
     .domain([0, d3.max(rollHisto) * 1.2])
     .range([height - xAxisHeight, titleHeight]);
@@ -587,7 +587,7 @@ root.selectAll('rect.bar')
   .append('rect')
     .attr({
       'class': 'bar',
-      'x': function(d, i) { return xScale(i + 0.5); },
+      'x': function(d, i) { return xScale(i - 0.5); },
       'width': xScale(1) - xScale(0),
       'y': yScale,
       'height': function(d) { return yScale(0) - yScale(d); },
@@ -612,7 +612,11 @@ root.selectAll('rect.bar')
             <hr>
             The next new bit is the <code><a href='http://www.w3.org/TR/SVG/text.html'>text</a></code>
             element used for the title. Just to confuse you, <code>text</code>
-            in SVG behaves nothing like in HTML. For one, it <em>does not wrap</em>.
+            in SVG behaves nothing like in HTML, nor like <code>rect</code>s
+            in SVG. Ignoring any centering or offsets, the <code>x</code> and
+            <code>y</code> attributes determine the left and <em>baseline</em>,
+            not top or mid, positions of the initial character. So far, so good.
+            The big annoyance: it <em>does not wrap</em>.
             It will overflow as necessary and you can't <em>easily</em> prevent
             this. It sucks. For serious text layout in SVG, I suggest two good
             options. If you know your data, lay your text out by hand, assuming
@@ -629,18 +633,101 @@ root.selectAll('rect.bar')
               <code><a href='http://www.w3.org/TR/SVG/types.html#InterfaceSVGLocatable'>SVGLocatable</a></code>
               DOM interface) to get the height as well.
             </div>
-            Enough of <code>text</code>, now for some stylistic concerns. You
-            may have noticed a few variables scattered about the code - in
+            Lets talk about the presentation a bit: we have a title that takes
+            up the top of the chart, and x-axis that takes up the bottom, and a
+            y-axis on the left. Each bar is <em>centered</em> on the dice roll
+            it represents, and our data on how many times the dice summed to
+            <code>n</code> is in <span class='nobr'><code>rollHisto[n]</code>.</span>
+            The area for drawing bars in then spans from the end of the y-axis
+            to the edge of the chart.
+            <hr>
+            You may have noticed a few variables scattered about the code - in
             addition to the <code>width</code> and <code>height</code> of
             previous examples, we additionally have
             <span class='nobr'><code>xAxisHeight</code>,</span>
             <span class='nobr'><code>yAxisWidth</code>,</span> and
-            <span class='nobr'><code>titleHeight</code>.</span> The reasoning
-            is, as usual when naming numbers, is clarity and modularity.
-            While we may never intend on changing these dimensions, I find
-            a line like <code>[height - xAxisHeight, titleHeight]</code> is
-            easier to parse than <span class='nobr'><code>[430, 50]</code>.</span>
-          </div>
+            <span class='nobr'><code>titleHeight</code>.</span> Knowing this,
+            our x scale should be obvious; the value <code>0</code> maps to
+            the edge of the y-axis, and the value <code>rollHisto.length - 1</code>
+            (the highest data value to graph) should be close to, but not at,
+            the edge of the chart. Hence:
+            <code class='block js'>var xScale = d3.scale.linear()
+    .domain([0, rollHisto.length])
+    .range([yAxisWidth, width]);</code>
+            Which, I might add, is a lot more obvious than the constant-less
+            version with a <code>range</code> of
+            <span class='nobr'><code>[480, 50]</code>.</span>
+            The y scale is similar, with the added complexity of it being
+            inverted; a value of <code>0</code> maps to the highest y-value,
+            namely <code>height - xAxisHeight</code>.
+            <hr>
+            The scales we have also let us do some nice tricks. The center
+            of each bar is at <code>xScale(i)</code>, as our scale is defined.
+            This means the left edge should be halfway between <code>i - 1</code>
+            and <code>i</code> - which we can put directly into the defintion as
+            <span class='nobr'><code>xScale(i - 0.5)</code>.</span> The
+            <code>width</code> of each bar, then, should be the distance between
+            <code>i - 0.5</code> and <span class='nobr'><code>i + 0.5</code>.</span>
+            As our scale is linear, each bar has the same width and we simplify
+            this to <code>xScale(1) - xScale(0)</code>. As before, so again, the
+            y-scale is defined in a similar fashion, using the <code>yScale</code>
+            to determine the <code>y</code> and <span class='nobr'><code>height</code>.</span>
+            <hr>
+            The next wrinkle is our axes - the most confusing, and new, piece
+            of code. The easiest part to explain is the wonderful
+            <code><a href='http://www.w3.org/TR/SVG/struct.html#Groups'>g</a></code>
+            element. We use this element mostly for two purposes: it can have
+            children elements, and it allows one to apply a <code><a href='http://www.w3.org/TR/SVG/coords.html#TransformAttribute'>transform</a></code>
+            to those children. This element forms the bread-and-butter of
+            many interesting graphs, paralleling the uses of a <code>div</code>
+            element in HTML. It allows elements to be grouped together, both
+            in the structure of the document and in the presentation.
+            <hr>
+            We commonly use the <code><a href='http://www.w3.org/TR/SVG/coords.html#TransformAttribute'>transform</a></code>
+            attribute just mentioned for its <code>translate</code> form - to
+            offset a set of elements from their normal position by a set amount
+            in the <code>x</code> and <code>y</code> directions. The other forms,
+            which allow a full range of affine transformations, won't be covered
+            here.
+            <hr>
+            So how does that help us? Well, the <code>d3.svg.axis</code> helper
+            isn't the smartest, or most configurable, kid in the shed. This is
+            by design (I think). <code>d3.svg.axis</code> is a function that
+            takes a <code>selection</code> and appends elements to it that
+            resemble a labeled axis. By default,
+            drawing a line from the start to the end of some scale along the x-axis,
+            positioned with a <code>y</code> of <code>0</code>, with ticks and labels
+            below. The simplistic interface doesn't allow us to specify where
+            this is positioned. If you browse the <a href='https://github.com/mbostock/d3/wiki/SVG-Axes#wiki-axis'>documentation</a>
+            you won't find any such method. So, <code>g</code> to the rescue!
+            Translating all the elements rendered for the axis down by <code>height - xAxisHeight</code>
+            gets the desired position.
+            <hr>
+            You'll also notice the docs don't mention anything about the
+            presentation of the axis elements, so I'll clue you in. There is
+            a <code>path</code> element that runs parallel to the axis with
+            a class of <code>domain</code> and many <code>line</code> elements
+            forming the perpendicular tick marks with, conveniently, a class
+            of <span class='nobr'><code>tick</code>.</span> The <code>text</code>
+            labels have no class. Given all of this information, we can easily
+            use CSS to change the display, even hiding bits if we don't like them
+            with a <code>stroke</code> and <code>fill</code> of none.
+            <hr>
+            To determine which way the axis runs, and which side the labels
+            get placed on, you use the <code><a href='https://github.com/mbostock/d3/wiki/SVG-Axes#wiki-orient'>orient</a></code>
+            method. And, to define the scale used, the <code><a href='https://github.com/mbostock/d3/wiki/SVG-Axes#wiki-scale'>scale</a></code>
+            method is used.
+            <div class='aside'>
+              The rendered axis goes from the start of the scale to the end, so
+              if you had used a not-so-obvious scale definition, it would not
+              work out so nicely. Like in our previous example of a y-scale
+              with a domain of <code>[0, 1]</code>.
+            </div>
+            And that is about it. Except that pesky <code>call</code> method
+            we called with the <code>d3.svg.axis</code> object. This is a
+            helper method; <code>selection.call(fn)</code> is equivalent to
+            <code>fn(selection); return selection;</code> - enabling method
+            chaining.
         </div>
       </div>
     </div>
