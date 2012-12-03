@@ -629,6 +629,17 @@ root.selectAll('rect.bar')
               <code><a href='http://www.w3.org/TR/SVG/types.html#InterfaceSVGLocatable'>SVGLocatable</a></code>
               DOM interface) to get the height as well.
             </div>
+            Enough of <code>text</code>, now for some stylistic concerns. You
+            may have noticed a few variables scattered about the code - in
+            addition to the <code>width</code> and <code>height</code> of
+            previous examples, we additionally have
+            <span class='nobr'><code>xAxisHeight</code>,</span>
+            <span class='nobr'><code>yAxisWidth</code>,</span> and
+            <span class='nobr'><code>titleHeight</code>.</span> The reasoning
+            is, as usual when naming numbers, is clarity and modularity.
+            While we may never intend on changing these dimensions, I find
+            a line like <code>[height - xAxisHeight, titleHeight]</code> is
+            easier to parse than <span class='nobr'><code>[430, 50]</code>.</span>
           </div>
         </div>
       </div>
