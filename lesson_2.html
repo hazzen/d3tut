@@ -32,7 +32,7 @@
           D3, Conceptually
         </h1>
         <h2 class='lesson'>
-          Lesson 2: Charts <span class='warn'>UNDER CONSTRUCTION</span>
+          Lesson 2: Charts
         </h2>
       </div>
     </div>
@@ -54,10 +54,10 @@
             We start this lesson with a simple (and completely contrived)
             problem to solve. Word has it the world might be ending; some
             aliens have contacted the leader of the world (pretend, will you)
-            and demanded they be shown a bar chart of the even numbers up to 10.
-            Some sort of test, we gather, and if we can't deliver they promise
+            and demanded to be shown a bar chart of the even numbers up to 10.
+            Some sort of test, we gather. If we can't deliver, they promise
             to destroy the world. A far-fetched request, but it sure beats a
-            whale.
+            whale. Really, who wants a whale?
             <hr>
             So, how to begin? As everything, with our data:
             <code class='block js'>var evenNumbers = [0, 2, 4, 6, 8, 10];</code>
@@ -68,12 +68,14 @@
             <code class='block js'>var width = 600;
 var height = 100;</code>
             And why not arbitrarily decide the bars will be stacked vertically,
-            each extending to the right in proportion to the represented number.
-            So, if we have six bars, that must make each of them
+            each extending to the right in proportion to the represented
+            number. And we'll use the full 600x100 pixels. If we have six
+            bars, that must make each of them
             <code class='js'>height / 6</code> pixels tall. Hardcoding
             <code class='js'>6</code> doesn't really strike me as a good idea,
-            considering the example we set above. So, we make sure
-            however many bars we have will fit:
+            considering the example we set above. Plus, the aliens might want more
+            numbers in the future. Insteand, we make sure however many bars we
+            have will fit:
             <code class='block js'>var barHeight = height / evenNumbers.length;</code>
             What about the width of each bar? Well, that depends on the number
             it represents. We have 600 pixels to work with; giving 10, the
@@ -84,7 +86,8 @@ var height = 100;</code>
 };</code>
             "Aha!", you might say, "shouldn't that <em>also</em> vary based
             on the data, and not hard-coded? Aren't you setting a bad example
-            for the kids?". And I would reply with a proper function:
+            for the kids?". And I would reply with a proper function (and,
+            possibly, a not-so-proper gesture):
             <code class='block js'>var maxDataValue = d3.max(evenNumbers);
 var barWidth = function(number) {
   return number * (width / maxDataValue);
@@ -101,9 +104,10 @@ var barWidth = function(number) {
             <code>x</code> is quite easy, actually. All bars should
             be aligned along the left axis, so they all have an <code>x</code>
             of 0. <code>y</code> takes a <em>bit</em> more thought, but not
-            much (save those brain cells for something else). The
-            <code>i</code>-th even number should be offset by <code>i * barHeight</code>.
-            Or, in a function:
+            much (save those brain cells for something else). To place the bar
+            for <code>0</code> at the top of the chart, and that for
+            <code>10</code> at the bottom, the <code>i</code>-th even number
+            should be offset by <code>i * barHeight</code>. Or, in a function:
             <code class='block js'>var barY = function(index) {
   return index * barHeight;
 };</code>
@@ -153,38 +157,40 @@ root.selectAll('rect.number')
               <code class='block result'></code>
             </div>
             <div class='aside'>
-               New syntax! Join the club. D3 is under
-               <a href='https://github.com/mbostock/d3/wiki/Release-Notes'>constant
-               development</a> and new features get added with some frequency.
-               Your author tries to keep up, but can't always be bothered.
-               Hopefully you pick better role models. Passing a map to the
-               <code>attr</code> function (among others) is shorthand for
-               calling <code>attr</code> for each (key, value) pair in the map.
+              New syntax! You might have noticed the <code>attr</code> function
+              here was passed an <code>object</code> literal. Bet you haven't
+              seen that before. Join the club. D3 is under
+              <a href='https://github.com/mbostock/d3/wiki/Release-Notes'>constant development</a>
+              and new features get added with some frequency.  Your author
+              tries to keep up, but can't always be bothered.  Hopefully you
+              pick better role models. Passing a map to the <code>attr</code>
+              function (among others) is shorthand for calling
+              <code>attr</code> for each (key, value) pair in the map.
              </div>
              <hr>
           </div>
         </div>
         <div class='section'>
           <div class='section-header' id='s2'>
-            2.3 A bigger palette
+            2.2 A bigger palette
           </div>
           <div class='section-content'>
             Contrary to the example we've set, SVG provides more primitives than
             the lowly <code>rect</code>. And you know what that means: more
             contrived examples. Let's consider a new graph - a <a href='http://xkcd.com/688/'>self-descriptive</a>
-            one. A plot of cicles, where the x-axis is
+            one. A plot of circles, where the x-axis is
             the radius of the circle and the y-axis is the number of pixels
             in that circle (its area).
             <hr>
             The <code><a href='http://www.w3.org/TR/SVG/shapes.html#CircleElement'>circle</a></code>
             element is just what we need.  Like the <code>rect</code> before
-            it, and all the future SVG elements we render, it supports
+            it, and all the future SVG elements we render, it supports a set of
             presentation attributes.
             <div class='aside'>
               Huh? What?  Afraid you fell asleep in class and missed the
               definition of the word? Nope, the teacher is just making you
               sweat. The <a href='http://www.w3.org/TR/SVG/styling.html#SVGStylingProperties'>presentation attributes</a>
-              are the attributes that determine how a shape is rendered. We've
+              are the attributes which determine how a shape is rendered. We've
               already seen <code>fill</code> and <code>stroke</code>. There are
               more to come, but we won't be exhaustive. The SVG standard is,
               while not exactly readable, easy to browse and full of examples.
@@ -199,8 +205,8 @@ root.selectAll('rect.number')
             much like the last one with a few changes:
             <code class='block js'>var circleX = function(radius) { return radius; };
 var circleY = function(radius) { return Math.PI * radius * radius; };</code>
-            We'll also, obviously, need a larger area to render our circles in.
-            Let's try radius values of <code>[1, 2, 3, 5]</code>.
+            Let's try radius values of <code>[1, 2, 3, 5]</code> as a starting
+            point for the graph.
             <div class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var width = 600;
@@ -235,21 +241,23 @@ root.selectAll('circle')
             left. Thirdly, our y-axis is <em>reversed</em> from a normal graph.
             The third is easy to solve - instead of mapping the
             <code>radius</code> to <code>Math.PI * radius * radius</code>, we
-            instead subtract that value from the height of the graph:
-            <code>height - Math.PI * radius * radius</code>. The first two are
-            both classes of the same problem - a scale where 1 unit along the
-            axis is 1 pixel is tiny. Miniscule. Laughable. Infintesimal. No,
-            wait, that isn't right. Got carried away with my adjectives.
+            subtract that value from the height of the graph:
+            <code>height - Math.PI * radius * radius</code>. Now top is bottom
+            and bottom is top. The first two issues are both classes of the
+            same problem - a scale where 1 unit along the axis is 1 pixel is
+            tiny. Miniscule. Laughable. Infinitesimal. No, wait, that isn't
+            right. We can definitely both see and measure the circles, so they
+            must not be infinitesimal. Got carried away with my adjectives.
             <hr>
             When drawing a graph on paper, your scale is more likely to be
-            closer to 10mm to 1 unit (we don't use imperial units here; those
-            despots will never keep us down). We can fix that by scaling our
-            computed <code>cx</code> and <code>cy</code> values by an arbitrary
-            number - <code>4</code> sounds good. We'll also need to change our
-            bounds; if the largest circle is has a radius of <code>5</code>, we
-            would like <code>height - 4 * Math.PI * 5 * 5</code> to not be
-            negative; 350 is big enough for that. Now, our new (and maybe
-            improved) chart:
+            closer to 10mm to 1 unit (we don't use imperial units here; we are
+            snobby intellectuals). This is fixed by scaling our computed
+            <code>cx</code> and <code>cy</code> values by an arbitrary number -
+            <code>4</code> sounds good. Never done me wrong, trusty
+            <code>4</code>.  We'll also need to change our bounds; if the
+            largest circle is has a radius of <code>5</code>, we would like
+            <code>height - 4 * Math.PI * 5 * 5</code> to not be negative; 350
+            is big enough for that. Now, our new (and maybe improved) chart:
             <div class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var width = 600;
@@ -290,13 +298,13 @@ root.selectAll('circle')
           </div>
           <div class='section-content'>
             While the previous example wasn't bad code, it isn't exactly
-            idiomatic D3. It works, but D3 provides <a href='https://github.com/mbostock/d3/wiki/API-Reference'>many helpers</a>
+            idiomatic D3. It works, but D3 provides <a href='https://github.com/mbostock/d3/wiki/API-Reference'>helpers</a>
             to make our code easier to read and our intent clear. For
-            example, <span class='nobr'><code><a href='https://github.com/mbostock/d3/wiki/Scales'>d3.scale</ao></code>.</span>
-            You may have noticed in the last example we had inserted some magic
+            example, <span class='nobr'><code><a href='https://github.com/mbostock/d3/wiki/Scales'>d3.scale</a></code>.</span>
+            Note, in the last example, we inserted some magic
             values in our attribute functions (like <code>4</code> and
             <code>height</code>). But these were <em>separate</em> from the data
-            we actually cared about - that our <code>cx</code> is just the
+            we actually cared about - our <code>cx</code> is just the
             <code>radius</code> on some arbitrary scale, and the <code>cy</code>
             is likewise a <em>number</em> on some <em>scale</em>. In case the
             name, and this hammering of a point, did not clue you in,
@@ -305,14 +313,17 @@ root.selectAll('circle')
             <hr>
             Before we introduce our first scale, we'll define what a scale
             <em>is</em>. A scale is a function that maps input values to output
-            values. Neither the input nor output need be numbers, but starting
-            with them will be easiest. The simplest scale, then, is the identity
-            function. We used that, implicitly, in the first circle example (the
-            "bad" one). We mapped our data (radius) values to a value along some
-            axis, then scaled that axis using the identity function.
+            values. Being mathematically-minded, the proper name for
+            <em>input</em> is <em>domain</em>, and that of <em>output</em> is
+            <em>range</em>.  Neither the domain nor range need be numbers, but
+            starting there will be easiest. The simplest scale, then, is the
+            identity function. We used that, implicitly, in the first circle
+            example (the "bad" one). We mapped our data (radius) values to a
+            value along some axis, then scaled that axis using the identity
+            function.
             <hr>
             In the second, questionably improved, example, we scaled that axis
-            by multipling by 4. Our scale function was then <code>function(x) {
+            by multiplying by 4. Our scale function was then <code>function(x) {
               return 4 * x; };</code>. This is an example of a
             <em>linear scale</em> (as, an astute reader will note, is the
             identity scale). D3 provides <code>d3.scale.linear</code> for just
@@ -358,13 +369,11 @@ root.selectAll('div')
             force all values to fall within the domain.
             <div class='aside'>
               Linear scales actually accept an array length <em>at least</em> 2
-              for the domain and range.  This is a more advanced feature which
-              may prove useful later, but for now only serves to confuse. Read
-              the <a
-                href='https://github.com/mbostock/d3/wiki/Quantitative-Scales#wiki-linear_domain'>docs</a>
+              for the domain and range. Specfying more than 2 values is a more
+              advanced feature which may prove useful later, but now only
+              serves to confuse. Read the <a href='https://github.com/mbostock/d3/wiki/Quantitative-Scales#wiki-linear_domain'>docs</a>
               or attempt to guess the semantics if you want, or just carry on
-              with your life. All are valid paths, and one may find
-              enlightenment along any.
+              with your life. All are valid paths.
             </div>
             We can use our scalar powers (sweet! only a Levenshtein distance of
             4 from super!) to improve the second circle example. Now, we have a
@@ -414,7 +423,7 @@ root.selectAll('circle')
           <div class='section-content'>
             And I'm not going to let it rest until that code is <em>good</em>
             (even if the source of the chart is contrived). The <code>yScale</code>
-            used in the example is, frankly, an embarassment. Look at our
+            used in the example is, frankly, an embarrassment. Look at our
             <code>circleY</code> function again:
             <code class='block js'>var circleY = function(radius) { return height - yScale(Math.PI * radius * radius); };</code>
             We still have parts of our conversion from axis to pixels (our
@@ -488,17 +497,18 @@ var circleY = function(d) {
               quadruple axe</em> (it's pretty cool, trust me). When you hit
             things with this thing, you roll <a href='http://en.wikipedia.org/wiki/Dice_notation'>2d4 + 2d6</a>
             for damage, assuming the enemy fails their sanity check, and half
-            rounding down otherwise. Now, you received <em>DJs boombox of Call
-              Me Maybe</em> in your last quest (for those not familiar with the
+            rounding down otherwise. Now, you received <em>DJs boombox of "Call
+              Me Maybe"</em> in your last quest (for those not familiar with the
             game, that is a cursed amulet that makes everyone within 50m fail
             their sanity checks) so the math here is going to be easy. Which is
             good, because some members of your party just stare at you blindly
             when you say <em>probability mass function</em> and you just want
-            to demonstrate how awesome this new axe is.
+            to demonstrate how awesome this new axe is. You need a pretty
+            picture to illustrate.
             <hr>
-            With a histogram, of course.
+            A picture of a histogram, of course.
             <hr>
-            So, we'll simulate 500 attacks with your axes and graph the
+            We'll simulate 500 attacks with your axes and graph the
             resulting histogram. And we'll pick, arbitrarily, 640x480 pixels
             as the size. With a title and nicely-labeled axes for our axes.
             <div class='sample'>
@@ -515,7 +525,7 @@ var circleY = function(d) {
 
   .title {
     fill: #666;
-    font-family: Helvetica, sans-serif;  /* Helvectica is cool, right? */
+    font-family: Helvetica, sans-serif;  /* Helvetica is cool, right? */
     text-anchor: middle;
     font-size: 24px;
   }
@@ -676,11 +686,27 @@ root.selectAll('rect.bar')
             The y scale is similar, with the added complexity of it being
             inverted; a value of <code>0</code> maps to the highest y-value,
             namely <code>height - xAxisHeight</code>.
-            <hr>
+            <div class='aside'>
+              Going back to our <a href='#s4'>"not-so-rubbish" circle example</a>,
+              we could improve it yet again. Instead of defining the <code>xScale</code>
+              and <code>yScale</code> as having domains of <code>[0, 1]</code>,
+              we can define them as having a more <em>natural</em> domain.
+              Like <code>[0, d3.max(circleRs)]</code> for the <code>xScale</code>
+              and <code>[0, dataToY(d3.max(circleRs))]</code> for the
+              <span class='nobr'><code>yScale</code>.</span> The ranges,
+              then, would be <code>[0, width]</code> and
+              <span class='nobr'><code>[0, height]</code>.</span> Our scale
+              is no longer <em>perfect</em>, but we could change the definition
+              of <code>width</code> and <code>height</code> to get the original
+              definition. This isn't as simple as I've led on, hence ignoring
+              it. But, generally, domains and ranges should be natural
+              from the domain of data you wish to render to the range of pixels
+              you have to render in.
+            </div>
             The scales we have also let us do some nice tricks. The center
             of each bar is at <code>xScale(i)</code>, as our scale is defined.
             This means the left edge should be halfway between <code>i - 1</code>
-            and <code>i</code> - which we can put directly into the defintion as
+            and <code>i</code> - which we can put directly into the definition as
             <span class='nobr'><code>xScale(i - 0.5)</code>.</span> The
             <code>width</code> of each bar, then, should be the distance between
             <code>i - 0.5</code> and <span class='nobr'><code>i + 0.5</code>.</span>
@@ -799,7 +825,7 @@ root.selectAll('rect.bar')
 
   .title {
     fill: #666;
-    font-family: Helvetica, sans-serif;  /* Helvectica is cool, right? */
+    font-family: Helvetica, sans-serif;  /* Helvetica is cool, right? */
     text-anchor: middle;
     font-size: 24px;
   }
@@ -888,7 +914,11 @@ histoG.selectAll('rect.bar')
               <code class='block result'></code>
             </div>
         </div>
-        A bit cleaner, if not shorter.
+        A bit cleaner, if not shorter. In the next lesson, we'll dive back into
+        data bindings. As you may have learned to expect, I've hidden a bit of
+        complexity in previous descriptions. But, trust me, it was for the
+        best. So, next time, "you got data in my data!" and other adventures
+        in binding land.
       </div>
     </div>
     <div class='footer'>
