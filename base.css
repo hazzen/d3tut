@@ -241,3 +241,11 @@ span.spoiler::before {
   border: 1px solid black;
   padding: 0 5px;
 }
+
+.prev-link {
+  float: left;
+}
+
+.next-link {
+  float: right;
+}
