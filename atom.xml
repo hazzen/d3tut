@@ -3,7 +3,7 @@
   <subtitle>A tutorial-in-progress for the JavaScript library D3</subtitle>
   <link href="http://code.hazzens.com/d3tut/atom.xml" rel="self"/>
   <link href="http://code.hazzens.com/d3tut/"/>
-  <updated>2012-11-26T23:59:00Z</updated>
+  <updated>2012-12-04T23:30:00Z</updated>
   <author>
     <name>Mikey Levine</name>
     <uri>http://hazzens.com</uri>
@@ -11,9 +11,24 @@
   <id>tag:code.hazzens.com,2012:/d3tut</id>
 
   <entry>
+    <title>Lesson 2: Charts</title>
+    <link href="http://code.hazzens.com/d3tut/lesson_2.html"/>
+    <id>tag:code.hazzens.com,2012-12-04:/d3tut/lesson_2.html</id>
+    <published>2012-12-04T23:30:00Z</published>
+    <updated>2012-12-04T23:30:00Z</updated>
+    <summary>
+      In which we spew SVG elements and make pretty charts
+    </summary>
+    <author>
+      <name>Mikey Levine</name>
+      <uri>http://hazzens.com</uri>
+    </author>
+  </entry>
+
+  <entry>
     <title>Lesson 1: Introductory elements</title>
-    <link href="http://code.hazzens.com/d3tut/lesson1.html"/>
-    <id>tag:code.hazzens.com,2012-11-26:/d3tut/lesson1.html</id>
+    <link href="http://code.hazzens.com/d3tut/lesson_1.html"/>
+    <id>tag:code.hazzens.com,2012-11-26:/d3tut/lesson_1.html</id>
     <published>2012-11-26T23:59:00Z</published>
     <updated>2012-11-26T23:59:00Z</updated>
     <summary>
@@ -27,8 +42,8 @@
 
   <entry>
     <title>Lesson 0: Preface</title>
-    <link href="http://code.hazzens.com/d3tut/lesson0.html"/>
-    <id>tag:code.hazzens.com,2012-11-26:/d3tut/lesson0.html</id>
+    <link href="http://code.hazzens.com/d3tut/lesson_0.html"/>
+    <id>tag:code.hazzens.com,2012-11-26:/d3tut/lesson_0.html</id>
     <published>2012-11-26T23:59:00Z</published>
     <updated>2012-11-26T23:59:00Z</updated>
     <summary>
