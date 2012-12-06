@@ -58,6 +58,51 @@
             3.1 Dearly Data'd Descendants
           </div>
           <div class='section-content'>
+            I know, I know: I promised at the end of <a href='lesson_1.html'>Lesson 1</a>
+            you would get to see some crazy animations soon. Well, soon isn't
+            yet. Soon is in the future. Now, sadly, we get to spend an entire
+            lesson not making eyeballs bleed and potential romantic partners
+            swoon. We are just going to take a deep dive into data (sorry
+            to the rebels; there will be no sidetrack into
+            <a href='http://en.wikipedia.org/wiki/Lore_(Star_Trek)#Lore'>lore</a>).
+            <hr>
+            Back in the first tutorial, there was a short example involving
+            <a href='lesson_1.html#s4'>sugar, spice, and appending nodes</a>.
+            We are going to revisit that, but as a data-driven example:
+            <div class='sample'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  .thing {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px;
+    width: 200px;
+  }
+
+  .thing.nice {
+    background: #cfc;
+  }
+
+  .thing.notnice {
+    background: #fcc;
+  }
+&lt;/style&gt;
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var things = [
+{name: 'Sugar', isNice: true},
+{name: 'Spice', isNice: true},
+{name: 'Toe Fungus', isNice: false}];
+
+d3.select('#chart').selectAll('div.thing')
+    .data(things).enter()
+  .append('div')
+    .classed({
+      'thing': true,
+      'nice': function(d) { return d.isNice; },
+      'notnice': function(d) { return !d.isNice; },
+    })
+    .text(function(d) { return d.name; });</code>
+              <code class='block result'></code>
+            </div>
           </div>
         </div>
       </div>
