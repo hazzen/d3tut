@@ -229,6 +229,41 @@ var subNumDivs = numDivs.append('div')
             thing modified. But wait - shouldn't there have been an error?
             If you look at the resulting HTML, you'll note each <code>div.num</code>
             has a <code>div</code> child, but only one of them has any text.
+            <em>Aha!</em> If only we put three elements in that array, then
+            everything should work. Right...?
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var nums = [5, 2, 8];
+
+var numDivs = d3.select('#chart').selectAll('div.num')
+    .data(nums).enter()
+  .append('div')
+    .attr('class', 'num')
+    .text(function(d, i) { return 'First-level! data:' + d + ', index: ' + i; });
+var subNumDivs = numDivs.append('div')
+<em>    .data([42, 43, 44])</em>
+    .text(function(d, i) { return '&nbsp;Second-level! data:' + d + ', index: ' + i; });</code>
+              <code class='block result'></code>
+            </div>
+            Right! Elated with your success, you decided to show off in that
+            way programmers like to show off - doing something outdated and
+            also trendy. In other words, using <code>table</code> elements.
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var tableRows = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+
+var table = d3.select('#chart').append('table');
+var trs = table.selectAll('tr')
+    .data(tableRows).enter()
+  .append('tr');
+trs.append('td')
+<em>    .data(/* harumph... what can we put in here? */);</em></code>
+              <code class='block result'></code>
+            </div>
           </div>
         </div>
       </div>
