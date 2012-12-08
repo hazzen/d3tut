@@ -79,18 +79,19 @@
   }
 
   .thing.nice {
-    background: #cfc;
+    background: #dfd;
   }
 
-  .thing.notnice {
-    background: #fcc;
+  .thing.icky {
+    background: #fdd;
   }
 &lt;/style&gt;
 &lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var things = [
-{name: 'Sugar', isNice: true},
-{name: 'Spice', isNice: true},
-{name: 'Toe Fungus', isNice: false}];
+  {name: 'Sugar', isNice: true},
+  {name: 'Spice', isNice: true},
+  {name: 'Toe Fungus', isNice: false},
+];
 
 d3.select('#chart').selectAll('div.thing')
     .data(things).enter()
@@ -98,11 +99,136 @@ d3.select('#chart').selectAll('div.thing')
     .classed({
       'thing': true,
       'nice': function(d) { return d.isNice; },
-      'notnice': function(d) { return !d.isNice; },
+      'icky': function(d) { return !d.isNice; },
     })
     .text(function(d) { return d.name; });</code>
               <code class='block result'></code>
             </div>
+            Not the same as before, but close.
+            This uses one new feature - the <code>classed<!--LINK--></code> operator.
+            This is a shorthand for accessing the <code>classList<!--LINK--></code>
+            property on nodes (or an equivalent if the browser is old). Usually,
+            setting the <code>class</code> through an <code>attr</code> call is
+            enough, but sometimes you need some more power.
+            <hr>
+            Now, we can't leave this as-is &ndash; our viewer might be
+            colorblind! By adding a little description to each div, we can help
+            set that right. We can easily add a <code>description</code> field
+            to each of our data objects, but how to get that into a new div as
+            a child of the <span class='nobr'><code>thing</code>?</span>
+            With <span class='nobr'><code>append</code></span>, of course!
+            <div class='sample'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  .thing {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px;
+    width: 200px;
+  }
+
+  .thing .description {
+    margin-left: 1em;
+    color: #666;
+  }
+
+  .thing.nice {
+    background: #dfd;
+  }
+
+  .thing.icky {
+    background: #fdd;
+  }
+&lt;/style&gt;
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var things = [
+  {name: 'Sugar', isNice: true, description: 'A tasty, sweet thing.'},
+  {name: 'Spice', isNice: true, description: 'A tasty, savory thing.'},
+  {name: 'Toe Fungus', isNice: false, description: 'A not so tasty, pungent thing.'},
+];
+
+var things = d3.select('#chart').selectAll('div.thing')
+    .data(things).enter()
+  .append('div')
+    .classed({
+      'thing': true,
+      'nice': function(d) { return d.isNice; },
+      'icky': function(d) { return !d.isNice; },
+    })
+    .text(function(d) { return d.name; });
+<em>things.append('div')
+  .attr('class', 'description')
+  .text(function(d) { return d.description; });</em></code>
+              <code class='block result'></code>
+            </div>
+            <em>Magic!</em> The <code>div.description</code> nodes that were
+            appended never had <code>.data</code> called but somehow still have
+            <code>data</code> bound on them. Well, it isn't magic. It is
+            just, actually, expected behavior. D3 automatically propogates
+            <code>data</code> from parent nodes to child nodes. Whenever you
+            append a node using <span class='nobr'><code>append</code>,</span>
+            it will get the bound data, if any, of the node it was appended to.
+            We can go deeper, even:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var nums = [5, 2, 8];
+
+var numDivs = d3.select('#chart').selectAll('div.num')
+    .data(nums).enter()
+  .append('div')
+    .attr('class', 'num')
+    .text(function(d, i) { return 'First-level! data:' + d + ', index: ' + i; });
+var subNumDivs = numDivs.append('div')
+    .text(function(d, i) { return '&nbsp;Second-level! data:' + d + ', index: ' + i; });
+subNumDivs.append('div')
+    .text(function(d, i) { return '&nbsp;&nbsp;THIRD-level! data:' + d + ', index: ' + i; });</code>
+              <code class='block result'></code>
+            </div>
+            In addition to inheriting the <code>data</code> of the parent, the
+            <code>index</code> is <em>also</em> inherited.
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s2'>
+            3.2 Selecting our way to a table
+          </div>
+          <div class='section-content'>
+            The last section may have raised an interesting question. Or,
+            potentially, not. It wasn't exactly obvious. The question is:
+            if we can inherit data, can we also bind new data? Let's try!
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var nums = [5, 2, 8];
+
+var numDivs = d3.select('#chart').selectAll('div.num')
+    .data(nums).enter()
+  .append('div')
+    .attr('class', 'num')
+    .text(function(d, i) { return 'First-level! data:' + d + ', index: ' + i; });
+var subNumDivs = numDivs.append('div')
+    .data(42)
+    .text(function(d, i) { return '&nbsp;Second-level! data:' + d + ', index: ' + i; });</code>
+              <code class='block result'></code>
+            </div>
+            Hrm. That didn't work. Wait... <code>data</code> calls we have seen
+            previously all take an array; we only gave it a number.
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var nums = [5, 2, 8];
+
+var numDivs = d3.select('#chart').selectAll('div.num')
+    .data(nums).enter()
+  .append('div')
+    .attr('class', 'num')
+    .text(function(d, i) { return 'First-level! data:' + d + ', index: ' + i; });
+var subNumDivs = numDivs.append('div')
+<em>    .data([42])</em>
+    .text(function(d, i) { return '&nbsp;Second-level! data:' + d + ', index: ' + i; });</code>
+              <code class='block result'></code>
+            </div>
+            A little better - we gave it one number, and we appear to have one
+            thing modified. But wait - shouldn't there have been an error?
+            If you look at the resulting HTML, you'll note each <code>div.num</code>
+            has a <code>div</code> child, but only one of them has any text.
           </div>
         </div>
       </div>
