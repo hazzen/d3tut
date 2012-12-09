@@ -189,7 +189,7 @@ subNumDivs.append('div')
         </div>
         <div class='section'>
           <div class='section-header' id='s2'>
-            3.2 Selecting our way to a table
+            3.2 Data in your data
           </div>
           <div class='section-content'>
             The last section may have raised an interesting question. Or,
@@ -261,7 +261,28 @@ var trs = table.selectAll('tr')
     .data(tableRows).enter()
   .append('tr');
 trs.append('td')
+    .text(function(d) { return 'TD - my data is ' + d; })
 <em>    .data(/* harumph... what can we put in here? */);</em></code>
+              <code class='block result'></code>
+            </div>
+            Well, snap, that didn't work. Two problems: we don't know what to
+            put in the <code>data</code> call, and we only have three
+            <span class='nobr'><code>td</code>s.</span> In order to solve these
+            most annoying problems with our matrix, you'll need to take the red
+            pill and see how deep the <code>data</code> rabbit hole goes.
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s3'>
+            3.3 The Red Pill
+          </div>
+          <div class='section-content'>
+            So, shall we blow your mind? Maybe? Maybe it isn't actually that
+            impressive. Maybe I should just go home and stop writing... or not.
+            I've really got nothing better to do, honestly.
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'></code>
               <code class='block result'></code>
             </div>
           </div>
