@@ -403,7 +403,11 @@ var innerDivs = outerDivs.selectAll('div.inner')
             <code class='block'>d3.selectAll('div')</code>
             you will see the following value printed (numbers changed
             protect the innocent):
-            <code class='block'>[Array[42]]</code>
+            <code class='block'>[Array[3]]</code>
+            And if you type the following:
+            <code class='block'>d3.selectAll('div').selectAll('div')</code>
+            you will see something like:
+            <code class='block'>[Array[1], Array[1], Array[2]]</code>
           </div>
         </div>
       </div>
