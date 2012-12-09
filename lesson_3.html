@@ -105,8 +105,8 @@ d3.select('#chart').selectAll('div.thing')
               <code class='block result'></code>
             </div>
             Not the same as before, but close.
-            This uses one new feature - the <code>classed<!--LINK--></code> operator.
-            This is a shorthand for accessing the <code>classList<!--LINK--></code>
+            This uses one new feature - the <code><a href='https://github.com/mbostock/d3/wiki/Selections#wiki-classed'>classed</a></code> operator.
+            This is a shorthand for accessing the <code><a href='https://developer.mozilla.org/en-US/docs/DOM/element.classList'>classList</a></code>
             property on nodes (or an equivalent if the browser is old). Usually,
             setting the <code>class</code> through an <code>attr</code> call is
             enough, but sometimes you need some more power.
@@ -370,7 +370,7 @@ var innerDivs = outerDivs.selectAll('div.inner')
               <code class='block result'></code>
             </div>
             <div class='aside'>
-              The <code>insert<!--LINK--></code> method used in the example is
+              The <code><a href='https://github.com/mbostock/d3/wiki/Selections#wiki-insert'>insert</a></code> method used in the example is
               new. It takes a first argument of a node <code>name</code>, like
               <span class='nobr'><code>append</code>.</span> A second argument
               is also required: a <code>selector</code> string. For each
@@ -417,7 +417,7 @@ var innerDivs = outerDivs.selectAll('div.inner')
               </div>
             </div>
             There are two <code>outer</code> lists, and each of those has the
-            corresponding <code>inner</code> divs from the matching div. An
+            corresponding <code>inner</code> divs from the <code>outer</code> div. An
             operation on this nested selection modifies all the
             <code>inner</code> nodes, just like an operation on the
             <code>outer</code> selection modifies all the <code>outer</code>
@@ -426,18 +426,97 @@ var innerDivs = outerDivs.selectAll('div.inner')
             set of <code>inner</code> nodes claim to have numbers starting
             again at 0.
             <hr>
-            It is important to note the difference between <code>select</code>
-            and <code>selectAll</code> when having many calls. <code>d3.selection</code>
-            objects are stored as an array of arrays. If you type the following
-            in the JS console:
+            Or, in more detail:
+            <div class='sample hide-src'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  button {
+    display: block;
+    width: 400px;
+  }
+  .outer,.inner {
+    margin: 5px;
+    padding: 2px;
+    border: 1px solid black;
+    display: inline-block;
+    color: #666;
+  }
+  .selected {
+    color: black;
+    border: 1px solid green;
+  }
+&lt;/style&gt;
+&lt;div class='outer'&gt;
+  &lt;div class='inner'&gt;not selected&lt;/div&gt;&lt;br&gt;
+  &lt;div class='inner'&gt;not selected&lt;/div&gt;&lt;br&gt;
+&lt;/div&gt;&lt;br&gt;
+&lt;div class='outer'&gt;
+  &lt;div class='inner'&gt;not selected&lt;/div&gt;&lt;br&gt;
+  &lt;div class='inner'&gt;not selected&lt;/div&gt;&lt;br&gt;
+  &lt;div class='inner'&gt;not selected&lt;/div&gt;&lt;br&gt;
+  &lt;/div&gt;&lt;br&gt;
+&lt;div id='buttons'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var options = [
+  'd3.selectAll(\'div.inner\')',
+  'd3.selectAll(\'div.outer\').selectAll(\'div.inner\')',
+  'd3.select(\'div.outer\').selectAll(\'div.inner\')',
+  'd3.selectAll(\'div.outer\').select(\'div.inner\')',
+];
+d3.select('#buttons').selectAll('button')
+    .data(options).enter()
+  .append('button')
+    .text(String)
+    .on('click', function(d) {
+      d3.selectAll('div.inner')
+          .text('not selected')
+          .classed('selected', false);
+      var nodes = eval(d);
+      nodes
+          .text(function(d, index) { return 'node index ' + index; })
+          .classed('selected', true);
+    });</code>
+              <code class='block result'></code>
+            </div>
+            We now have the two pieces of the puzzle. Ready for the red pill?
+            <code>d3.selection</code> objects <em>always</em> contain an array
+            of arrays. Really, try it out in your JS console. If you type:
             <code class='block'>d3.selectAll('div')</code>
             you will see the following value printed (numbers changed
             protect the innocent):
             <code class='block'>[Array[3]]</code>
-            And if you type the following:
+            And if you type:
             <code class='block'>d3.selectAll('div').selectAll('div')</code>
             you will see something like:
             <code class='block'>[Array[1], Array[1], Array[2]]</code>
+            No difference. None. Your very first <code>selectAll</code>
+            introduced nesting, and you just didn't bother to check. Shows how
+            much you care.
+            <div class='aside'>
+              If a D3 selection contains <code>Array[s<sub>0</sub>],
+                Array[s<sub>1</sub>], ... , Array[s<sub>n</sub>]</code>
+              and a <code>selectAll</code> is run on it, the resulting selection
+              will contain <code>&sum;<sub>i=0..n</sub> s<sub>i</sub></code>
+              arrays; arrays <code>0</code> to <code>s<sub>1</sub> - 1</code>
+              will have the matched sub-nodes for the elements in the original
+              first array, <code>s<sub>1</sub></code> to <code>s<sub>2</sub> - 1</code>
+              those from the second original array, etc. In essence, the
+              <code>selectAll</code> replaces each inner array with a new array
+              for each element in it.
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s4'>
+            3.4 Whats data got to do with it?
+          </div>
+          <div class='section-content'>
+            At the end of the last section, your mind should have been blown.
+            Or at least seen things in a new way (unless you are one of those
+            students that reads ahead, then maybe not). If not, I'll sum things
+            up quickly: <code>selectAll</code> operates on multi-node
+            selections just as well, and in just the same way, as it has in all
+            of our single-node selection examples. Yes, even the <code>data</code>
+            operator and its data join semantics we talked about in
+            <a href='lesson_1.html#s6'>the first lesson</a>.
           </div>
         </div>
       </div>

@@ -10,6 +10,11 @@
 .warn{color: #ad1f1f;}
 .nobr{white-space:nowrap;}
 
+sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
 em {
   font-style: italic;
 }
@@ -197,6 +202,15 @@ code.block {
   border-color: #888;
   color: #000;
   background-color: #9292a0;
+}
+
+.sample.hide-src .html,
+.sample.hide-src .js {
+  display: none;
+}
+
+.sample.hide-src code.result::before {
+  content: none;
 }
 
 code em {

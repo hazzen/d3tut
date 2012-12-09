@@ -99,7 +99,9 @@
 
       iframeDoc.head.appendChild(ijs);
 
-      makeSwapButton(result.node(), iframeDoc.body);
+      if (!sample.classed('hide-src')) {
+        makeSwapButton(result.node(), iframeDoc.body);
+      }
     };
     // Firefox doesn't like setTimeout-ing an iframe loading, and Chrome doesn't
     // seem to fire the load event. I'll assume Webkit == Chrome, and ignore
