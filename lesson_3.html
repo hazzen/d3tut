@@ -281,8 +281,53 @@ trs.append('td')
             impressive. Maybe I should just go home and stop writing... or not.
             I've really got nothing better to do, honestly.
             <div class='sample'>
-              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
-              <code class='block js'></code>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  .position {
+    color: #666;
+  }
+&lt;/style&gt;
+&lt;ul id='ship-list'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var ships = [
+  {
+    'name': 'Enterprise',
+    'crew': [
+      {name: 'Picard', position: 'Captain'},
+      {name: 'Riker', position: 'Tool'},
+      {name: 'Data', position: 'Android'},
+      {name: 'Worf', position: 'Security Officer'},
+      {name: 'Troi', position: 'Counselor'},
+    ],
+  },
+  {
+    'name': 'Millenium Falcon',
+    'crew': [
+      {name: 'Hans Solo', position: 'Pilot'},
+      {name: 'Chewie', position: 'Pilot'},
+    ],
+  },
+];
+
+var ships = d3.select('#ship-list').selectAll('li.starship')
+    .data(ships).enter()
+  .append('li')
+    .attr('class', 'starship')
+    .text(function(starshipData) { return starshipData.name; });
+
+var shipCrewList = ships.append('ul')
+    .attr('class', 'crew-list');
+
+var crewMembers = shipCrewList.selectAll('li.crew-member')
+    .data(function(starshipData) { return starshipData.crew; }).enter()
+  .append('li')
+    .attr('class', 'crew-member');
+
+crewMembers.append('span')
+    .attr('class', 'name')
+    .text(function(crewData) { return crewData.name; });
+
+crewMembers.append('span')
+    .attr('class', 'position')
+    .text(function(crewData) { return ' [' + crewData.position + ']'; });</code>
               <code class='block result'></code>
             </div>
           </div>
