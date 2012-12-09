@@ -330,6 +330,80 @@ crewMembers.append('span')
     .text(function(crewData) { return ' [' + crewData.position + ']'; });</code>
               <code class='block result'></code>
             </div>
+            So. Yeah. That. Not sure what I'm talking about, with all the code
+            above? Well, mostly these lines:
+            <code class='block'>var crewMembers = shipCrewList.selectAll('li.crew-member')
+    .data(function(starshipData) { return starshipData.crew; }).enter()</code>
+            Two things immediately pop out - <code>data</code> is a function,
+            not a constant. And <code>selectAll</code> is called on something
+            already <span class='nobr'><code>selectAll</code>-d.</span> Far out!
+            Never before have we seen these things. If you need to take a break,
+            sit down, cool off, think about what you've just seen&mdash;go right
+            ahead. I'm not going anywhere. Back? Great.
+            <hr>
+            The easiest one to explain is the <code>data</code> call. Just like
+            <code>attr</code> and <code>style</code> calls you have seen before,
+            <code>data</code> can also take a function. Works just like the
+            others, too. Not much to explain there, really.
+            <hr>
+            The harder part is the line before that &ndash; the <code>selectAll</code>
+            called on an existing multi-element selection. It works kind of
+            like you might expect when you aren't binding data. Consider the
+            following example, with no messy <code>data</code> to get in the
+            way:
+            <div class='sample'>
+              <code class='block html'>&lt;div class='outer'&gt;
+  &lt;div class='inner'&gt;&lt;/div&gt;
+  &lt;div class='inner'&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class='outer'&gt;
+  &lt;div class='inner'&gt;&lt;/div&gt;
+  &lt;div class='inner'&gt;&lt;/div&gt;
+  &lt;div class='inner'&gt;&lt;/div&gt;
+&lt;/div&gt;</code>
+              <code class='block js'>var outerDivs = d3.selectAll('div.outer');
+outerDivs.insert('div', '.inner')
+    .text(function(d, outerIndex) { return 'I\'m outer div number ' + outerIndex + '!'; });
+
+var innerDivs = outerDivs.selectAll('div.inner')
+    .text(function(d, innerIndex) { return '&raquo;I\'m inner div number ' + innerIndex + '!'; });</code>
+              <code class='block result'></code>
+            </div>
+            <div class='aside'>
+              The <code>insert<!--LINK--></code> method used in the example is
+              new. It takes a first argument of a node <code>name</code>, like
+              <span class='nobr'><code>append</code>.</span> A second argument
+              is also required: a <code>selector</code> string. For each
+              element in the selection, <code>insert</code> creates a node and
+              inserts it as a child of element before the node returned by
+              <code>element.querySelector(selector)</code> &ndash; in the
+              example, inserting a new <code>div</code> before the first
+              child element with a class of "inner". It is used so we can
+              append some text to a node without removing the child elements,
+              as the <code>text</code> operator clears any content&mdash;including
+              children&mdash;of the node.
+            </div>
+            The example is either a surprise to you, dear reader, or completely
+            expected behavior. After all, if one can write
+            <code>d3.select(...)<span class='nobr'>.selectAll(...)</code>,</span>
+            why couldn't one write
+            <code>d3.selectAll(...)<span class='nobr'>.selectAll(...)</code>?</span>
+            After all, <code>select</code> and <code>selectAll</code> both return
+            <code>d3.selection</code> objects, and selection objects have both
+            selection methods. Why not descend into meme-land and put a
+            selectAll in our selectAll? I do believe, in fact, to have
+            overheard a discussion in which it was insinuated you enjoyed
+            selections. I hope I was not mistaken; that would be most
+            embarassing.
+            <hr>
+            It is important to note the difference between <code>select</code>
+            and <code>selectAll</code> when having many calls. <code>d3.selection</code>
+            objects are stored as an array of arrays. If you type the following
+            in the JS console:
+            <code class='block'>d3.selectAll('div')</code>
+            you will see the following value printed (numbers changed
+            protect the innocent):
+            <code class='block'>[Array[42]]</code>
           </div>
         </div>
       </div>
