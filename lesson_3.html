@@ -396,6 +396,36 @@ var innerDivs = outerDivs.selectAll('div.inner')
             selections. I hope I was not mistaken; that would be most
             embarassing.
             <hr>
+            In the example, the line <code>d3.selectAll('div.outer')</code>
+            results in a selection that, conceptually, looks like this:
+            <div class='diagram'>
+              <div class='box'>&lt;div class='outer'&gt;</div><br>
+              <div class='box'>&lt;div class='outer'&gt;</div><br>
+            </div>
+            Where the line <code>d3.selectAll('div.outer').selectAll('div.inner')</code>
+            results in a selection that, conceptually, looks like:
+            <div class='diagram'>
+              <div class='box'>
+                <div class='box'>&lt;div class='inner'&gt;</div><br>
+                <div class='box'>&lt;div class='inner'&gt;</div><br>
+              </div>
+              <br>
+              <div class='box'>
+                <div class='box'>&lt;div class='inner'&gt;</div><br>
+                <div class='box'>&lt;div class='inner'&gt;</div><br>
+                <div class='box'>&lt;div class='inner'&gt;</div><br>
+              </div>
+            </div>
+            There are two <code>outer</code> lists, and each of those has the
+            corresponding <code>inner</code> divs from the matching div. An
+            operation on this nested selection modifies all the
+            <code>inner</code> nodes, just like an operation on the
+            <code>outer</code> selection modifies all the <code>outer</code>
+            nodes. Each block of nodes, however, is treated as its <em>own</em>
+            list for numbering. This is why, in the code example, the second
+            set of <code>inner</code> nodes claim to have numbers starting
+            again at 0.
+            <hr>
             It is important to note the difference between <code>select</code>
             and <code>selectAll</code> when having many calls. <code>d3.selection</code>
             objects are stored as an array of arrays. If you type the following

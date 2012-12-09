@@ -249,3 +249,16 @@ span.spoiler::before {
 .next-link {
   float: right;
 }
+
+.diagram {
+  margin: 10px 0 10px 20px;
+}
+
+.diagram .box {
+  margin: 5px;
+  padding: 2px;
+  border: 1px solid #aaa;
+  background: #fff;
+  border-radius: 3px;
+  display: inline-block;
+}
