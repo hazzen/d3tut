@@ -18,7 +18,6 @@
       _gaq.push(['_trackPageview']);
 
       (function() {
-       asdf
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
@@ -514,7 +513,7 @@ d3.select('#buttons').selectAll('button')
             Hopefully, now, the starship example from <a href='#s3'>above</a>
             may make more sense. Let's look a little more closely at what
             happens in a <a href='lesson_1.html#s6'>data join</a> of nested
-            selections. If we have two nodes, each with a few children...
+            selections.
             <div id='l3-select' class='selector-code'>
               <div class='code'>
               </div>
@@ -528,101 +527,6 @@ d3.select('#buttons').selectAll('button')
                   outer 2<span class='data'></span>
                   <div class='box inner'>inner 1<span class='data'></span></div>
                 </div>
-              </div>
-            </div>
-            <hr>
-            <hr>
-            <div class='diagram'>
-              <div class='box'>
-                outer 1<br>
-                <div class='box'>inner 1</div><br>
-                <div class='box'>inner 2</div><br>
-              </div>
-              <br>
-              <div class='box'>
-                outer 2<br>
-                <div class='box'>inner 1</div><br>
-              </div>
-            </div>
-            and if we go <code>var outers = d3.selectAll('outer').data(['a', 'b', 'c'])</code>...
-            <div class='diagram'>
-              <div class='box selected'>
-                outer 1 [data='a']<br>
-                <div class='box'>inner 1</div><br>
-                <div class='box'>inner 2</div><br>
-              </div><br>
-              <div class='box selected'>
-                outer 2 [data='b']<br>
-                <div class='box'>inner 1</div><br>
-              </div><br>
-              <div class='box selected placeholder'>
-                outer 3 [data='c']<br>
-              </div>
-            </div>
-            followed by <code>var newOuters = outers.enter();</code>...
-            <div class='diagram'>
-              <div class='box'>
-                outer 1 [data='a']<br>
-                <div class='box'>inner 1</div><br>
-                <div class='box'>inner 2</div><br>
-              </div><br>
-              <div class='box'>
-                outer 2 [data='b']<br>
-                <div class='box'>inner 1</div><br>
-              </div><br>
-              <div class='box selected placeholder'>
-                outer 3 [data='c']<br>
-              </div>
-            </div>
-            and then a <code>newOuters.append('div');</code>...
-            <div class='diagram'>
-              <div class='box'>
-                outer 1 [data='a']<br>
-                <div class='box'>inner 1</div><br>
-                <div class='box'>inner 2</div><br>
-              </div><br>
-              <div class='box'>
-                outer 2 [data='b']<br>
-                <div class='box'>inner 1</div><br>
-              </div><br>
-              <div class='box selected'>
-                outer 3 [data='c']<br>
-              </div>
-            </div>
-            complicating things with <code>var inners = outers.selectAll('inner').data(function(d, i) { return ['x' + i, 'y' + i]; });</code>...
-            <div class='diagram'>
-              <div class='box'>
-                outer 1 [data='a']<br>
-                <div class='box selected'>inner 1 [data='x0']</div><br>
-                <div class='box selected'>inner 2 [data='y0']</div><br>
-              </div><br>
-              <div class='box'>
-                outer 2 [data='b']<br>
-                <div class='box selected'>inner 1 [data='x1']</div><br>
-                <div class='box selected placeholder'>inner 2 [data='y1']</div><br>
-              </div><br>
-              <div class='box'>
-                outer 3 [data='c']<br>
-                <div class='box selected placeholder'>inner 1 [data='x2']</div><br>
-                <div class='box selected placeholder'>inner 2 [data='y2']</div><br>
-              </div>
-            </div>
-            and our master-stroke: <code>inners.enter().append('div')</code>...
-            <div class='diagram'>
-              <div class='box'>
-                outer 1 [data='a']<br>
-                <div class='box'>inner 1 [data='x0']</div><br>
-                <div class='box'>inner 2 [data='y0']</div><br>
-              </div><br>
-              <div class='box'>
-                outer 2 [data='b']<br>
-                <div class='box'>inner 1 [data='x1']</div><br>
-                <div class='box selected'>inner 2 [data='y1']</div><br>
-              </div><br>
-              <div class='box'>
-                outer 3 [data='c']<br>
-                <div class='box selected'>inner 1 [data='x2']</div><br>
-                <div class='box selected'>inner 2 [data='y2']</div><br>
               </div>
             </div>
           </div>

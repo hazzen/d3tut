@@ -14,7 +14,20 @@
       ],
     },
     {
-      line: "var outers = d3.selectAll('outer').data(['a', 'b', 'c']);",
+      line: "var outers = d3.selectAll('outer')",
+      nodes: [
+        {
+          selected: true,
+          children: [{}, {}],
+        },
+        {
+          selected: true,
+          children: [{}],
+        },
+      ],
+    },
+    {
+      line: "    .data(['a', 'b', 'c']);",
       nodes: [
         {
           selected: true,
@@ -72,7 +85,35 @@
       ],
     },
     {
-      line: "var inners = outers.selectAll('inner').data(function(d, i) { return ['x' + i, 'y' + i]; });",
+      line: "var inners = outers.selectAll('inner')",
+      nodes: [
+        {
+          data: 'a',
+          children: [
+            {
+              selected: true,
+            },
+            {
+              selected: true,
+            },
+          ],
+        },
+        {
+          data: 'b',
+          children: [
+            {
+              selected: true,
+            },
+          ],
+        },
+        {
+          data: 'c',
+          children: [],
+        },
+      ],
+    },
+    {
+      line: "    .data(function(d, i) { return ['x' + i, 'y' + i]; });",
       nodes: [
         {
           data: 'a',
@@ -118,6 +159,91 @@
         },
       ],
     },
+    {
+      line: "var newInners = inners.enter()",
+      nodes: [
+        {
+          data: 'a',
+          children: [
+            {
+              data: 'x0',
+            },
+            {
+              data: 'y0',
+            },
+          ],
+        },
+        {
+          data: 'b',
+          children: [
+            {
+              data: 'x1',
+            },
+            {
+              selected: true,
+              placeholder: true,
+              data: 'y1',
+            },
+          ],
+        },
+        {
+          data: 'c',
+          children: [
+            {
+              selected: true,
+              placeholder: true,
+              data: 'x2',
+            },
+            {
+              selected: true,
+              placeholder: true,
+              data: 'y2',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      line: "    .append('div');",
+      nodes: [
+        {
+          data: 'a',
+          children: [
+            {
+              data: 'x0',
+            },
+            {
+              data: 'y0',
+            },
+          ],
+        },
+        {
+          data: 'b',
+          children: [
+            {
+              data: 'x1',
+            },
+            {
+              selected: true,
+              data: 'y1',
+            },
+          ],
+        },
+        {
+          data: 'c',
+          children: [
+            {
+              selected: true,
+              data: 'x2',
+            },
+            {
+              selected: true,
+              data: 'y2',
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   tut3.initCode = function(idSuffix, lines) {
@@ -140,41 +266,43 @@
     var active = 0;
 
     var setLine = function(v) {
+      if (v < 0 || v >= lines.length) return;
       active = v;
       lineElems
           .classed('active', function(d, i) { return i == active; });
 
+      var renderDiagram = function(nodes, name) {
+        nodes.exit().transition()
+            .style('opacity', 0)
+            .style('left', '-15px')
+            .remove();
+        nodes.enter().append('div')
+            .style('opacity', 0)
+            .style('left', '-15px')
+            .attr('class', 'box ' + name)
+            .text(function(d, i) { return name + ' ' + (i + 1); })
+            .append('span')
+              .attr('class', 'data');
+
+        nodes.transition()
+            .style('border-color', function(d) { return d.selected ? '#add8ff' : '#aaa'; })
+            .style('left', '0px')
+            .style('opacity', 1);
+
+        nodes
+            .classed('placeholder', function(d) { return d.placeholder; })
+            .classed('selected', function(d) { return d.selected; })
+            .select('.data')
+              .text(function(d) { return d.data == null ? '' : ' [data=' + d.data + ']'; });
+      };
+
       var outers = diagram.selectAll('.outer')
           .data(lines[v].nodes);
-
-      outers.exit().remove();
-      outers.enter().append('div')
-          .attr('class', 'box outer')
-          .text(function(d, i) { return 'outer ' + (i + 1); })
-          .append('span')
-            .attr('class', 'data');
-
-      outers
-          .classed('placeholder', function(d) { return d.placeholder; })
-          .classed('selected', function(d) { return d.selected; })
-          .select('.data')
-            .text(function(d) { return d.data == null ? '' : ' [data=' + d.data + ']'; });
+      renderDiagram(outers, 'outer');
 
       var inners = outers.selectAll('.inner')
           .data(function(d) { return d.children; });
-
-      inners.exit().remove();
-      inners.enter().append('div')
-          .attr('class', 'box inner')
-          .text(function(d, i) { return 'inner ' + (i + 1); })
-          .append('span')
-            .attr('class', 'data');
-
-      inners
-          .classed('placeholder', function(d) { return d.placeholder; })
-          .classed('selected', function(d) { return d.selected; })
-          .select('.data')
-            .text(function(d) { return d.data == null ? '' : ' [data=' + d.data + ']'; });
+      renderDiagram(inners, 'inner');
     };
 
     setLine(active);

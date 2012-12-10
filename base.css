@@ -284,14 +284,20 @@ span.spoiler::before {
 
 .diagram .box.placeholder {
   border-style: dashed;
-  background: #eee;
+  background: #f8f8f8;
+  color: #666;
 }
 
 .diagram .box.placeholder::before {
-  content: 'placeholder';
+  content: '[placeholder]';
   position: absolute;
   right: 0;
-  background: #e8e8e8;
+  background: #ddd;
+}
+
+.selector-code {
+  border: 1px solid #eee;
+  border-radius: 5px;
 }
 
 .selector-code .diagram .box {
@@ -302,7 +308,6 @@ span.spoiler::before {
 .selector-code .code {
   display: block;
   font-family: monospace;
-  border: 1px solid #eee;
   margin: 5px;
   padding: 5px;
   color: #666;
