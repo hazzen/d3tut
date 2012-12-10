@@ -271,8 +271,23 @@ span.spoiler::before {
 .diagram .box {
   margin: 5px;
   padding: 2px;
-  border: 1px solid #aaa;
+  border: 2px solid #aaa;
   background: #fff;
   border-radius: 3px;
   display: inline-block;
+}
+
+.diagram .box.selected {
+  border-color: #add8ff;
+}
+
+.diagram .box.placeholder {
+  border-style: dashed;
+  background: #eee;
+}
+
+.diagram .box.placeholder::before {
+  content: 'placeholder';
+  display: block;
+  background: #e8e8e8;
 }
