@@ -9,6 +9,7 @@
     </title>
     <script type="text/javascript" src="d3.v2.min.js"></script>
     <script type="text/javascript" src="base.js"></script>
+    <script type="text/javascript" src="lesson_3.js"></script>
     <script type="text/javascript" src="beautify-html.js"></script>
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -17,6 +18,7 @@
       _gaq.push(['_trackPageview']);
 
       (function() {
+       asdf
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
@@ -513,6 +515,23 @@ d3.select('#buttons').selectAll('button')
             may make more sense. Let's look a little more closely at what
             happens in a <a href='lesson_1.html#s6'>data join</a> of nested
             selections. If we have two nodes, each with a few children...
+            <div id='l3-select' class='selector-code'>
+              <div class='code'>
+              </div>
+              <div class='diagram'>
+                <div class='box outer'>
+                  outer 1<span class='data'></span>
+                  <div class='box inner'>inner 1<span class='data'></span></div>
+                  <div class='box inner'>inner 2<span class='data'></span></div>
+                </div>
+                <div class='box outer'>
+                  outer 2<span class='data'></span>
+                  <div class='box inner'>inner 1<span class='data'></span></div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <hr>
             <div class='diagram'>
               <div class='box'>
                 outer 1<br>
@@ -629,5 +648,6 @@ d3.select('#buttons').selectAll('button')
   </body>
   <script type="text/javascript">
     tut.init();
+    tut3.init();
   </script>
 </html>

@@ -275,6 +275,7 @@ span.spoiler::before {
   background: #fff;
   border-radius: 3px;
   display: inline-block;
+  position: relative;
 }
 
 .diagram .box.selected {
@@ -288,6 +289,42 @@ span.spoiler::before {
 
 .diagram .box.placeholder::before {
   content: 'placeholder';
-  display: block;
+  position: absolute;
+  right: 0;
   background: #e8e8e8;
+}
+
+.selector-code .diagram .box {
+  width: 200px;
+  display: block;
+}
+
+.selector-code .code {
+  display: block;
+  font-family: monospace;
+  border: 1px solid #eee;
+  margin: 5px;
+  padding: 5px;
+  color: #666;
+}
+
+.selector-code .line {
+  border: 2px solid transparent;
+  white-space: pre;
+}
+
+.selector-code .line::before {
+  width: 2em;
+  content: '';
+  display: inline-block;
+}
+
+.selector-code .line.active {
+  border: 2px solid #add8ff;
+  color: #000;
+  background: #f8f8f8;
+}
+
+.selector-code .line.active::before {
+  content: '>';
 }
