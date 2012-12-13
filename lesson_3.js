@@ -1,18 +1,7 @@
 (function(exports) {
   var tut3 = {};
 
-  var DATA = [
-    {
-      line: '...',
-      nodes: [
-        {
-          children: [{}, {}],
-        },
-        {
-          children: [{}],
-        },
-      ],
-    },
+  var SELECT_DATA = [
     {
       line: "var outers = d3.selectAll('outer')",
       nodes: [
@@ -244,9 +233,285 @@
         },
       ],
     },
+    {
+      line: '...',
+    },
+  ];
+  var TABLE_DATA = [
+    {
+      line: "var tableRows = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];",
+      nodes: [
+      ],
+    },
+    {
+      line: "var trs = table.selectAll('tr')",
+      nodes: [
+      ],
+    },
+    {
+      line: "    .data(tableRows);",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+          placeholder: true,
+          selected: true,
+        },
+        {
+          data: '[4, 5, 6]',
+          placeholder: true,
+          selected: true,
+        },
+        {
+          data: '[7, 8, 9]',
+          placeholder: true,
+          selected: true,
+        },
+      ],
+    },
+    {
+      line: "var newTrs = trs.enter()",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+          placeholder: true,
+          selected: true,
+        },
+        {
+          data: '[4, 5, 6]',
+          placeholder: true,
+          selected: true,
+        },
+        {
+          data: '[7, 8, 9]',
+          placeholder: true,
+          selected: true,
+        },
+      ],
+    },
+    {
+      line: "    .append('tr');",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+          selected: true,
+        },
+        {
+          data: '[4, 5, 6]',
+          selected: true,
+        },
+        {
+          data: '[7, 8, 9]',
+          selected: true,
+        },
+      ],
+    },
+    {
+      line: "var tds = trs.selectAll('td')",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+        },
+        {
+          data: '[4, 5, 6]',
+        },
+        {
+          data: '[7, 8, 9]',
+        },
+      ],
+    },
+    {
+      line: "    .data(Object);",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+          children: [
+            {
+              data: '1',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '2',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '3',
+              selected: true,
+              placeholder: true,
+            },
+          ],
+        },
+        {
+          data: '[4, 5, 6]',
+          children: [
+            {
+              data: '4',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '5',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '6',
+              selected: true,
+              placeholder: true,
+            },
+          ],
+        },
+        {
+          data: '[7, 8, 9]',
+          children: [
+            {
+              data: '7',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '8',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '9',
+              selected: true,
+              placeholder: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      line: "var newTds = tds.enter()",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+          children: [
+            {
+              data: '1',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '2',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '3',
+              selected: true,
+              placeholder: true,
+            },
+          ],
+        },
+        {
+          data: '[4, 5, 6]',
+          children: [
+            {
+              data: '4',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '5',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '6',
+              selected: true,
+              placeholder: true,
+            },
+          ],
+        },
+        {
+          data: '[7, 8, 9]',
+          children: [
+            {
+              data: '7',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '8',
+              selected: true,
+              placeholder: true,
+            },
+            {
+              data: '9',
+              selected: true,
+              placeholder: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      line: "    .append('td')",
+      nodes: [
+        {
+          data: '[1, 2, 3]',
+          children: [
+            {
+              data: '1',
+              selected: true,
+            },
+            {
+              data: '2',
+              selected: true,
+            },
+            {
+              data: '3',
+              selected: true,
+            },
+          ],
+        },
+        {
+          data: '[4, 5, 6]',
+          children: [
+            {
+              data: '4',
+              selected: true,
+            },
+            {
+              data: '5',
+              selected: true,
+            },
+            {
+              data: '6',
+              selected: true,
+            },
+          ],
+        },
+        {
+          data: '[7, 8, 9]',
+          children: [
+            {
+              data: '7',
+              selected: true,
+            },
+            {
+              data: '8',
+              selected: true,
+            },
+            {
+              data: '9',
+              selected: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      line: '...',
+    },
   ];
 
-  tut3.initCode = function(idSuffix, lines) {
+  tut3.initCode = function(idSuffix, lines, opt_names) {
+    var names = opt_names || ['outer', 'inner'];
     var block = d3.select('#l3-' + idSuffix);
 
     var code = block.select('.code');
@@ -259,9 +524,9 @@
         .text(function(d) { return d.line; });
 
     var prevButton = code.append('button')
-        .html('&laquo; prev line');
+        .html('&laquo; step back');
     var nextButton = code.append('button')
-        .html('next line &raquo;');
+        .html('run line &raquo;');
 
     var active = 0;
 
@@ -271,7 +536,7 @@
       lineElems
           .classed('active', function(d, i) { return i == active; });
 
-      var renderDiagram = function(nodes, name) {
+      var renderDiagram = function(nodes, clazz, name) {
         nodes.exit().transition()
             .style('opacity', 0)
             .style('left', '-15px')
@@ -279,7 +544,7 @@
         nodes.enter().append('div')
             .style('opacity', 0)
             .style('left', '-15px')
-            .attr('class', 'box ' + name)
+            .attr('class', 'box ' + clazz)
             .text(function(d, i) { return name + ' ' + (i + 1); })
             .append('span')
               .attr('class', 'data');
@@ -296,13 +561,15 @@
               .text(function(d) { return d.data == null ? '' : ' [data=' + d.data + ']'; });
       };
 
-      var outers = diagram.selectAll('.outer')
-          .data(lines[v].nodes);
-      renderDiagram(outers, 'outer');
+      if (v > 0) {
+        var outers = diagram.selectAll('.outer')
+            .data(lines[v - 1].nodes);
+        renderDiagram(outers, 'outer', names[0]);
 
-      var inners = outers.selectAll('.inner')
-          .data(function(d) { return d.children; });
-      renderDiagram(inners, 'inner');
+        var inners = outers.selectAll('.inner')
+            .data(function(d) { return d.children || []; });
+        renderDiagram(inners, 'inner', names[1]);
+      }
     };
 
     setLine(active);
@@ -312,7 +579,8 @@
   };
 
   tut3.init = function() {
-    tut3.initCode('select', DATA);
+    tut3.initCode('select', SELECT_DATA);
+    tut3.initCode('table', TABLE_DATA, ['tr', 'td']);
   };
 
   exports.tut3 = tut3;

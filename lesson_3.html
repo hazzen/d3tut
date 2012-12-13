@@ -249,7 +249,7 @@ var subNumDivs = numDivs.append('div')
             Right! Elated with your success, you decided to show off in that
             way programmers like to show off - doing something outdated and
             also trendy. In other words, using <code>table</code> elements.
-            <div class='sample'>
+            <div id='table-example' class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var tableRows = [
   [1, 2, 3],
@@ -529,6 +529,68 @@ d3.select('#buttons').selectAll('button')
                 </div>
               </div>
             </div>
+            As you can see, <code>data</code> binding works <em>exactly</em>
+            the same for a nested selection as it does for a normal one -
+            except you are potentially appending nodes to multiple parent nodes.
+            It is vitally important to note the format of <code>data</code>
+            calls for a nested selection. The arguments should be a function to
+            give each parent node a different set of data. If you use a literal
+            like <span class='nobr'><code>[42, 8]</code>,</span> all children
+            will get the same data. Sometimes you may want this, but it is
+            rare. Maybe now we can write the <a href='#table-example'>table
+            example</a> from before?
+            <div id='table-example' class='sample'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  table {
+    margin: 5px;
+    border: 1px solid #666;
+    border-radius: 10px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+  }
+&lt;/style&gt;
+
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var tableRows = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+
+var table = d3.select('#chart').append('table');
+var trs = table.selectAll('tr')
+    .data(tableRows).enter()
+  .append('tr');
+trs.selectAll('td')
+<em>    // Each datum of the outer array is itself an array -
+    // The first one is [1, 2, 3], the second [4, 5, 6], etc.
+    // One can just use those arrays as the data for the next level.</em>
+    .data(Object).enter()
+  .append('td')
+    .text(String);</code>
+              <code class='block result'></code>
+            </div>
+            Or, the above example as one of those nifty step-through examples
+            I spent so much time writing, so dammit I'm going to use them again:
+            <div id='l3-table' class='selector-code'>
+              <div class='code'>
+              </div>
+              <div class='diagram'>
+              </div>
+            </div>
+            Make sense? If not, please don't continue. Read it again, step
+            through the examples again, play around in a sandbox, do <em>
+              something</em> to make it click. Maybe even message your dear
+            author, or a friend that knows D3. If you don't get this bit,
+            you are going to constantly scratch your head. Become one with the
+            data.
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s5'>
+            3.5 Gettin' ij-y with it
+          </div>
+          <div class='section-content'>
           </div>
         </div>
       </div>
