@@ -169,7 +169,7 @@ var things = d3.select('#chart').selectAll('div.thing')
             by <a href='http://en.wikipedia.org/wiki/Flying_Spaghetti_Monster'>
             His Noodly Appendange</a>, but I doubt that). I'm going to go out
             on a limb here and say it isn't magic. Rather pedestrian, and
-            expected, behavior, sadly. D3 automatically propogates
+            expected, behavior, sadly. D3 automatically propagates
             <code>data</code> from parent nodes to child nodes. Whenever you
             use <span class='nobr'><code>append</code>,</span> the new node
             inherits the bound data from its parent.  We can go deeper, even:
@@ -363,7 +363,7 @@ crewMembers.append('span')
             <hr>
             The harder part is the line before that &ndash; the <code>selectAll</code>
             called on an existing multi-element selection. It works kind of
-            like you might expect when you aren't binding data. Consider the
+            like you might expect when you're not binding data. Consider the
             following example, with no messy <code>data</code> to get in the
             way:
             <div class='sample'>
@@ -409,7 +409,7 @@ var innerDivs = outerDivs.selectAll('div.inner')
             selectAll in our selectAll? I do believe, in fact, to have
             overheard a discussion in which it was insinuated you enjoyed
             selections. I hope I was not mistaken; that would be most
-            embarassing.
+            embarrassing.
             <hr>
             Yes, yes, back to the matter at hand&mdash;in the example, the line
             <code>d3.selectAll('div.outer')</code> results in a selection that,
@@ -526,7 +526,7 @@ d3.select('#buttons').selectAll('button')
           </div>
           <div class='section-content'>
             Hopefully, now, the starship example from <a href='#s3'>above</a>
-            makes more sense. If not, the next biy might help. If you think you
+            makes more sense. If not, the next bit might help. If you think you
             understand it all perfectly well, I still suggest you keep reading.
             I mean, I'd hate those words to go to waste. Plus, it's important
             stuff.  Let's look a little more closely at what happens in a
@@ -556,7 +556,7 @@ d3.select('#buttons').selectAll('button')
             messes.
             <hr>
             Note the format of <code>data</code>
-            calls for a nested selection: the argument is a function to given
+            calls for a nested selection: the argument is a function to give
             children a new set of data, usually based on the parent's data.  If
             you use a literal like <span class='nobr'><code>[42,
             8]</code>,</span> all children will get the same data. Sometimes
