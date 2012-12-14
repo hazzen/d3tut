@@ -63,13 +63,14 @@
             you would get to see some crazy animations soon. Well, soon isn't
             yet. Soon is in the future. Now, sadly, we get to spend an entire
             lesson not making eyeballs bleed and potential romantic partners
-            swoon. We are just going to take a deep dive into data (sorry
+            swoon. We shall, merely, take a deep dive into data (sorry
             to the rebels; there will be no sidetrack into
             <a href='http://en.wikipedia.org/wiki/Lore_(Star_Trek)#Lore'>lore</a>).
             <hr>
             Back in the first tutorial, there was a short example involving
             <a href='lesson_1.html#s4'>sugar, spice, and appending nodes</a>.
-            We are going to revisit that, but as a data-driven example:
+            Let's revisit it, but as a data-driven example using what we've
+            learned in previous lessons:
             <div class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
   .thing {
@@ -105,19 +106,20 @@ d3.select('#chart').selectAll('div.thing')
     .text(function(d) { return d.name; });</code>
               <code class='block result'></code>
             </div>
-            Not the same as before, but close.
-            This uses one new feature - the <code><a href='https://github.com/mbostock/d3/wiki/Selections#wiki-classed'>classed</a></code> operator.
+            Not the same as before, but close. We use one new feature - the
+            <code><a href='https://github.com/mbostock/d3/wiki/Selections#wiki-classed'>classed</a></code> operator.
             This is a shorthand for accessing the <code><a href='https://developer.mozilla.org/en-US/docs/DOM/element.classList'>classList</a></code>
             property on nodes (or an equivalent if the browser is old). Usually,
             setting the <code>class</code> through an <code>attr</code> call is
-            enough, but sometimes you need some more power.
+            enough, when setting multiple independent classes based on data it
+            proves convenient.
             <hr>
             Now, we can't leave this as-is &ndash; our viewer might be
             colorblind! By adding a little description to each div, we can help
             set that right. We can easily add a <code>description</code> field
             to each of our data objects, but how to get that into a new div as
             a child of the <span class='nobr'><code>thing</code>?</span>
-            With <span class='nobr'><code>append</code></span>, of course!
+            With <span class='nobr'><code>append</code>,</span> of course!
             <div class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
   .thing {
@@ -163,12 +165,14 @@ var things = d3.select('#chart').selectAll('div.thing')
             </div>
             <em>Magic!</em> The <code>div.description</code> nodes that were
             appended never had <code>.data</code> called but somehow still have
-            <code>data</code> bound on them. Well, it isn't magic. It is
-            just, actually, expected behavior. D3 automatically propogates
+            <code>data</code> bound (unless the nodes were instead touched
+            by <a href='http://en.wikipedia.org/wiki/Flying_Spaghetti_Monster'>
+            His Noodly Appendange</a>, but I doubt that). I'm going to go out
+            on a limb here and say it isn't magic. Rather pedestrian, and
+            expected, behavior, sadly. D3 automatically propogates
             <code>data</code> from parent nodes to child nodes. Whenever you
-            append a node using <span class='nobr'><code>append</code>,</span>
-            it will get the bound data, if any, of the node it was appended to.
-            We can go deeper, even:
+            use <span class='nobr'><code>append</code>,</span> the new node
+            inherits the bound data from its parent.  We can go deeper, even:
             <div class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var nums = [5, 2, 8];
@@ -227,8 +231,15 @@ var subNumDivs = numDivs.append('div')
               <code class='block result'></code>
             </div>
             A little better - we gave it one number, and we appear to have one
-            thing modified. But wait - shouldn't there have been an error?
-            If you look at the resulting HTML, you'll note each <code>div.num</code>
+            thing modified. But wait - shouldn't there have been an error? Or
+            some sort of... badness? We had 3 parent nodes, but only specified
+            a single data. Those other two nodes should be, I don't know,
+            something? Well, nope, D3 doesn't care if you provide less data
+            than elements (or more, as you've seen with the
+            <code>selectAll-data-enter</code> pattern). This may come in handy
+            later, just saying.
+            <hr>
+            If you examine the resulting HTML, you'll note each <code>div.num</code>
             has a <code>div</code> child, but only one of them has any text.
             <em>Aha!</em> If only we put three elements in that array, then
             everything should work. Right...?
@@ -246,9 +257,11 @@ var subNumDivs = numDivs.append('div')
     .text(function(d, i) { return '&nbsp;Second-level! data:' + d + ', index: ' + i; });</code>
               <code class='block result'></code>
             </div>
-            Right! Elated with your success, you decided to show off in that
+            Right! Elated with your success, one might show off in that
             way programmers like to show off - doing something outdated and
-            also trendy. In other words, using <code>table</code> elements.
+            also trendy. In other words, using <code>table</code> elements, but
+            using them as intended and not
+            <a href='http://en.wikipedia.org/wiki/Tableless_web_design'>for layout hacks</a>.
             <div id='table-example' class='sample'>
               <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
               <code class='block js'>var tableRows = [
@@ -345,7 +358,8 @@ crewMembers.append('span')
             The easiest one to explain is the <code>data</code> call. Just like
             <code>attr</code> and <code>style</code> calls you have seen before,
             <code>data</code> can also take a function. Works just like the
-            others, too. Not much to explain there, really.
+            others, too. Not much to explain there, really. Each node has data,
+            and we can bind data based on it.
             <hr>
             The harder part is the line before that &ndash; the <code>selectAll</code>
             called on an existing multi-element selection. It works kind of
@@ -379,9 +393,9 @@ var innerDivs = outerDivs.selectAll('div.inner')
               inserts it as a child of element before the node returned by
               <code>element.querySelector(selector)</code> &ndash; in the
               example, inserting a new <code>div</code> before the first
-              child element with a class of "inner". It is used so we can
-              append some text to a node without removing the child elements,
-              as the <code>text</code> operator clears any content&mdash;including
+              child element with a class of "inner". We use it to append some
+              text to a node without removing the child elements, as the
+              <code>text</code> operator clears any content&mdash;including
               children&mdash;of the node.
             </div>
             The example is either a surprise to you, dear reader, or completely
@@ -397,8 +411,9 @@ var innerDivs = outerDivs.selectAll('div.inner')
             selections. I hope I was not mistaken; that would be most
             embarassing.
             <hr>
-            In the example, the line <code>d3.selectAll('div.outer')</code>
-            results in a selection that, conceptually, looks like this:
+            Yes, yes, back to the matter at hand&mdash;in the example, the line
+            <code>d3.selectAll('div.outer')</code> results in a selection that,
+            conceptually, looks like this:
             <div class='diagram'>
               <div class='box'>&lt;div class='outer'&gt;</div><br>
               <div class='box'>&lt;div class='outer'&gt;</div><br>
@@ -511,9 +526,11 @@ d3.select('#buttons').selectAll('button')
           </div>
           <div class='section-content'>
             Hopefully, now, the starship example from <a href='#s3'>above</a>
-            may make more sense. Let's look a little more closely at what
-            happens in a <a href='lesson_1.html#s6'>data join</a> of nested
-            selections.
+            makes more sense. If not, the next biy might help. If you think you
+            understand it all perfectly well, I still suggest you keep reading.
+            I mean, I'd hate those words to go to waste. Plus, it's important
+            stuff.  Let's look a little more closely at what happens in a
+            <a href='lesson_1.html#s6'>data join</a> of nested selections.
             <div id='l3-select' class='selector-code'>
               <div class='code'>
               </div>
@@ -530,15 +547,21 @@ d3.select('#buttons').selectAll('button')
               </div>
             </div>
             As you can see, <code>data</code> binding works <em>exactly</em>
-            the same for a nested selection as it does for a normal one -
-            except you are potentially appending nodes to multiple parent nodes.
-            It is vitally important to note the format of <code>data</code>
-            calls for a nested selection. The arguments should be a function to
-            give each parent node a different set of data. If you use a literal
-            like <span class='nobr'><code>[42, 8]</code>,</span> all children
-            will get the same data. Sometimes you may want this, but it is
-            rare. Maybe now we can write the <a href='#table-example'>table
-            example</a> from before?
+            the same for a nested selection as it does for a normal one.
+            Each selected node gets data, and each selected selected node receives
+            placeholder children for datum without a matching node. You could,
+            if you really wanted, do this one node at a time by iterating
+            over the <code>outer</code> nodes using <code><a href='https://github.com/mbostock/d3/wiki/Selections#wiki-each'>d3.selection.each</a></code>.
+            But I wouldn't recommend it. It gets messy, and we don't like
+            messes.
+            <hr>
+            Note the format of <code>data</code>
+            calls for a nested selection: the argument is a function to given
+            children a new set of data, usually based on the parent's data.  If
+            you use a literal like <span class='nobr'><code>[42,
+            8]</code>,</span> all children will get the same data. Sometimes
+            you may want this, but it is rare. Maybe now we can write the <a
+            href='#table-example'>table example</a> from before?
             <div id='table-example' class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
   table {
@@ -583,7 +606,7 @@ trs.selectAll('td')
               something</em> to make it click. Maybe even message your dear
             author, or a friend that knows D3. If you don't get this bit,
             you are going to constantly scratch your head. Become one with the
-            data.
+            data, and it will reward you. Battle the data at your own peril.
           </div>
         </div>
         <div class='section'>
