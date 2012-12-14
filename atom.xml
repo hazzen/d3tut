@@ -3,12 +3,27 @@
   <subtitle>A tutorial-in-progress for the JavaScript library D3</subtitle>
   <link href="http://code.hazzens.com/d3tut/atom.xml" rel="self"/>
   <link href="http://code.hazzens.com/d3tut/"/>
-  <updated>2012-12-04T23:30:00Z</updated>
+  <updated>2012-12-14T03:40:00Z</updated>
   <author>
     <name>Mikey Levine</name>
     <uri>http://hazzens.com</uri>
   </author>
   <id>tag:code.hazzens.com,2012:/d3tut</id>
+
+  <entry>
+    <title>Lesson 3: (Moderately) Advanced Data</title>
+    <link href="http://code.hazzens.com/d3tut/lesson_3.html"/>
+    <id>tag:code.hazzens.com,2012-12-14:/d3tut/lesson_3.html</id>
+    <published>2012-12-14T03:40:00Z</published>
+    <updated>2012-12-14T03:40:00Z</updated>
+    <summary>
+      In which we ignore charts for a bit and focus on data.
+    </summary>
+    <author>
+      <name>Mikey Levine</name>
+      <uri>http://hazzens.com</uri>
+    </author>
+  </entry>
 
   <entry>
     <title>Lesson 2: Charts</title>
@@ -17,7 +32,7 @@
     <published>2012-12-04T23:30:00Z</published>
     <updated>2012-12-04T23:30:00Z</updated>
     <summary>
-      In which we spew SVG elements and make pretty charts
+      In which we spew SVG elements and make pretty charts.
     </summary>
     <author>
       <name>Mikey Levine</name>
