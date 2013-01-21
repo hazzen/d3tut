@@ -23,9 +23,6 @@ a,a:visited {
   color: #41689f;
   text-decoration: none;
 }
-a.no-style,a.no-style:visited {
-  color: #31484f;
-}
 
 body {
   font: 13px arial,sans-serif;
@@ -135,6 +132,10 @@ code {
   font-family: monospace;
   margin: 0;
   white-space: normal;
+}
+
+a code,a:visited code{
+  color: #41689f;
 }
 
 code.block {

@@ -57,9 +57,35 @@
         <div class='clearfix pad-top'></div>
         <div class='section'>
           <div class='section-header' id='s1'>
-            4.1 Ch-ch-ch-changes
+            4.1 Two nodes leave, no nodes enter
           </div>
           <div class='section-content'>
+            In all previous lessons, we've only added data or modified data.
+            Never have we <em>removed</em> data from a loving home.
+            Our <a href='lesson_1.html#s6'>introduction of the <code>enter</code> selection</a>
+            left a question unspoken - what if one had less data? Would there
+            be a corresponding <code>exit</code> selection to match?
+            <div class='sample'>
+              <code class='block html'>&lt;div class='captain'&gt;Kirk&lt;/div&gt;
+&lt;div class='captain'&gt;Picard&lt;/div&gt;
+&lt;div class='captain'&gt;Sisko&lt;/div&gt;
+&lt;div class='captain'&gt;Janeway&lt;/div&gt;
+&lt;div class='captain'&gt;Archer&lt;/div&gt;</code>
+              <code class='block js'>var captainNames = [
+  'Kirk',
+  'Picard',
+  'Sisko',
+  'Janeway',
+  // I never liked Enterprise.
+  // 'Archer',
+];
+var captains = d3.selectAll('.captain').data(captainNames);
+<em>captains.exit()
+    .remove();</em>
+captains
+    .text(String);</code>
+              <code class='block result'></code>
+            </div>
           </div>
         </div>
       </div>
