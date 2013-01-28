@@ -86,6 +86,103 @@ captains
     .text(String);</code>
               <code class='block result'></code>
             </div>
+            The <code>remove</code> function, rather obviously, removes the
+            selection from the DOM. Its use isn't limited to <code>exit</code>
+            selections, but it is most commonly used there. You also need not
+            remove the <code>exit</code>ing nodes - there is nothing inherently
+            special about the selection and it functions identically to the
+            <code>update</code> selection. Except, of course, it has no data:
+            <div class='sample'>
+              <code class='block html'>&lt;div class='captain'&gt;Kirk&lt;/div&gt;
+&lt;div class='captain'&gt;Picard&lt;/div&gt;
+&lt;div class='captain'&gt;Sisko&lt;/div&gt;
+&lt;div class='captain'&gt;Janeway&lt;/div&gt;
+&lt;div class='captain'&gt;Archer&lt;/div&gt;</code>
+              <code class='block js'>var captainNames = [
+  'Kirk',
+  'Picard',
+  'Sisko',
+  'Janeway',
+  // I never liked Enterprise.
+  // 'Archer',
+];
+var captains = d3.selectAll('.captain').data(captainNames);
+captains.exit()
+    .style('color', 'grey')
+    .text(function(d, i) { return 'data: [' + d + '], index: [' + i + ']'; });
+captains
+    .text(String);</code>
+              <code class='block result'></code>
+            </div>
+            But how, exactly, does d3 decide which nodes are in the exit
+            selection? If the data started as <span class='nobr'><code>[0, 2, 4]</code></span>
+            and was <code>update</code>-d to <span class='nobr'><code>[2, 4, 6]</code>,</span>
+            would any nodes <code>exit</code>? With the tools presented so
+            far, <em>no</em>. Just as <code>enter</code> is defined as all the
+            new indices with data, <code>exit</code> is all the indices that no
+            longer have data. Consequently, we can't have an <code>enter</code>
+            and an <code>exit</code> from the same <code>data</code> binding. At
+            least, not yet. Consider the following example:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var chart = d3.select('#chart');
+chart.selectAll('div')
+    .data([0, 2, 4]).enter()
+  .append('div')
+    .text(String);
+
+var divs = chart.selectAll('div')
+    .data([2, 4]);
+
+divs.exit()
+    .style('color', 'grey')
+    .text('Poor, unloved datum');
+divs
+    .text(function(d) { return d + ' - still kicking'; });</code>
+              <code class='block result'></code>
+            </div>
+            As expected, the <em>last</em> node is the <code>exit</code>-ing node.
+            The mapping from pre-<code>update</code> node to post-<code>update</code>
+            node is by index. The node formerly known as <code>0</code> is now
+            known as <code>2</code> after the <code>update</code>.
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s2'>
+            4.2 A new dawn for data - the key
+          </div>
+          <div class='section-content'>
+            One last bit before animations - key functions. Many of the functions
+            we've seen in D3 have additional, optional params. <code>data</code>
+            is no exception. In addition to the first argument (to specify the data),
+            it accepts a <em>key function</em> as a second argument. What's a key
+            for, huh? To unlock doors, of course. Doors to data-binding fun!
+            <hr>
+            Or, you know, something else. The key function allows one to specify
+            a data mapping from pre-<code>update</code> to post-<code>update</code>
+            instead of the default by-index behavior. In other words, it defines
+            if a datum is exiting, entering, or updating. Consider our previous
+            example, but with a key function that defines an identity mapping:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var chart = d3.select('#chart');
+<em>var keyFn = function(d) { return d; };</em>
+chart.selectAll('div')
+    .data([0, 2, 4], <em>keyFn</em>).enter()
+  .append('div')
+    .text(String);
+
+var divs = chart.selectAll('div')
+    .data([2, 4], <em>keyFn</em>);
+
+divs.exit()
+    .style('color', 'grey')
+    .text('Poor, unloved datum');
+divs
+    .text(function(d) { return d + ' - still kicking'; });</code>
+              <code class='block result'></code>
+            </div>
+            The first node in the tree is now grey, not the last.
           </div>
         </div>
       </div>
