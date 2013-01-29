@@ -182,7 +182,35 @@ divs
     .text(function(d) { return d + ' - still kicking'; });</code>
               <code class='block result'></code>
             </div>
-            The first node in the tree is now grey, not the last.
+            The function, like most D3 functions, is passed two params:
+            <code>data</code> and <code>index</code> along with the <code>this</code>
+            bound to the appropriate <code>Element</code>. To pair nodes up with
+            data, D3 calls the <code>key</code> function on each selected node
+            and on the fresh data. The <code>exit</code> selection is all nodes
+            selected with a key not present in the fresh data (in set terms,
+            <code>{key(node): node &isin; selected} - {key(datum): datum &isin; data}</code>.
+            Likewise, <code>enter</code> is all nodes with keys in fresh data, but not in
+            selected and the basic selection is all selected nodes with a matching
+            key in data (
+            <code>{key(node): node &isin; selected} &cap; {key(datum): datum &isin; data}</code>).
+            <hr>
+            What does this mean for us? Well, the first node in the tree is now
+            grey, not the last. That is about it. The next section, though, will
+            make it useful. One last thing to note: the returned key is
+            <code>string</code>-ified, so using an <code>Array</code> or <code>
+            Object</code> will lead to all data having the same key - not a good
+            thing.
+            <div class='aside'>
+              If you are the kind that likes to cause trouble, find flaws in
+              things, or worry about corner cases - have you checked for
+              backdoors in your compiler yet? Also, let me head off two
+              possible questions. First, the <code>key</code> function only
+              matters at the time of calling <code>data</code>, and only for
+              that single call. Previous and future calls could use a different
+              function. Second, if your key function does not provide a unique
+              mapping you are in for a world of hurt - the <code>enter</code> and
+              <code>exit</code> sets will be mystifying.
+            </div>
           </div>
         </div>
       </div>
