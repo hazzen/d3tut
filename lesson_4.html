@@ -195,8 +195,8 @@ divs
             <code>{key(node): node &isin; selected} &cap; {key(datum): datum &isin; data}</code>).
             <hr>
             What does this mean for us? Well, the first node in the tree is now
-            grey, not the last. That is about it. The next section, though, will
-            make it useful. One last thing to note: the returned key is
+            grey, not the last. That is about it. We'll find this useful in the
+            next section. One last thing to note: the returned key is
             <code>string</code>-ified, so using an <code>Array</code> or <code>
             Object</code> will lead to all data having the same key - not a good
             thing.
@@ -210,6 +210,67 @@ divs
               function. Second, if your key function does not provide a unique
               mapping you are in for a world of hurt - the <code>enter</code> and
               <code>exit</code> sets will be mystifying.
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s3'>
+            4.3 Animate
+          </div>
+          <div class='section-content'>
+            Drumroll - animation time! Animations in D3 are very simple to
+            initiate. And, as is wont for easy tasks, easy to mess up. A
+            <code><a href='https://github.com/mbostock/d3/wiki/Selections#wiki-transition'>
+            transition</a></code> is just another function called on a selection.
+            It takes no arguments and returns a <code><a href='https://github.com/mbostock/d3/wiki/Transitions'>d3.transition</a></code>
+            object. You could read all about them by clicking on the link, or
+            you could keep reading my tutorial. Maybe both? Wouldn't want to hurt
+            mine nor mbostock's feelings, now would you?
+            <hr>
+            A <code>d3.transition</code> acts just like a
+            <code>selection</code> with a few extra methods tacked on, and a
+            few other methods removed. The three most important methods are
+            retained - <code>attr</code>, <code>style</code>, and <code>text</code>.
+            These three will continue as your bread-and-butter of D3. As you may
+            have guessed from the identical names, <code>attr</code>, <code>style</code>,
+            and <code>text</code> accomplish the same ends, with the same arguments,
+            as the <code>d3.selection</code> methods.
+            <hr>
+            With one difference, of course. The three setters will not immediately
+            set the <code>attr</code>/<code>style</code>/<code>text</code> of
+            nodes in the selection, but instead gradually change them from the
+            current value to the one specified. Gradual change is best, oddly,
+            visualized:
+            <div class='sample'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  div.bar {
+    background: #ccf;
+    border: 1px solid black;
+    margin: 5px 0;
+    height: 10px;
+  }
+&lt;/style&gt;
+&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root');
+var renderBars = function() {
+  var data = d3.range(5).map(Math.random);  // 5 random numbers [0, 1)
+  var widthScale = d3.scale.linear()
+      .range([0, 300]);
+  var bars = root.selectAll('div.bar').data(data);
+  bars.enter().append('div')
+      .attr('class', 'bar');
+  bars.transition()
+      .style('width', widthScale);
+  bars.exit()
+      .remove();
+};
+
+renderBars();  // Render the bars initially just to have some data.
+
+root.append('button')
+    .text('run renderBars')
+    .on('click', renderBars);</code>
+              <code class='block result'></code>
             </div>
           </div>
         </div>
