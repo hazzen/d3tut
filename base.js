@@ -12,6 +12,11 @@
   };
 
   var makeSwapButton = function(container, content) {
+    // Swap a button to swap from html to "view source" for the content
+    // element within container. Moves any child nodes to an invisible div to
+    // preserve event handlers.
+    var holder = d3.select(container).append('div')
+        .style('display', 'none');
     var btn = d3.select(container).append('button')
         .datum(true)
         .attr('class', 'sample-swap')
@@ -23,11 +28,17 @@
             var styled = style_html(body.html(), {
               indent_size: 2
             });
+            while (body.node().childNodes.length) {
+              holder.node().appendChild(body.node().childNodes[0]);
+            }
             body.text(styled)
               .classed('code', true);
           } else {
-            body.html(body.text())
+            body.html('')
               .classed('code', false);
+            while (holder.node().childNodes.length) {
+              body.node().appendChild(holder.node().childNodes[0]);
+            }
           }
           me.datum(!me.datum());
           var dims = sizeResultContent(content);
@@ -91,9 +102,12 @@
         }
         ijs.parentNode.removeChild(ijs);
 
-        var resultDims = sizeResultContent(iframeDoc.body);
-        result
-            .style('height', (25 + resultDims[1]) + 'px');
+        // Delay the load - let any transitions run at least one frame.
+        window.setTimeout(function() {
+          var resultDims = sizeResultContent(iframeDoc.body);
+          result
+              .style('height', (25 + resultDims[1]) + 'px');
+        }, 0);
       };
       ijs.addEventListener('load', onIjsLoad, true);
 

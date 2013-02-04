@@ -247,7 +247,6 @@ divs
     background: #ccf;
     border: 1px solid black;
     margin: 5px 0;
-    height: 10px;
   }
 &lt;/style&gt;
 &lt;div id='root'&gt;&lt;/div&gt;</code>
@@ -260,6 +259,7 @@ var renderBars = function() {
   bars.enter().append('div')
       .attr('class', 'bar');
   bars.transition()
+      .text(d3.format('.2f'))
       .style('width', widthScale);
   bars.exit()
       .remove();
