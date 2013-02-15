@@ -96,6 +96,7 @@
         try {
           iframeWindow.eval(js.text());
         } catch (e) {
+          alert(e);
           result
               .classed('error', true)
               .text(describeError(e));
@@ -103,11 +104,15 @@
         ijs.parentNode.removeChild(ijs);
 
         // Delay the load - let any transitions run at least one frame.
-        window.setTimeout(function() {
-          var resultDims = sizeResultContent(iframeDoc.body);
-          result
-              .style('height', (25 + resultDims[1]) + 'px');
-        }, 0);
+        var resizeElem = function() {
+          window.setTimeout(function() {
+            var resultDims = sizeResultContent(iframeDoc.body);
+            result
+                .style('height', (25 + resultDims[1]) + 'px');
+          }, 0);
+        };
+        d3.select(iframeDoc).on('click', resizeElem);
+        resizeElem();
       };
       ijs.addEventListener('load', onIjsLoad, true);
 

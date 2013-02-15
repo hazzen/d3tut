@@ -215,7 +215,86 @@ divs
         </div>
         <div class='section'>
           <div class='section-header' id='s3'>
-            4.3 Animate
+            4.3 Enter-Update-Exit
+          </div>
+          <div class='section-content'>
+            Example code, up until this point, as been a single-run affair - we
+            select some nodes, we update attributes on them, and we go on our
+            way. What if we wish for our method to be more than a fling? What if
+            we want our callers to call us (maybe)?
+            <div class='sample'>
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root')
+
+var renderData = function() {
+  var data = d3.range(5).map(Math.random);  // 5 random numbers [0, 1)
+  var numbers = root.selectAll('div.datum').data(data);
+  numbers.enter().append('div')
+      .attr('class', 'datum')
+      .text(d3.format('.2f'));
+};
+
+root.append('button')
+    .text('make it rain data!')
+    .on('click', renderData);</code>
+              <code class='block result'></code>
+            </div>
+            What happened? Why doesn't the text update? Shouldn't we get a fresh
+            set of five numbers each time <code>renderData</code> is called? No,
+            not with this code. Now that our function is called multiple times,
+            we must consider when attributes can change and when they can't.
+            Shoulde the <code>class</code> of a <code>div</code> in this example
+            ever change? Should the <code>text</code> of a <code>div</code>
+            change? To answer these questions, consider how the attribute is
+            set. If your attribute depends on <code>data</code>, then it can
+            change. And attributes that can change should be set on the
+            <em>entire</em> selection:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root')
+
+var renderData = function() {
+  var data = d3.range(5).map(Math.random);  // 5 random numbers [0, 1)
+  var numbers = root.selectAll('div.datum').data(data);
+  numbers.enter().append('div')
+      .attr('class', 'datum');
+<em>  // The number changes each time; ensure the text does as well.
+  numbers
+      .text(d3.format('.2f'));</em>
+};
+
+root.append('button')
+    .text('make it rain data!')
+    .on('click', renderData);</code>
+              <code class='block result'></code>
+            </div>
+            Far out! Now, I've written this code in a very specific order - the
+            order from the section title. <code>enter</code> before
+            <code>update</code> (our fancy name for operating on the original
+            selection). What if we write it in the reverse order?
+            <div class='sample'>
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'><div class='hide'>var root = d3.select('#root')
+
+var renderData = function() {
+  var data = d3.range(5).map(Math.random);  // 5 random numbers [0, 1)
+  var numbers = root.selectAll('div.datum').data(data);
+</div>  numbers
+      .text(d3.format('.2f'));
+  numbers.enter().append('div')
+      .attr('class', 'datum');
+<div class='hide'>};
+
+root.append('button')
+    .text('make it rain data!')
+    .on('click', renderData);</div></code>
+              <code class='block result'></code>
+            </div>
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s4'>
+            4.4 Animate
           </div>
           <div class='section-content'>
             Drumroll - animation time! Animations in D3 are very simple to
@@ -264,8 +343,6 @@ var renderBars = function() {
   bars.exit()
       .remove();
 };
-
-renderBars();  // Render the bars initially just to have some data.
 
 root.append('button')
     .text('run renderBars')
@@ -333,6 +410,8 @@ var renderBars = function() {
       .attr('width', 0)
       .remove();
 };
+
+root.append('br');
 
 root.append('button')
     .text('run renderBars')
