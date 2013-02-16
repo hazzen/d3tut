@@ -271,7 +271,8 @@ root.append('button')
             Far out! Now, I've written this code in a very specific order - the
             order from the section title. <code>enter</code> before
             <code>update</code> (our fancy name for operating on the original
-            selection). What if we write it in the reverse order?
+            selection). What if we write it in the reverse order? With
+            <code>update</code> before <code>enter</code>? Not the nicest:
             <div class='sample'>
               <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
               <code class='block js'><div class='hide'>var root = d3.select('#root')
@@ -286,6 +287,42 @@ var renderData = function() {
 <div class='hide'>};
 
 root.append('button')
+    .text('make it rain data!')
+    .on('click', renderData);</div></code>
+              <code class='block result'></code>
+            </div>
+            You may have noticed the first time you made it rain data it did
+            not, in fact, rain data. We were instead parched for data. But, if
+            you look ever more closely, you'll notice it had still rained
+            <code>div</code>s. This should be obvious in retrospect - the code
+            first set properties on divs, then added new ones. If we have none
+            to begin with, nothing will get updated.
+            <div class='aside'>
+              d3 does something to make the
+              <code>enter</code>-<code>update</code> pattern more effective -
+              any nodes appened to an <code>enter</code> are immediately filled
+              in on the original selection. By writing your <code>enter</code>
+              first, you automatically get any operations from your
+              <code>update</code> applied.
+            </div>
+            So, what of our third musketeer - the <code>exit</code>? An example,
+            of course:
+            <div class='sample'>
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root')
+
+var renderData = function() {
+  var numData = Math.floor(5 * Math.random());
+  var data = d3.range(numData).map(Math.random);  // [0-4] random numbers [0, 1)
+  var numbers = root.selectAll('div.datum').data(data);
+  numbers.enter().append('div')
+      .attr('class', 'datum');
+  numbers
+      .text(d3.format('.2f'));
+  numbers.exit()
+      .remove();
+};
+<div class='hide'>root.append('button')
     .text('make it rain data!')
     .on('click', renderData);</div></code>
               <code class='block result'></code>
@@ -315,61 +352,83 @@ root.append('button')
             and <code>text</code> accomplish the same ends, with the same arguments,
             as the <code>d3.selection</code> methods.
             <hr>
-            With one difference, of course. The three setters will not immediately
-            set the <code>attr</code>/<code>style</code>/<code>text</code> of
-            nodes in the selection, but instead gradually change them from the
-            current value to the one specified. Gradual change is best, oddly,
-            visualized:
+            With one difference, of course. Two of the setters
+            (<code>attr</code>/<code>style</code>) will not immediately
+            take effect, but instead gradually change them from the current
+            value to the one specified. Consider our previous example, but with
+            animating opacities:
             <div class='sample'>
-              <code class='block html'>&lt;style type='text/css'&gt;
-  div.bar {
-    background: #ccf;
-    border: 1px solid black;
-    margin: 5px 0;
-  }
-&lt;/style&gt;
-&lt;div id='root'&gt;&lt;/div&gt;</code>
-              <code class='block js'>var root = d3.select('#root');
-var renderBars = function() {
-  var data = d3.range(5).map(Math.random);  // 5 random numbers [0, 1)
-  var widthScale = d3.scale.linear()
-      .range([0, 300]);
-  var bars = root.selectAll('div.bar').data(data);
-  bars.enter().append('div')
-      .attr('class', 'bar');
-  bars.transition()
-      .text(d3.format('.2f'))
-      .style('width', widthScale);
-  bars.exit()
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root')
+
+var renderData = function() {
+  var numData = Math.floor(5 * Math.random());
+  var data = d3.range(numData).map(Math.random);  // [0-4] random numbers [0, 1)
+  var numbers = root.selectAll('div.datum').data(data);
+  numbers.enter().append('div')
+      .attr('class', 'datum');
+  numbers<em>.transition()</em>
+      <em>.style('opacity', Number)</em>
+      .text(d3.format('.2f'));
+  numbers.exit()
       .remove();
 };
-
 root.append('button')
-    .text('run renderBars')
-    .on('click', renderBars);</code>
+    .text('make it rain data!')
+    .on('click', renderData);</code>
               <code class='block result'></code>
             </div>
-            While the code is short, concise, and similar to many of our past
-            examples, a few differences should be noted. Firstly, it animates.
-            Cool beans! Now you can go impress all the potential romantic
-            partners with your ability to make bars dance without Flash. Also,
-            the code is broken into three distinct parts. We will call those
-            <code>enter</code>, <code>update</code>, and <code>exit</code>
-            (coinciding nicely with the method names in two fo the three cases).
-            Thirdly, and as a result of the previous bullet, the code is
-            repeatable. It can be called as many times as desired, and will
-            always render the latest data, replacing the previous.
-            <hr>
-            Though, you'll note, I've written this example in a way that only
-            the <code>update</code> portion runs on a button click - no nodes
-            ever <code>exit</code> as the data size is fixed at five elements
-            and, likewise, none ever <code>enter</code> because the initial
-            render call is run on page-load. An example that uses all three may
-            be instructive:
-            <hr>
-            <em>TODO: this should be delayed, talk about above example
-              first</em>
-            <hr>
+            Nitpicker that I am, two qualms with the example get me. For one,
+            watch what happens when a new div is added. They fade from 100%
+            opacity to whatever their target value is! That isn't a very good
+            visual; why not have them start at 0% and fade in, instead of out?
+            The second is the inverse - our exiting nodes simply go poof. Why
+            not fade them out into the dark of the night? It sounds like we want
+            two changes: new nodes should start with an <code>opacity</code> of
+            <code>0</code>, and <code>exit</code>ing nodes should animate to
+            <code>0</code> before going away. We can turn that directly into two
+            new lines of code, and one modified one (ignore the incorrect
+            sizing, it is a defect in my page's code, not that of the example):
+            <div class='sample'>
+              <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var root = d3.select('#root')
+
+var renderData = function() {
+  var numData = Math.floor(5 * Math.random());
+  var data = d3.range(numData).map(Math.random);  // [0-4] random numbers [0, 1)
+  var numbers = root.selectAll('div.datum').data(data);
+  numbers.enter().append('div')
+      <em>.style('opacity', 0)</em>
+      .attr('class', 'datum');
+  numbers.transition()
+      .style('opacity', Number)
+      .text(d3.format('.2f'));
+  numbers.exit()<em>.transition()</em>
+      <em>.style('opacity', 0)</em>
+      .remove();
+};
+root.append('button')
+    .text('make it rain data!')
+    .on('click', renderData);</code>
+              <code class='block result'></code>
+            </div>
+            Nifty! By giving the <code>enter</code>ing nodes an initial opacity
+            of 0, now they fade in to whatever their target may be. And by
+            turning our <code>exit</code> call into a <code>transition</code> we
+            make the nodes fade out. Of note is the behaviour of a call to
+            <code>remove</code> on a transition - it is delayed until the
+            transition completes, allowing all to see the majesty of your
+            animation before unceremoniously severing the nodes from the
+            document. A sad life they lead, sad indeed.
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s5'>
+            4.5 An Annotated Animated Example
+          </div>
+          <div class='section-content'>
+            Lets one more example, which could accurately be described as a
+            graph:
             <div class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
   rect.bar {
@@ -386,7 +445,7 @@ var svg = root.append('svg')
     .attr('height', h);
 
 var xScale = d3.scale.linear()
-    .range([0, w]);
+    .range([0, w - 30]);  // Allow 30 pixels of space for the labels.
 var yScale = d3.scale.linear()
     .domain([0, 5])  // We will have 3-5 datums.
     .range([0, h]);
@@ -408,6 +467,23 @@ var renderBars = function() {
   bars.exit().transition()
       .attr('opacity', 0)
       .attr('width', 0)
+      .remove();
+
+  var labels = svg.selectAll('text.label').data(data);
+  var newLabels = labels.enter().append('text')
+      .attr('class', 'label')
+      .attr('opacity', 0)
+      .attr('x', xScale(0))
+      .attr('y', function(d, i) { return yScale(i + 0.5); })
+      .attr('dx', '0.3em')
+      .attr('dy', '0.4em');
+  labels.transition()
+      .attr('x', xScale)
+      .attr('opacity', 1)
+      .text(d3.format('.2f'));
+  labels.exit().transition()
+      .attr('opacity', 0)
+      .attr('x', xScale(0))
       .remove();
 };
 

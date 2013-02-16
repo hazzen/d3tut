@@ -59,6 +59,14 @@
     return [w, h];
   };
 
+  var annotateHiders = function() {
+    d3.selectAll('.sample .hide').on('click', function() {
+      var div = d3.select(this);
+      div.classed('hide-active', !div.classed('hide-active'));
+    });
+  };
+
+
   var annotateSample = function(sample) {
     sample = d3.select(sample);
     var html = sample.select('.html');
@@ -141,6 +149,7 @@
 
   tut.init = function() {
     annotateAllSamples();
+    annotateHiders();
   };
 
   exports.tut = tut;
