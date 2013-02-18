@@ -427,7 +427,7 @@ root.append('button')
             4.5 An Annotated Animated Example
           </div>
           <div class='section-content'>
-            Lets one more example, which could accurately be described as a
+            Let's one more example, which could accurately be described as a
             graph:
             <div class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
@@ -443,25 +443,36 @@ var h = 100;
 var svg = root.append('svg')
     .attr('width', w)
     .attr('height', h);
-
+<div class='annotate'>
+  // We will draw 3-5 bars for random numbers in the range [0, 1), with a small text label afterwards. 30 is, sadly, a magic number - you can expect a few of these in svg.
+</div>
 var xScale = d3.scale.linear()
     .range([0, w - 30]);  // Allow 30 pixels of space for the labels.
-var yScale = d3.scale.linear()
-    .domain([0, 5])  // We will have 3-5 datums.
+var yScale = d3.scale.linear()<div class='annotate'>
+  // Note the <code>domain</code> is constant; this way, the size of a bar is constant whether we have <code>3</code>, <code>4</code>, or <code>5</code>.
+    </div>
+    .domain([0, 5])
     .range([0, h]);
 
 var renderBars = function() {
   var numData = 3 + Math.floor(Math.random() * 3);  // 3-5 numbers
-  var data = d3.range(numData).map(Math.random);    // between [0, 1)
-
+  var data = d3.range(numData).map(Math.random);    // between [0, 1)<div class='annotate'>
+    // <code>enter</code> of the enter-update-exit triumverate.
+  </div>
   var bars = svg.selectAll('rect.bar').data(data);
   var newBars = bars.enter().append('rect')
-      .attr('class', 'bar')
+      .attr('class', 'bar')<div class='annotate'>
+        // The <code>enter</code> animation is a fade in from 0 opacity combined with a grow to the target width.<hr>Using <code>xScale(0)</code> for the x position makes our code more flexible. If we changed the bars to have an indent of 10px, this code need not change.<hr>The same effect could, of course, be accomplished using a <code>&lt;g&gt;</code> element and modifying its <code>transform</code> property.
+      </div>
       .attr('opacity', 0)
-      .attr('x', xScale(0))
+      .attr('x', xScale(0))<div class='annotate'>
+        // Each bar should get some padding. I arbitrarily decided 20% the height of a bar between each bar - or, 10% from the top and 10% from the bottom.<hr>Or, in other words, each bar should go from <code>yScale(i + 0.1)</code> to <code>yScale(i + 0.9)</code>. The height could also be written as, simply, <code>yScale(0.8)</code> or with constants. It comes down to taste, though I chose this value to call out the duality of the <code>y</code> and <code>height</code> properties. As with the <code>xScale(0)</code> call above, make sure whichever solution looks sexiest to you uses the <code>yScale</code>.
+      </div>
       .attr('y', function(d, i) { return yScale(i + 0.1); })
       .attr('height', function(d, i) { return yScale(i + 0.9) - yScale(i + 0.1);});
-  bars.transition()
+  bars.transition()<div class='annotate'>
+    // <code>update</code> of the enter-update-exit triumverate. One gotcha with the pattern is the behavior of repeated calls to <code>transition</code> on a node - the last one wins.<hr>Even if it looks cleaner to handle the transition from 0 opacity to 1 on the new nodes using the <code>newBars</code> selection, the subsequent <code>transition</code> on <code>bars</code> would override it. Sometimes, an enter animation is distinct enough from the update that separating the two makes sense - in this case, either set up your update transition before appending new nodes, or place the enter transition after the update transition.
+      </div>
       .attr('width', xScale)
       .attr('opacity', 1);
   bars.exit().transition()

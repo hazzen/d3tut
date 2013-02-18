@@ -244,6 +244,54 @@ code.block {
   display: none;
 }
 
+.sample .annotate {
+  z-index: 1;
+  position: absolute;
+  left: -100px;
+  width: 300px;
+  min-height: 20px;
+  border: 2px solid black;
+  background: white;
+  white-space: normal;
+  padding: 5px;
+  font-family: sans-serif;
+}
+.sample .annotate.collapse {
+  white-space: nowrap;
+  padding: 0;
+  z-index: 0;
+  width: 100px;
+  height: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.sample .annotate code {
+  white-space: nowrap;
+}
+
+.sample .annotate:hover {
+  z-index: 2;
+  border: 2px solid #888;
+}
+
+.sample .annotate:before {
+  content: '// ';
+  position: absolute;
+  background: white;
+  color: white;
+}
+
+.sample .annotate.collapse:before {
+  content: '';
+  border: 10px solid transparent;
+  border-right: none;
+  border-left-color: black;
+}
+.sample .annotate.collapse:hover:before {
+  border-left-color: #666;
+}
+
 code em {
   font-style: normal;
   background-color: #f1ae7e;
