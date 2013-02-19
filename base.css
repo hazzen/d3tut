@@ -247,22 +247,19 @@ code.block {
 .sample .annotate {
   z-index: 1;
   position: absolute;
-  left: -100px;
+  left: 700px;
   width: 300px;
-  min-height: 20px;
-  border: 2px solid black;
+  min-height: 15px;
+  border: 1px solid #ccc;
   background: white;
   white-space: normal;
-  padding: 5px;
+  padding: 2px;
   font-family: sans-serif;
 }
 .sample .annotate.collapse {
   white-space: nowrap;
-  padding: 0;
   z-index: 0;
-  width: 100px;
-  height: 20px;
-  text-overflow: ellipsis;
+  height: 15px;
   overflow: hidden;
 }
 
@@ -272,7 +269,7 @@ code.block {
 
 .sample .annotate:hover {
   z-index: 2;
-  border: 2px solid #888;
+  border: 1px solid #888;
 }
 
 .sample .annotate:before {
@@ -285,11 +282,29 @@ code.block {
 .sample .annotate.collapse:before {
   content: '';
   border: 10px solid transparent;
+  margin-left: -5px;
+  margin-top: -2px;
+  width: 5px;
   border-right: none;
-  border-left-color: black;
+  border-left-color: #ccc;
 }
 .sample .annotate.collapse:hover:before {
   border-left-color: #666;
+}
+
+.sample .annotate.collapse:after {
+  content: '';
+  width: 10px;
+  padding: 10px;
+  position: absolute;
+  top: 2px;
+  right: 0;
+  background-image: linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+  display: block;
 }
 
 code em {

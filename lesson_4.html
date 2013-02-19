@@ -457,7 +457,7 @@ var yScale = d3.scale.linear()<div class='annotate'>
 var renderBars = function() {
   var numData = 3 + Math.floor(Math.random() * 3);  // 3-5 numbers
   var data = d3.range(numData).map(Math.random);    // between [0, 1)<div class='annotate'>
-    // <code>enter</code> of the enter-update-exit triumverate.
+    // <code>enter</code> of the enter-update-exit triumverate. Keep in mind this selection will have initial <code>attr</code>s as well as <code>transition</code>. If an <code>attr</code> never changes - like the <code>class</code> of a bar - set it on newly-created <code>enter</code> nodes.
   </div>
   var bars = svg.selectAll('rect.bar').data(data);
   var newBars = bars.enter().append('rect')
