@@ -69,7 +69,6 @@
 
   var annotateAnnotates = function() {
     d3.selectAll('.sample .annotate')
-      .classed('collapse', true)
       .on('click', function() {
         var div = d3.select(this);
         div.classed('collapse', !div.classed('collapse'));

@@ -245,26 +245,18 @@ code.block {
 }
 
 .sample .annotate {
-  z-index: 1;
-  position: absolute;
-  left: 700px;
-  width: 300px;
-  min-height: 15px;
+  color: #598d59;
+  position: relative;
+  min-height: 8px;
   border: 1px solid #ccc;
   background: white;
   white-space: normal;
   padding: 2px;
-  font-family: sans-serif;
 }
 .sample .annotate.collapse {
-  white-space: nowrap;
   z-index: 0;
-  height: 15px;
+  height: 8px;
   overflow: hidden;
-}
-
-.sample .annotate code {
-  white-space: nowrap;
 }
 
 .sample .annotate:hover {
@@ -272,38 +264,17 @@ code.block {
   border: 1px solid #888;
 }
 
-.sample .annotate:before {
-  content: '// ';
-  position: absolute;
-  background: white;
-  color: white;
-}
-
 .sample .annotate.collapse:before {
   content: '';
-  border: 10px solid transparent;
-  margin-left: -5px;
-  margin-top: -2px;
-  width: 5px;
-  border-right: none;
-  border-left-color: #ccc;
-}
-.sample .annotate.collapse:hover:before {
-  border-left-color: #666;
-}
-
-.sample .annotate.collapse:after {
-  content: '';
-  width: 10px;
-  padding: 10px;
   position: absolute;
-  top: 2px;
-  right: 0;
-  background-image: linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, white 100%);
+  margin-top: 5px;
+  height: 5px;
+  width: 100%;
+  background-image: linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
   display: block;
 }
 

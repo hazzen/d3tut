@@ -9,7 +9,6 @@
     </title>
     <script type="text/javascript" src="d3.v2.min.js"></script>
     <script type="text/javascript" src="base.js"></script>
-    <script type="text/javascript" src="lesson_3.js"></script>
     <script type="text/javascript" src="beautify-html.js"></script>
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -35,6 +34,7 @@
         <h2 class='lesson'>
           Lesson 4: Changing Data
         </h2>
+        originally published FIX ME
       </div>
     </div>
     <div class='main'>
@@ -441,70 +441,121 @@ root.append('button')
 var w = 300;
 var h = 100;
 var svg = root.append('svg')
+    .style('display', 'block')
     .attr('width', w)
     .attr('height', h);
 <div class='annotate'>
-  // We will draw 3-5 bars for random numbers in the range [0, 1), with a small text label afterwards. 30 is, sadly, a magic number - you can expect a few of these in svg.
-</div>
-var xScale = d3.scale.linear()
+  /* We will draw 3-5 bars for random numbers in the range [0, 1), with a small
+  text label afterwards. 30 is, sadly, a magic number - you can expect a few of
+  these in svg. */
+</div>var xScale = d3.scale.linear()
     .range([0, w - 30]);  // Allow 30 pixels of space for the labels.
 var yScale = d3.scale.linear()<div class='annotate'>
-  // Note the <code>domain</code> is constant; this way, the size of a bar is constant whether we have <code>3</code>, <code>4</code>, or <code>5</code>.
-    </div>
-    .domain([0, 5])
+  /* Note the <code>domain</code> is constant; this way, the size of a bar is
+  constant whether we have <code>3</code>, <code>4</code>, or <code>5</code>.
+  */
+</div>    .domain([0, 5])
     .range([0, h]);
 
 var renderBars = function() {
   var numData = 3 + Math.floor(Math.random() * 3);  // 3-5 numbers
   var data = d3.range(numData).map(Math.random);    // between [0, 1)<div class='annotate'>
-    // <code>enter</code> of the enter-update-exit triumverate. Keep in mind this selection will have initial <code>attr</code>s as well as <code>transition</code>. If an <code>attr</code> never changes - like the <code>class</code> of a bar - set it on newly-created <code>enter</code> nodes.
-  </div>
-  var bars = svg.selectAll('rect.bar').data(data);
+    /* <code>enter</code> of the enter-update-exit triumverate. Keep in mind
+    this selection will have initial <code>attr</code>s as well as
+    <code>transition</code>. If an <code>attr</code> never changes - like the
+    <code>class</code> of a bar - set it on newly-created <code>enter</code>
+    nodes. */
+</div>  var bars = svg.selectAll('rect.bar').data(data);
   var newBars = bars.enter().append('rect')
       .attr('class', 'bar')<div class='annotate'>
-        // The <code>enter</code> animation is a fade in from 0 opacity combined with a grow to the target width.<hr>Using <code>xScale(0)</code> for the x position makes our code more flexible. If we changed the bars to have an indent of 10px, this code need not change.<hr>The same effect could, of course, be accomplished using a <code>&lt;g&gt;</code> element and modifying its <code>transform</code> property.
-      </div>
-      .attr('opacity', 0)
+        /* The <code>enter</code> animation is a fade in from 0 opacity
+        combined with a grow to the target width.<hr>Using
+        <code>xScale(0)</code> for the x position makes our code more flexible.
+        If we changed the bars to have an indent of 10px, this code need not
+        change.<hr>The same effect could, of course, be accomplished using a
+        <code>&lt;g&gt;</code> element and modifying its <code>transform</code>
+        property. */
+</div>      .attr('opacity', 0)
       .attr('x', xScale(0))<div class='annotate'>
-        // Each bar should get some padding. I arbitrarily decided 20% the height of a bar between each bar - or, 10% from the top and 10% from the bottom.<hr>Or, in other words, each bar should go from <code>yScale(i + 0.1)</code> to <code>yScale(i + 0.9)</code>. The height could also be written as, simply, <code>yScale(0.8)</code> or with constants. It comes down to taste, though I chose this value to call out the duality of the <code>y</code> and <code>height</code> properties. As with the <code>xScale(0)</code> call above, make sure whichever solution looks sexiest to you uses the <code>yScale</code>.
-      </div>
-      .attr('y', function(d, i) { return yScale(i + 0.1); })
+        /* Each bar should get some padding. I arbitrarily decided 20% the
+        height of a bar between each bar - or, 10% from the top and 10% from
+        the bottom.<hr>Or, in other words, each bar should go from
+        <code>yScale(i + 0.1)</code> to <code>yScale(i + 0.9)</code>. The
+        height could also be written as, simply, <code>yScale(0.8)</code> or
+        with constants. It comes down to taste, though I chose this value to
+        call out the duality of the <code>y</code> and <code>height</code>
+        properties. As with the <code>xScale(0)</code> call above, make sure
+        whichever solution looks sexiest to you uses the <code>yScale</code>.
+        */
+</div>      .attr('y', function(d, i) { return yScale(i + 0.1); })
       .attr('height', function(d, i) { return yScale(i + 0.9) - yScale(i + 0.1);});
   bars.transition()<div class='annotate'>
-    // <code>update</code> of the enter-update-exit triumverate. One gotcha with the pattern is the behavior of repeated calls to <code>transition</code> on a node - the last one wins.<hr>Even if it looks cleaner to handle the transition from 0 opacity to 1 on the new nodes using the <code>newBars</code> selection, the subsequent <code>transition</code> on <code>bars</code> would override it. Sometimes, an enter animation is distinct enough from the update that separating the two makes sense - in this case, either set up your update transition before appending new nodes, or place the enter transition after the update transition.
-      </div>
-      .attr('width', xScale)
+    /* <code>update</code> of the enter-update-exit triumverate. One gotcha
+    with the pattern is the behavior of repeated calls to
+    <code>transition</code> on a node - the last one wins.<hr>Even if it looks
+    cleaner to handle the transition from 0 opacity to 1 on the new nodes using
+    the <code>newBars</code> selection, the subsequent <code>transition</code>
+    on <code>bars</code> would override it. Sometimes, an enter animation is
+    distinct enough from the update that separating the two makes sense - in
+    this case, either set up your update transition before appending new nodes,
+    or place the enter transition after the update transition.
+    */
+</div>      .attr('width', xScale)
       .attr('opacity', 1);
-  bars.exit().transition()
-      .attr('opacity', 0)
+    bars.exit().transition()<div class='annotate'>
+      /* <code>exit</code> of the enter-update-exit triumverate. We are
+      initiating a <code>transition</code>, so the <code>remove</code> call
+      won't happen until the animation has ended. */
+</div>      .attr('opacity', 0)
       .attr('width', 0)
       .remove();
 
   var labels = svg.selectAll('text.label').data(data);
   var newLabels = labels.enter().append('text')
-      .attr('class', 'label')
-      .attr('opacity', 0)
+      .attr('class', 'label')<div class='annotate'>
+        /* We go through the same <code>opacity</code> hoops as on the bars with
+        our text. In fact, much of the animation is the same so that text and
+        bars appear a single unit. */
+</div>      .attr('opacity', 0)
       .attr('x', xScale(0))
-      .attr('y', function(d, i) { return yScale(i + 0.5); })
-      .attr('dx', '0.3em')
-      .attr('dy', '0.4em');
+      .attr('y', function(d, i) { return yScale(i + 0.5); })<div class='annotate'>
+        /* <code>0.3em</code> is a magic number that looks good, giving just
+        enough padding. Pixels would be a fine measure as well - five of them or
+        so. */
+</div>      .attr('dx', '0.3em')<div class='annotate'>
+        /* <code>0.35em</code> is SVG for <code>vertical-align: center</code>
+        - not technically true, but true enough. */
+</div>      .attr('dy', '0.35em');
   labels.transition()
       .attr('x', xScale)
-      .attr('opacity', 1)
-      .text(d3.format('.2f'));
+      .attr('opacity', 1)<div class='annotate'>
+        /* The <code>d3.format</code> <a
+          href='https://github.com/mbostock/d3/wiki/Formatting#wiki-d3_format'>mini-language</a>
+        is very rich and familiar to users of Python, and ever-so-slightly
+        confusing to those accustomed to <code>printf</code>. You can just yell
+        at me to get off your lawn, really. */
+</div>      .text(d3.format('.2f'));
   labels.exit().transition()
       .attr('opacity', 0)
       .attr('x', xScale(0))
       .remove();
 };
 
-root.append('br');
-
 root.append('button')
     .text('run renderBars')
     .on('click', renderBars);</code>
               <code class='block result'></code>
             </div>
+            Now go off and animate some bars! But one more thing, and it is
+            dreadfully important: object constancy. A mouthful, truly.
+          </div>
+        </div>
+        <div class='section'>
+          <div class='section-header' id='s6'>
+            4.6 Constancy, my dear, would you fetch my keys?
+          </div>
+          <div class='section-content'>
+            <a href='http://bost.ocks.org/mike/constancy/'>mbostock's tutorial</a>
           </div>
         </div>
       </div>
@@ -528,6 +579,5 @@ root.append('button')
   </body>
   <script type="text/javascript">
     tut.init();
-    tut3.init();
   </script>
 </html>
