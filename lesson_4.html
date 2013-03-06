@@ -555,6 +555,298 @@ root.append('button')
             4.6 Constancy, my dear, would you fetch my keys?
           </div>
           <div class='section-content'>
+            So: what is object constancy and why should you care? Pretend, for
+            a moment, you are playing catch with a parental figure. You are a
+            kid. You like catch. Your parental figure tosses a ball your way;
+            you see it pause as it leaves their hand. Then, it dissappears and a
+            ball materializes in your glove. That ball? No constancy. It jumped
+            from parental figure's windup to your waiting glove, and you are
+            confused. Is it even the same ball? You didn't see it travel, so you
+            can't be sure. You go and lie down, never to play catch again.
+            <hr>
+            Maybe a graph will help:
+            <div class='sample hide-src'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  #chart {
+    background-color: #fff;
+  }
+  svg {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .highs line {
+    stroke-width: 2px;
+    stroke: #f88;
+  }
+  .rains line {
+    stroke-width: 2px;
+    stroke: #88f;
+  }
+  text {
+    font-size: 13px;
+    font-family: sans-serif;
+  }
+  text.small {
+    font-size: 10px;
+    fill: #666;
+  }
+&lt;/style&gt;
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var w = 300;
+var h = 220;
+
+var data = [
+  {'i':  0,'month': 'January',   'high': 47, 'rain': 5.6},
+  {'i':  1,'month': 'February',  'high': 50, 'rain': 3.5},
+  {'i':  2,'month': 'March',     'high': 53, 'rain': 3.7},
+  {'i':  3,'month': 'April',     'high': 58, 'rain': 2.7},
+  {'i':  4,'month': 'May',       'high': 64, 'rain': 1.9},
+  {'i':  5,'month': 'June',      'high': 70, 'rain': 1.6},
+  {'i':  6,'month': 'July',      'high': 76, 'rain': 0.7},
+  {'i':  7,'month': 'August',    'high': 76, 'rain': 0.9},
+  {'i':  8,'month': 'September', 'high': 70, 'rain': 1.5},
+  {'i':  9,'month': 'October',   'high': 59, 'rain': 3.5},
+  {'i': 10,'month': 'November',  'high': 51, 'rain': 6.6},
+  {'i': 11,'month': 'December',  'high': 45, 'rain': 5.4},
+];
+var dataMonth = function(d) { return d['month']; };
+var dataHigh = function(d) { return d['high']; };
+var dataRain = function(d) { return d['rain']; };
+var highScale = d3.scale.linear()
+    .domain(d3.extent(data, dataHigh))
+    .range([100, 0]);
+var rainScale = d3.scale.linear()
+    .domain([0, d3.max(data, dataRain)])
+    .range([50, 0]);
+var xScale = d3.scale.linear()
+    .domain([0, data.length])
+    .range([0, w]);
+var datumWidth = xScale(1) - xScale(0);
+
+var chart = d3.select('#chart').append('svg')
+    .attr('width', w)
+    .attr('height', h);
+var highG = chart.append('g').attr('class', 'highs')
+    .attr('transform', 'translate(0, 20)');
+var rainG = chart.append('g').attr('class', 'rains')
+    .attr('transform', 'translate(' + [0, 30 + d3.max(highScale.range())] + ')');
+
+var title = chart.append('text')
+    .attr('x', w / 2)
+    .attr('y', h - 10)
+    .attr('text-anchor', 'middle')
+    .text('Seattle Climate');
+var dataLink = chart.append('a')
+    .attr('xlink:href', 'http://en.wikipedia.org/wiki/Seattle');
+dataLink.append('text')
+    .attr('class', 'small')
+    .attr('x', w / 2)
+    .attr('y', h)
+    .attr('text-anchor', 'middle')
+    .text('[source]');
+
+var drawChart = function() {
+  var highGs = highG.selectAll('g.tick').data(data);
+  var newHighGs = highGs.enter().append('g')
+      .attr('class', 'tick');
+  highGs.transition().duration(1000)
+      .attr('transform', function(d, i) {
+        return 'translate(' + [xScale(i) + datumWidth / 2, highScale(dataHigh(d))] + ')';
+      })
+  newHighGs.append('line')
+      .attr('x1', -datumWidth / 2)
+      .attr('x2', datumWidth / 2);
+  newHighGs.append('text')
+      .attr('class', 'small')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '-0.3em');
+  highGs.select('text')
+      .text(function(d) { return dataHigh(d) + '°F'; });
+    
+  var rainGs = rainG.selectAll('g.tick').data(data);
+  var newRainGs = rainGs.enter().append('g')
+      .attr('class', 'tick');
+  rainGs.transition().duration(1000)
+      .attr('transform', function(d, i) {
+        return 'translate(' + [xScale(i) + datumWidth / 2, rainScale(dataRain(d))] + ')';
+      })
+  newRainGs.append('line')
+      .attr('x1', -datumWidth / 2)
+      .attr('x2', datumWidth / 2);
+  newRainGs.append('text')
+      .attr('class', 'small')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '-0.3em');
+  rainGs.select('text')
+      .text(function(d) { return dataRain(d) + '"'; });
+
+  var labels = chart.selectAll('text.month').data(data);
+  labels.enter().append('text')
+      .attr('class', 'month small')
+      .attr('y', h - 25)
+      .attr('text-anchor', 'middle');
+  labels.transition().duration(1000)
+      .attr('x', function(d, i) { return xScale(i) + datumWidth / 2; })
+      .text(function(d) { return dataMonth(d).substr(0, 3); });
+};
+drawChart();
+var makeSortButton = function(field, rev) {
+  return d3.select('#chart').append('button')
+      .on('click', function() {
+        data.sort(function(a, b) { return rev * (a[field] - b[field]); });
+        drawChart();
+      });
+};
+makeSortButton('i', 1).text('Sort by month');
+makeSortButton('high', -1).text('Sort by high temperature');
+makeSortButton('rain', -1).text('Sort by precipitation');
+</code>
+              <code class='block result'></code>
+            </div>
+            When the sorting is changed on the chart, you may see a smooth
+            transition. Try, however, tracking a single month - like May (a good
+            month, May). It is easy to track when swapping between month and
+            teperature, but not so much by precipitation. It jumps, instantly,
+            somewhere else on the chart. With object constancy, however:
+            <div class='sample hide-src'>
+              <code class='block html'>&lt;style type='text/css'&gt;
+  #chart {
+    background-color: #fff;
+  }
+  svg {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .highs line {
+    stroke-width: 2px;
+    stroke: #f88;
+  }
+  .rains line {
+    stroke-width: 2px;
+    stroke: #88f;
+  }
+  text {
+    font-size: 13px;
+    font-family: sans-serif;
+  }
+  text.small {
+    font-size: 10px;
+    fill: #666;
+  }
+&lt;/style&gt;
+&lt;div id='chart'&gt;&lt;/div&gt;</code>
+              <code class='block js'>var w = 300;
+var h = 220;
+
+var data = [
+  {'i':  0,'month': 'January',   'high': 47, 'rain': 5.6},
+  {'i':  1,'month': 'February',  'high': 50, 'rain': 3.5},
+  {'i':  2,'month': 'March',     'high': 53, 'rain': 3.7},
+  {'i':  3,'month': 'April',     'high': 58, 'rain': 2.7},
+  {'i':  4,'month': 'May',       'high': 64, 'rain': 1.9},
+  {'i':  5,'month': 'June',      'high': 70, 'rain': 1.6},
+  {'i':  6,'month': 'July',      'high': 76, 'rain': 0.7},
+  {'i':  7,'month': 'August',    'high': 76, 'rain': 0.9},
+  {'i':  8,'month': 'September', 'high': 70, 'rain': 1.5},
+  {'i':  9,'month': 'October',   'high': 59, 'rain': 3.5},
+  {'i': 10,'month': 'November',  'high': 51, 'rain': 6.6},
+  {'i': 11,'month': 'December',  'high': 45, 'rain': 5.4},
+];
+var dataMonth = function(d) { return d['month']; };
+var dataHigh = function(d) { return d['high']; };
+var dataRain = function(d) { return d['rain']; };
+var keyFn = dataMonth;
+var highScale = d3.scale.linear()
+    .domain(d3.extent(data, dataHigh))
+    .range([100, 0]);
+var rainScale = d3.scale.linear()
+    .domain([0, d3.max(data, dataRain)])
+    .range([50, 0]);
+var xScale = d3.scale.linear()
+    .domain([0, data.length])
+    .range([0, w]);
+var datumWidth = xScale(1) - xScale(0);
+
+var chart = d3.select('#chart').append('svg')
+    .attr('width', w)
+    .attr('height', h);
+var highG = chart.append('g').attr('class', 'highs')
+    .attr('transform', 'translate(0, 20)');
+var rainG = chart.append('g').attr('class', 'rains')
+    .attr('transform', 'translate(' + [0, 30 + d3.max(highScale.range())] + ')');
+
+var title = chart.append('text')
+    .attr('x', w / 2)
+    .attr('y', h - 10)
+    .attr('text-anchor', 'middle')
+    .text('Seattle Climate');
+var dataLink = chart.append('a')
+    .attr('xlink:href', 'http://en.wikipedia.org/wiki/Seattle');
+dataLink.append('text')
+    .attr('class', 'small')
+    .attr('x', w / 2)
+    .attr('y', h)
+    .attr('text-anchor', 'middle')
+    .text('[source]');
+
+var drawChart = function() {
+  var highGs = highG.selectAll('g.tick').data(data, keyFn);
+  var newHighGs = highGs.enter().append('g')
+      .attr('class', 'tick');
+  highGs.transition().duration(1000)
+      .attr('transform', function(d, i) {
+        return 'translate(' + [xScale(i) + datumWidth / 2, highScale(dataHigh(d))] + ')';
+      })
+  newHighGs.append('line')
+      .attr('x1', -datumWidth / 2)
+      .attr('x2', datumWidth / 2);
+  newHighGs.append('text')
+      .attr('class', 'small')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '-0.3em');
+  highGs.select('text')
+      .text(function(d) { return dataHigh(d) + '°F'; });
+    
+  var rainGs = rainG.selectAll('g.tick').data(data, keyFn);
+  var newRainGs = rainGs.enter().append('g')
+      .attr('class', 'tick');
+  rainGs.transition().duration(1000)
+      .attr('transform', function(d, i) {
+        return 'translate(' + [xScale(i) + datumWidth / 2, rainScale(dataRain(d))] + ')';
+      })
+  newRainGs.append('line')
+      .attr('x1', -datumWidth / 2)
+      .attr('x2', datumWidth / 2);
+  newRainGs.append('text')
+      .attr('class', 'small')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '-0.3em');
+  rainGs.select('text')
+      .text(function(d) { return dataRain(d) + '"'; });
+
+  var labels = chart.selectAll('text.month').data(data, keyFn);
+  labels.enter().append('text')
+      .attr('class', 'month small')
+      .attr('y', h - 25)
+      .attr('text-anchor', 'middle');
+  labels.transition().duration(1000)
+      .attr('x', function(d, i) { return xScale(i) + datumWidth / 2; })
+      .text(function(d) { return dataMonth(d).substr(0, 3); });
+};
+drawChart();
+var makeSortButton = function(field, rev) {
+  return d3.select('#chart').append('button')
+      .on('click', function() {
+        data.sort(function(a, b) { return rev * (a[field] - b[field]); });
+        drawChart();
+      });
+};
+makeSortButton('i', 1).text('Sort by month');
+makeSortButton('high', -1).text('Sort by high temperature');
+makeSortButton('rain', -1).text('Sort by precipitation');
+</code>
+              <code class='block result'></code>
+            </div>
             <a href='http://bost.ocks.org/mike/constancy/'>mbostock's tutorial</a>
           </div>
         </div>
