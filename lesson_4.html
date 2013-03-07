@@ -706,7 +706,7 @@ makeSortButton('rain', -1).text('Sort by precipitation');
             When the sorting is changed on the chart, you may see a smooth
             transition. Try, however, tracking a single month - like May (a good
             month, May). It is easy to track when swapping between month and
-            teperature, but not so much by precipitation. It jumps, instantly,
+            temperature, but not so much by precipitation. It jumps, instantly,
             somewhere else on the chart. With object constancy, however:
             <div class='sample hide-src'>
               <code class='block html'>&lt;style type='text/css'&gt;
@@ -735,7 +735,7 @@ makeSortButton('rain', -1).text('Sort by precipitation');
   }
 &lt;/style&gt;
 &lt;div id='chart'&gt;&lt;/div&gt;</code>
-              <code class='block js'>var w = 300;
+              <code class='block js'><div class='hide'>var w = 300;
 var h = 220;
 
 var data = [
@@ -752,11 +752,11 @@ var data = [
   {'i': 10,'month': 'November',  'high': 51, 'rain': 6.6},
   {'i': 11,'month': 'December',  'high': 45, 'rain': 5.4},
 ];
-var dataMonth = function(d) { return d['month']; };
+</div>var dataMonth = function(d) { return d['month']; };
 var dataHigh = function(d) { return d['high']; };
 var dataRain = function(d) { return d['rain']; };
-var keyFn = dataMonth;
-var highScale = d3.scale.linear()
+<em>var keyFn = dataMonth;</em>
+<div class='hide'>var highScale = d3.scale.linear()
     .domain(d3.extent(data, dataHigh))
     .range([100, 0]);
 var rainScale = d3.scale.linear()
@@ -789,9 +789,9 @@ dataLink.append('text')
     .attr('text-anchor', 'middle')
     .text('[source]');
 
-var drawChart = function() {
-  var highGs = highG.selectAll('g.tick').data(data, keyFn);
-  var newHighGs = highGs.enter().append('g')
+</div>var drawChart = function() {
+  var highGs = highG.selectAll('g.tick').data(data, <em>keyFn</em>);
+<div class='hide'>  var newHighGs = highGs.enter().append('g')
       .attr('class', 'tick');
   highGs.transition().duration(1000)
       .attr('transform', function(d, i) {
@@ -806,9 +806,8 @@ var drawChart = function() {
       .attr('dy', '-0.3em');
   highGs.select('text')
       .text(function(d) { return dataHigh(d) + '°F'; });
-    
-  var rainGs = rainG.selectAll('g.tick').data(data, keyFn);
-  var newRainGs = rainGs.enter().append('g')
+</div>  var rainGs = rainG.selectAll('g.tick').data(data, <em>keyFn</em>);
+<div class='hide'>  var newRainGs = rainGs.enter().append('g')
       .attr('class', 'tick');
   rainGs.transition().duration(1000)
       .attr('transform', function(d, i) {
@@ -823,17 +822,16 @@ var drawChart = function() {
       .attr('dy', '-0.3em');
   rainGs.select('text')
       .text(function(d) { return dataRain(d) + '"'; });
-
-  var labels = chart.selectAll('text.month').data(data, keyFn);
-  labels.enter().append('text')
+</div>  var labels = chart.selectAll('text.month').data(data, <em>keyFn</em>);
+<div class='hide'>  labels.enter().append('text')
       .attr('class', 'month small')
       .attr('y', h - 25)
       .attr('text-anchor', 'middle');
   labels.transition().duration(1000)
       .attr('x', function(d, i) { return xScale(i) + datumWidth / 2; })
       .text(function(d) { return dataMonth(d).substr(0, 3); });
-};
-drawChart();
+</div>};
+<div class='hide'>drawChart();
 var makeSortButton = function(field, rev) {
   return d3.select('#chart').append('button')
       .on('click', function() {
@@ -843,11 +841,49 @@ var makeSortButton = function(field, rev) {
 };
 makeSortButton('i', 1).text('Sort by month');
 makeSortButton('high', -1).text('Sort by high temperature');
-makeSortButton('rain', -1).text('Sort by precipitation');
-</code>
+makeSortButton('rain', -1).text('Sort by precipitation');</div></code>
               <code class='block result'></code>
             </div>
-            <a href='http://bost.ocks.org/mike/constancy/'>mbostock's tutorial</a>
+            Watch those bars fly! Or, rather, float - the animation has been
+            slowed considerably for illustrative purposes only. Now the eye can
+            track the data as it changes. You can see when a month doesn't
+            change its position; you can see when a month goes from the best to
+            the worst. You can also spam clicks on the buttons for fun effects,
+            if your <a href='...'>APM</a> is a bit low.
+            <hr>
+            That must have been hard, write? The code surely changed a great
+            deal. Not so! Go ahead, click the "Show code" button. One line
+            added, three lines modified. Not bad, not bad.
+            <div class='aside'>
+              The DOM structure of this chart was chosen arbitrarily - it
+              consists of an SVG. Each month has a "g" element for the
+              temperature and a "g" element for the rainfall, transformed to the
+              approriate x/y position. The month labels are positioned using
+              their <code>x</code> property along the bottom. Why this? Why not
+              position everything using <code>x</code> and <code>y</code>
+              values?
+              <hr>
+              We net a few benefits from <code>transform</code>-ed
+              <code>g</code>s - the children elements are simply positioned -
+              all temperature lines receive the same values and need never
+              change. Positioning is easier to reason. Given a pen at the
+              relevant x/y for a month's temperature, where do we write the
+              label? Well, right there (with a little offset so it doesn't
+              overlap the line).
+              <hr>
+              One could also structure the DOM so each month has a
+              <code>g</code> element transformed to have the appropriate
+              <code>x</code> value, then <code>y</code>-translated
+              <code>g</code>s for each of the temperature, rainfall, and month
+              labels. Is this better? Maybe; I'm not one to judge. Both work and
+              both are flexible.
+            </div>
+            <hr>
+            To read more on object constancy, consider
+            <a href='http://bost.ocks.org/mike/constancy/'>mbostock's
+              tutorial</a>. It provides a different example which you may find
+            more compelling. That wrap up this lesson - you have enough
+            knowledge (and enough code samples) to do some serious work.
           </div>
         </div>
       </div>

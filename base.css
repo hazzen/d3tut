@@ -214,6 +214,10 @@ code.block {
   content: none;
 }
 
+.sample.hide-src button.toggle-src {
+  margin: 0 0 -10px 20px;
+}
+
 .sample .hide {
   width: 0;
   color: #888;

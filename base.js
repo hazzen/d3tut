@@ -11,6 +11,21 @@
     return code.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
   };
 
+  var makeToggleSrcButton = function(sample) {
+    var js = sample.select('.js');
+    var buttonText = function(d) { return d ? 'Hide code' : 'Show code'; };
+    sample.insert('button', '.js')
+        .attr('class', 'toggle-src')
+        .datum(false)
+        .text(buttonText)
+        .on('click', function(isVisible) {
+          d3.select(this)
+              .datum(!isVisible)
+              .text(buttonText);
+          js.style('display', function() { return isVisible ? 'none' : 'inherit'; });
+        });
+  };
+
   var makeSwapButton = function(container, content) {
     // Swap a button to swap from html to "view source" for the content
     // element within container. Moves any child nodes to an invisible div to
@@ -137,6 +152,8 @@
 
       if (!sample.classed('hide-src')) {
         makeSwapButton(result.node(), iframeDoc.body);
+      } else {
+        makeToggleSrcButton(sample);
       }
     };
     // Firefox doesn't like setTimeout-ing an iframe loading, and Chrome doesn't
