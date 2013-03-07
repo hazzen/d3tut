@@ -251,7 +251,7 @@ code.block {
 .sample .annotate {
   color: #598d59;
   position: relative;
-  min-height: 8px;
+  min-height: 13px;
   border: 1px solid #ccc;
   background: white;
   white-space: normal;
@@ -259,8 +259,16 @@ code.block {
 }
 .sample .annotate.collapse {
   z-index: 0;
-  height: 8px;
+  height: 13px;
   overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 100px;
+  left: -100px;
+}
+
+.sample .annotate.collapse code {
+  white-space: nowrap;
 }
 
 .sample .annotate:hover {
@@ -271,14 +279,13 @@ code.block {
 .sample .annotate.collapse:before {
   content: '';
   position: absolute;
-  margin-top: 5px;
-  height: 5px;
+  height: 100%;
   width: 100%;
-  background-image: linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
-  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 100%);
+  background-image: linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 80%);
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 80%);
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 80%);
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 80%);
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, white 80%);
   display: block;
 }
 
