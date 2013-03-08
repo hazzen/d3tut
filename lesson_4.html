@@ -34,7 +34,7 @@
         <h2 class='lesson'>
           Lesson 4: Changing Data
         </h2>
-        originally published FIX ME
+        originally published 8 march 2013
       </div>
     </div>
     <div class='main'>
@@ -60,7 +60,7 @@
             4.1 Two nodes leave, no nodes enter
           </div>
           <div class='section-content'>
-            In all previous lessons, we've only added data or modified data.
+            In previous lessons, we've only added data or modified data.
             Never have we <em>removed</em> data from a loving home.
             Our <a href='lesson_1.html#s6'>introduction of the <code>enter</code> selection</a>
             left a question unspoken - what if one had less data? Would there
@@ -152,11 +152,13 @@ divs
             4.2 A new dawn for data - the key
           </div>
           <div class='section-content'>
-            One last bit before animations - key functions. Many of the functions
-            we've seen in D3 have additional, optional params. <code>data</code>
-            is no exception. In addition to the first argument (to specify the data),
-            it accepts a <em>key function</em> as a second argument. What's a key
-            for, huh? To unlock doors, of course. Doors to data-binding fun!
+            Data binding needn't be by index; we may also bind data by key. But
+            how to specify it? As you may have noticed, many of the functions
+            we've seen in D3 have additional, optional params.
+            <code>data</code> is no exception. In addition to the first
+            argument (to specify the data), it accepts a <em>key function</em>
+            as a second argument. What's a key for, huh? To unlock doors, of
+            course. Doors to data-binding fun!
             <hr>
             Or, you know, something else. The key function allows one to specify
             a data mapping from pre-<code>update</code> to post-<code>update</code>
@@ -188,13 +190,13 @@ divs
             data, D3 calls the <code>key</code> function on each selected node
             and on the fresh data. The <code>exit</code> selection is all nodes
             selected with a key not present in the fresh data (in set terms,
-            <code>{key(node): node &isin; selected} - {key(datum): datum &isin; data}</code>.
+            <code>{key(node): node &isin; selected} - {key(datum): datum &isin; data}</code>).
             Likewise, <code>enter</code> is all nodes with keys in fresh data, but not in
-            selected and the basic selection is all selected nodes with a matching
+            selected. The base selection is all selected nodes with a matching
             key in data (
             <code>{key(node): node &isin; selected} &cap; {key(datum): datum &isin; data}</code>).
             <hr>
-            What does this mean for us? Well, the first node in the tree is now
+            What does this mean for us? Well, the first node in the list is now
             grey, not the last. That is about it. We'll find this useful in the
             next section. One last thing to note: the returned key is
             <code>string</code>-ified, so using an <code>Array</code> or <code>
@@ -218,7 +220,7 @@ divs
             4.3 Enter-Update-Exit
           </div>
           <div class='section-content'>
-            Example code, up until this point, as been a single-run affair - we
+            Example code, up until this point, has been a single-run affair - we
             select some nodes, we update attributes on them, and we go on our
             way. What if we wish for our method to be more than a fling? What if
             we want our callers to call us (maybe)?
@@ -243,7 +245,7 @@ root.append('button')
             set of five numbers each time <code>renderData</code> is called? No,
             not with this code. Now that our function is called multiple times,
             we must consider when attributes can change and when they can't.
-            Shoulde the <code>class</code> of a <code>div</code> in this example
+            Should the <code>class</code> of a <code>div</code> in this example
             ever change? Should the <code>text</code> of a <code>div</code>
             change? To answer these questions, consider how the attribute is
             set. If your attribute depends on <code>data</code>, then it can
@@ -257,7 +259,7 @@ var renderData = function() {
   var data = d3.range(5).map(Math.random);  // 5 random numbers [0, 1)
   var numbers = root.selectAll('div.datum').data(data);
   numbers.enter().append('div')
-      .attr('class', 'datum');
+      .attr('class', 'datum');  // The class never changes.
 <em>  // The number changes each time; ensure the text does as well.
   numbers
       .text(d3.format('.2f'));</em>
@@ -292,15 +294,16 @@ root.append('button')
               <code class='block result'></code>
             </div>
             You may have noticed the first time you made it rain data it did
-            not, in fact, rain data. We were instead parched for data. But, if
-            you look ever more closely, you'll notice it had still rained
-            <code>div</code>s. This should be obvious in retrospect - the code
-            first set properties on divs, then added new ones. If we have none
-            to begin with, nothing will get updated.
+            not, in fact, rain data. We instead found ourselves parched for
+            data. But, if you look ever more closely, you'll notice it had
+            still rained <code>div</code>s. This should be obvious in
+            retrospect - the code first set properties on divs, then added new
+            ones. If we have no divs to begin with, nothing will get updated and
+            then our new divs will pop into existence, naked.
             <div class='aside'>
               d3 does something to make the
               <code>enter</code>-<code>update</code> pattern more effective -
-              any nodes appened to an <code>enter</code> are immediately filled
+              any nodes appended to an <code>enter</code> are immediately filled
               in on the original selection. By writing your <code>enter</code>
               first, you automatically get any operations from your
               <code>update</code> applied.
@@ -354,9 +357,9 @@ var renderData = function() {
             <hr>
             With one difference, of course. Two of the setters
             (<code>attr</code>/<code>style</code>) will not immediately
-            take effect, but instead gradually change them from the current
-            value to the one specified. Consider our previous example, but with
-            animating opacities:
+            take effect, but instead gradually change from the current value to
+            one specified. Consider our previous example, but with animating
+            opacities:
             <div class='sample'>
               <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
               <code class='block js'>var root = d3.select('#root')
@@ -387,8 +390,9 @@ root.append('button')
             two changes: new nodes should start with an <code>opacity</code> of
             <code>0</code>, and <code>exit</code>ing nodes should animate to
             <code>0</code> before going away. We can turn that directly into two
-            new lines of code, and one modified one (ignore the incorrect
-            sizing, it is a defect in my page's code, not that of the example):
+            new lines of code (to set new properties), and one modified one (to
+            cause an animation). Ignore the incorrect sizing, it is a defect in
+            my page's code, not of the example:
             <div class='sample'>
               <code class='block html'>&lt;div id='root'&gt;&lt;/div&gt;</code>
               <code class='block js'>var root = d3.select('#root')
@@ -428,7 +432,10 @@ root.append('button')
           </div>
           <div class='section-content'>
             Let's one more example, which could accurately be described as a
-            graph:
+            graph. This section is a bit different from the previous - it
+            consists entirely of a large block of code, replete with inline
+            comments. All the important bits are called out, and the rest if for
+            you to grok. So, grok:
             <div class='sample'>
               <code class='block html'>&lt;style type='text/css'&gt;
   rect.bar {
@@ -460,11 +467,12 @@ var yScale = d3.scale.linear()<div class='annotate'>
 var renderBars = function() {
   var numData = 3 + Math.floor(Math.random() * 3);  // 3-5 numbers
   var data = d3.range(numData).map(Math.random);    // between [0, 1)<div class='annotate'>
-    /* <code>enter</code> of the enter-update-exit triumverate. Keep in mind
-    this selection will have initial <code>attr</code>s as well as
-    <code>transition</code>. If an <code>attr</code> never changes - like the
-    <code>class</code> of a bar - set it on newly-created <code>enter</code>
-    nodes. */
+    /* <code>enter</code> of the enter-update-exit triumvirate. Keep in mind
+    this selection will have initial <code>attr</code>s we specify here, as well
+    as potentially updated <code>attr</code>s specified later on the root
+    selection's <code>transition</code>.  If an <code>attr</code> never changes
+    - like the <code>class</code> of a bar - set it on newly created
+    <code>enter</code> nodes. */
 </div>  var bars = svg.selectAll('rect.bar').data(data);
   var newBars = bars.enter().append('rect')
       .attr('class', 'bar')<div class='annotate'>
@@ -485,12 +493,12 @@ var renderBars = function() {
         with constants. It comes down to taste, though I chose this value to
         call out the duality of the <code>y</code> and <code>height</code>
         properties. As with the <code>xScale(0)</code> call above, make sure
-        whichever solution looks sexiest to you uses the <code>yScale</code>.
+        whichever solution you think looks best uses the <code>yScale</code>.
         */
 </div>      .attr('y', function(d, i) { return yScale(i + 0.1); })
       .attr('height', function(d, i) { return yScale(i + 0.9) - yScale(i + 0.1);});
   bars.transition()<div class='annotate'>
-    /* <code>update</code> of the enter-update-exit triumverate. One gotcha
+    /* <code>update</code> of the enter-update-exit triumvirate. One gotcha
     with the pattern is the behavior of repeated calls to
     <code>transition</code> on a node - the last one wins.<hr>Even if it looks
     cleaner to handle the transition from 0 opacity to 1 on the new nodes using
@@ -503,7 +511,7 @@ var renderBars = function() {
 </div>      .attr('width', xScale)
       .attr('opacity', 1);
     bars.exit().transition()<div class='annotate'>
-      /* <code>exit</code> of the enter-update-exit triumverate. We are
+      /* <code>exit</code> of the enter-update-exit triumvirate. We are
       initiating a <code>transition</code>, so the <code>remove</code> call
       won't happen until the animation has ended. */
 </div>      .attr('opacity', 0)
@@ -558,13 +566,14 @@ root.append('button')
             So: what is object constancy and why should you care? Pretend, for
             a moment, you are playing catch with a parental figure. You are a
             kid. You like catch. Your parental figure tosses a ball your way;
-            you see it pause as it leaves their hand. Then, it dissappears and a
+            you see it pause as it leaves their hand. Then, it disappears and a
             ball materializes in your glove. That ball? No constancy. It jumped
             from parental figure's windup to your waiting glove, and you are
             confused. Is it even the same ball? You didn't see it travel, so you
             can't be sure. You go and lie down, never to play catch again.
             <hr>
-            Maybe a graph will help:
+            Maybe a graph will help (the code is a good example to read, but
+            also a mouthful. I recommend you read it after running the demos):
             <div class='sample hide-src'>
               <code class='block html'>&lt;style type='text/css'&gt;
   #chart {
@@ -662,7 +671,9 @@ var drawChart = function() {
       .attr('dy', '-0.3em');
   highGs.select('text')
       .text(function(d) { return dataHigh(d) + '°F'; });
-    
+
+  // This code is almost identical to the 'highGs' block. An exercise to the
+  // reader: should you remove the redundancy? How best to?
   var rainGs = rainG.selectAll('g.tick').data(data);
   var newRainGs = rainGs.enter().append('g')
       .attr('class', 'tick');
@@ -806,6 +817,9 @@ dataLink.append('text')
       .attr('dy', '-0.3em');
   highGs.select('text')
       .text(function(d) { return dataHigh(d) + '°F'; });
+
+  // This code is almost identical to the 'highGs' block. An exercise to the
+  // reader: should you remove the redundancy? How best to?
 </div>  var rainGs = rainG.selectAll('g.tick').data(data, <em>keyFn</em>);
 <div class='hide'>  var newRainGs = rainGs.enter().append('g')
       .attr('class', 'tick');
@@ -822,6 +836,7 @@ dataLink.append('text')
       .attr('dy', '-0.3em');
   rainGs.select('text')
       .text(function(d) { return dataRain(d) + '"'; });
+
 </div>  var labels = chart.selectAll('text.month').data(data, <em>keyFn</em>);
 <div class='hide'>  labels.enter().append('text')
       .attr('class', 'month small')
@@ -858,7 +873,7 @@ makeSortButton('rain', -1).text('Sort by precipitation');</div></code>
               The DOM structure of this chart was chosen arbitrarily - it
               consists of an SVG. Each month has a "g" element for the
               temperature and a "g" element for the rainfall, transformed to the
-              approriate x/y position. The month labels are positioned using
+              appropriate x/y position. The month labels are positioned using
               their <code>x</code> property along the bottom. Why this? Why not
               position everything using <code>x</code> and <code>y</code>
               values?
@@ -882,8 +897,8 @@ makeSortButton('rain', -1).text('Sort by precipitation');</div></code>
             To read more on object constancy, consider
             <a href='http://bost.ocks.org/mike/constancy/'>mbostock's
               tutorial</a>. It provides a different example which you may find
-            more compelling. That wrap up this lesson - you have enough
-            knowledge (and enough code samples) to do some serious work.
+            more compelling. Otherwise, that wraps up this lesson - you have
+            enough knowledge (and enough code samples) to do some serious work.
           </div>
         </div>
       </div>
